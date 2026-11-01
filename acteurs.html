@@ -9,20 +9,53 @@
 <body>
 <main>
   <h1>Les acteurs</h1>
-  <p class="chapeau">Qui recrute ce métier, et qui l'exerce.</p>
+  <p class="chapeau">Qui recrute ce métier, en France et dans le Puy-de-Dôme.</p>
 
   <h2>Les entreprises qui publient des offres</h2>
-  <div class="afaire">À faire : dresser la liste des entreprises qui recrutent l'intitulé « chef de produit » et noter les cinq qui publient le plus. Cela demande un canal d'annonces, pas encore disponible.</div>
+  <p>Les entreprises qui publient le plus d'annonces « chef de produit » dans les données Adzuna :</p>
+  <table id="t-entreprises"></table>
+  <p class="source">Source : API Adzuna, extraction du <span class="date"></span> (voir la page « Annonces »). Script : <code>scripts/adzuna.ps1</code>.</p>
+  <div class="limite"><strong>Limite.</strong> Les cabinets de recrutement et les écoles publient pour le compte de tiers : ce classement ne dit pas qui embauche réellement. Les annonces du Puy-de-Dôme sont très rares (voir « Annonces »).</div>
 
   <h2>Le marché caché : les entreprises du Puy-de-Dôme</h2>
-  <p>L'idée : les sites d'offres ne montrent que les entreprises qui publient. Partir des entreprises elles-mêmes permet de voir celles qui pourraient avoir besoin de ce métier sans l'annoncer.</p>
-  <div class="limite"><strong>Limite rencontrée.</strong> L'API « La Bonne Boite » de France Travail, qui liste les entreprises à fort potentiel d'embauche par métier et par département, est activée sur mon compte mais refuse mes requêtes (erreur 403, sans message). Je n'ai donc pas de liste d'entreprises issue de ce canal.</div>
-  <div class="afaire">Piste à faire : l'API « Recherche d'entreprises » (data.gouv.fr, gratuite, sans clé) filtre par département et par code d'activité (NAF). Elle permettrait de constituer la base des entreprises du 63 sans passer par La Bonne Boite.</div>
-
-  <h2>Les professionnels qui exercent le métier</h2>
-  <div class="afaire">À faire à la main : repérer trois personnes qui portent le titre de chef de produit dans des entreprises qui recrutent, et les noter ici avec leur fonction. Règle : un contact nominatif n'est conservé que pour une finalité claire (une candidature), en lien avec sa fonction, avec possibilité de s'opposer.</div>
+  <p>Les sites d'offres ne montrent que les entreprises qui publient. Partir des entreprises elles-mêmes permet de voir celles qui pourraient avoir besoin de ce métier sans l'annoncer. Ici : les entreprises d'au moins 50 salariés qui ont un établissement dans le département.</p>
+  <div class="cartes" id="cartes-ent"></div>
+  <h3>Où se trouvent les sièges</h3>
+  <figure><div id="b-communes"></div><figcaption>Communes qui comptent le plus de sièges d'entreprises de 50 salariés et plus</figcaption></figure>
+  <h3>Dans quels secteurs</h3>
+  <figure><div id="b-sections"></div><figcaption>Sièges d'entreprises de 50 salariés et plus, par section d'activité (nomenclature NAF)</figcaption></figure>
+  <h3>Les plus grandes entreprises privées dont le siège est dans le département</h3>
+  <p id="texte-grandes"></p>
+  <table id="t-grandes"></table>
+  <p class="source">Source : API « Recherche d'entreprises » (Sirene), département 63, entreprises actives de 50 salariés et plus, extraction du <span class="date-ent"></span>. Script : <code>scripts/entreprises63.ps1</code>. Données : <code>data/entreprises_63_AAAA-MM-JJ.csv</code>.</p>
+  <div class="limite"><strong>Limites.</strong> L'effectif filtré est celui de l'entreprise entière, pas celui de l'établissement local : une chaîne nationale avec un petit magasin dans le département est comptée. Le « siège dans le 63 » est un meilleur indice : les postes de chef de produit se trouvent plus souvent au siège. Rien n'indique pour autant qu'une entreprise de la liste recrute ce profil. La liste contient aussi des hôpitaux, des collectivités et des établissements d'enseignement, écartés de la liste des grandes entreprises mais présents dans le graphique par secteur.</div>
+  <div class="limite"><strong>Canal écarté.</strong> L'API « La Bonne Boite » de France Travail, qui classe les entreprises à fort potentiel d'embauche par métier, est activée sur le compte développeur mais refuse les requêtes (erreur 403 sans message). Elle n'est donc pas utilisée.</div>
 </main>
 <script src="donnees.js"></script>
 <script src="commun.js"></script>
+<script>
+(function () {
+  var A = window.DONNEES.annonces;
+  document.querySelectorAll(".date").forEach(function (e) { e.textContent = A.extraction; });
+  document.getElementById("t-entreprises").innerHTML = "<tr><th>Entreprise</th><th>Annonces</th></tr>" +
+    A.entreprises.slice(0, 5).map(function (e) { return "<tr><td>" + e.nom + "</td><td>" + e.nombre + "</td></tr>"; }).join("");
+
+  var E = window.DONNEES.entreprises63;
+  document.querySelectorAll(".date-ent").forEach(function (e) { e.textContent = E.extraction; });
+  var carte = function (v, l) { return '<div class="carte"><div class="valeur">' + v + '</div><div class="legende">' + l + "</div></div>"; };
+  document.getElementById("cartes-ent").innerHTML =
+    carte(fmt(E.total), "entreprises de 50 salariés et plus avec un établissement dans le 63") +
+    carte(fmt(E.siege_63), "dont le siège est dans le département") +
+    carte(fmt(E.nb_grandes), "grandes entreprises privées (500 salariés et plus) avec siège dans le 63");
+  var casse = function (s) { return s.toLowerCase().replace(/(^|[ '-])([a-zàâéèêëîïôùûç])/g, function (m, a, b) { return a + b.toUpperCase(); }); };
+  barres("b-communes", E.communes.map(function (c) { return { nom: casse(c.nom), nombre: c.nombre }; }), "var(--serie1)");
+  var sections = { A: "Agriculture", B: "Industries extractives", C: "Industrie manufacturière", D: "Énergie", E: "Eau, déchets", F: "Construction", G: "Commerce", H: "Transports, entreposage", I: "Hébergement, restauration", J: "Information, communication", K: "Finance, assurance", L: "Immobilier", M: "Activités spécialisées, scientifiques", N: "Services administratifs et de soutien", O: "Administration publique", P: "Enseignement", Q: "Santé, action sociale", R: "Arts, spectacles", S: "Autres services" };
+  barres("b-sections", E.sections.map(function (s) { return { nom: sections[s.code] || s.code, nombre: s.nombre }; }), "var(--serie3)");
+  var tranches = { "53": "10 000 +", "52": "5 000 – 9 999", "51": "2 000 – 4 999", "42": "1 000 – 1 999", "41": "500 – 999" };
+  document.getElementById("texte-grandes").textContent = "Parmi les " + fmt(E.nb_grandes) + " grandes entreprises privées (500 salariés et plus, hors administration, enseignement et santé), voici les " + E.grandes.length + " plus grosses par tranche d'effectif de l'entreprise.";
+  document.getElementById("t-grandes").innerHTML = "<tr><th>Entreprise</th><th>Siège</th><th>Secteur</th><th>Effectif</th></tr>" +
+    E.grandes.map(function (g) { return "<tr><td>" + casse(g.nom) + "</td><td>" + casse(g.commune) + "</td><td>" + (sections[g.section] || g.section) + "</td><td>" + (tranches[g.tranche] || g.tranche) + "</td></tr>"; }).join("");
+})();
+</script>
 </body>
 </html>

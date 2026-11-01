@@ -16,7 +16,10 @@
     <tr><th>Canal</th><th>Ce qu'il apporte</th><th>État</th></tr>
     <tr><td>API France Travail « Marché du travail »</td><td>Offres, embauches, tension, salaires en poste, par trimestre ou par année</td><td>Branché</td></tr>
     <tr><td>API France Travail « ROME 4.0 » (métiers, fiches métiers)</td><td>Appellations et compétences officielles de M1703</td><td>Branché</td></tr>
-    <tr><td>API France Travail « Offres d'emploi »</td><td>Annonces détaillées (salaires affichés, compétences)</td><td>Absente de mon compte développeur</td></tr>
+    <tr><td>API « Recherche d'entreprises » (Sirene, data.gouv.fr)</td><td>Entreprises de 50 salariés et plus du Puy-de-Dôme, siège, secteur, effectif</td><td>Branché</td></tr>
+    <tr><td>Études de l'emploi (Apec)</td><td>Évolution du métier, impact de l'IA</td><td>Source citée</td></tr>
+    <tr><td>API Adzuna (agrégateur d'annonces)</td><td>Annonces individuelles : lieu, entreprise, contrat, salaire affiché, extrait de texte</td><td>Branché</td></tr>
+    <tr><td>API France Travail « Offres d'emploi »</td><td>Annonces détaillées (salaires affichés, compétences)</td><td>Absente du compte développeur</td></tr>
     <tr><td>API France Travail « La Bonne Boite »</td><td>Entreprises à fort potentiel d'embauche</td><td>Activée mais erreur 403</td></tr>
   </table>
   <p>Aucun scraping de LinkedIn, de l'APEC ou d'Indeed : leurs conditions d'utilisation l'interdisent.</p>
@@ -26,7 +29,12 @@
     <li><code>scripts/test_connexion.ps1</code> : teste la connexion à l'API (n'affiche jamais les identifiants).</li>
     <li><code>scripts/marche_du_travail.ps1</code> : offres par trimestre → <code>data/marche_travail_AAAA-MM-JJ.csv</code>.</li>
     <li><code>scripts/indicateurs_marche.ps1</code> : tension, embauches, salaires → <code>data/indicateurs_AAAA-MM-JJ.csv</code>.</li>
+    <li><code>scripts/adzuna.ps1</code> : annonces → <code>data/adzuna_offres_AAAA-MM-JJ.csv</code>.</li>
+    <li><code>scripts/adzuna_compteurs.ps1</code> : relevé léger du nombre d'annonces, daté → <code>data/adzuna_compteurs.csv</code>.</li>
+    <li><code>scripts/entreprises63.ps1</code> : entreprises du Puy-de-Dôme → <code>data/entreprises_63_AAAA-MM-JJ.csv</code> (aucune donnée sur les dirigeants).</li>
     <li><code>scripts/rome.ps1</code> : appellations et compétences → <code>data/rome_*.csv</code>.</li>
+    <li><code>carte_regions.js</code>, <code>carte_departements.js</code>, <code>carte.js</code> : contours simplifiés des régions et des départements, et code de la carte de la page « Annonces ». Source des contours : dépôt public <em>france-geojson</em> (Grégoire David), fichiers <code>regions-version-simplifiee.geojson</code> et <code>departements-version-simplifiee.geojson</code>, d'après les données Etalab / IGN ; coordonnées arrondies.</li>
+    <li><code>scripts/completer_departement.ps1</code> : ajoute le département de chaque annonce au CSV Adzuna à partir des réponses brutes (sans nouvel appel à l'API).</li>
     <li><code>scripts/build_site.ps1</code> : prépare <code>donnees.js</code>, lu par les pages.</li>
     <li><code>data/raw/</code> : les réponses brutes de l'API, conservées pour vérifier chaque chiffre.</li>
   </ul>
@@ -41,8 +49,9 @@
 
   <h2>Les limites rencontrées</h2>
   <ul class="liste">
-    <li>L'API « Offres d'emploi » n'apparaît pas dans le catalogue de mon compte : je n'ai pas d'annonces détaillées.</li>
+    <li>L'API « Offres d'emploi » n'apparaît pas dans le catalogue du compte développeur : le site passe par Adzuna, qui ne donne qu'un extrait d'environ 500 caractères par annonce.</li>
     <li>« La Bonne Boite » répond 403 malgré une activation et un jeton accepté.</li>
+    <li>La clé Adzuna est en « activation en attente » : elle est limitée à un quota d'appels d'essai. Une extraction complète en demande une trentaine, donc les extractions Adzuna sont comptées et espacées.</li>
     <li>Les statistiques sont arrondies et agrégées : elles décrivent le marché, pas des offres individuelles.</li>
   </ul>
 

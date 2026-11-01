@@ -14,10 +14,12 @@
   <h2>Le volume d'offres, trimestre par trimestre</h2>
   <p id="texte-offres"></p>
   <figure><div id="c-fr"></div><figcaption>France entière · offres « Chef / Cheffe de produit » enregistrées par trimestre</figcaption></figure>
-  <figure><div id="c-ara"></div><figcaption>Auvergne-Rhône-Alpes</figcaption></figure>
-  <figure><div id="c-63"></div><figcaption>Puy-de-Dôme</figcaption></figure>
+  <div class="duo">
+    <figure><div id="c-ara"></div><figcaption>Auvergne-Rhône-Alpes</figcaption></figure>
+    <figure><div id="c-63"></div><figcaption>Puy-de-Dôme</figcaption></figure>
+  </div>
   <p class="source">Requête : indicateur OFF_1, ROME M1703, origine « toutes offres », période trimestrielle, territoires France / région 84 / département 63. Canal : API France Travail « Marché du travail ». Extraction du <span class="date"></span>. Script : <code>scripts/marche_du_travail.ps1</code>.</p>
-  <div class="limite"><strong>Limites.</strong> Les nombres semblent arrondis à la dizaine, ce qui rend les chiffres du Puy-de-Dôme peu précis (10 à 40 offres par trimestre). Ce sont des offres enregistrées par France Travail et ses partenaires, pas l'ensemble des offres du marché. Je n'ai pas vérifié si les offres d'alternance sont comptées.</div>
+  <div class="limite"><strong>Limites.</strong> Les nombres semblent arrondis à la dizaine, ce qui rend les chiffres du Puy-de-Dôme peu précis (10 à 40 offres par trimestre). Ce sont des offres enregistrées par France Travail et ses partenaires, pas l'ensemble des offres du marché. La source ne précise pas si les offres d'alternance sont comptées.</div>
 
   <h2>Les embauches</h2>
   <p id="texte-emb"></p>
@@ -29,15 +31,18 @@
   <p id="texte-tension"></p>
   <table id="t-tension"></table>
   <p class="source">Requête : indicateur PERSP_2 (indicateur principal de tension), ROME M1703, annuel. Aucune donnée pour le Puy-de-Dôme.</p>
-  <div class="limite"><strong>Limite.</strong> Je n'ai pas encore vérifié la signification exacte de l'échelle (niveau et score). Je rapporte les valeurs sans les interpréter.</div>
+  <div class="limite"><strong>Limite.</strong> La signification exacte de l'échelle (niveau et score) n'est pas détaillée dans la source consultée : les valeurs sont rapportées sans interprétation.</div>
 
   <h2>Les salaires</h2>
   <p id="texte-sal"></p>
   <table id="t-sal"></table>
   <div class="limite"><strong>Limites.</strong> Ce sont des salaires de personnes <em>en poste</em>, pas des salaires <em>affichés</em> dans les annonces : on ne les confond pas. Ils concernent la famille professionnelle « cadres commerciaux, acheteurs et cadres de la mercatique », plus large que le seul chef de produit. L'unité (mensuelle ou autre) reste à confirmer.</div>
 
-  <h2>Contrats</h2>
-  <div class="afaire">À compléter : la répartition par type de contrat est disponible dans les données (colonne « caractéristique »), mais elle contient des incohérences (nombre à 0 avec un pourcentage non nul). Je ne la publie pas avant de l'avoir vérifiée.</div>
+  <h2>Les contrats</h2>
+  <p id="texte-contrats"></p>
+  <table id="t-contrats"></table>
+  <p class="source">Requête : indicateur OFF_1, ROME M1703, toutes offres, caractéristique « type de contrat », France entière, par trimestre. Canal : API France Travail « Marché du travail ». Les pourcentages sont ceux de l'API.</p>
+  <div class="limite"><strong>Limites.</strong> Seuls les pourcentages sont exploitables : les nombres sont arrondis à la dizaine, et pour les petits effectifs (Puy-de-Dôme) ils sont parfois à 0 alors que le pourcentage ne l'est pas, ce qui rend la répartition locale inutilisable. La catégorie « Autres » regroupe l'intérim, les emplois aidés et l'apprentissage : on ne peut pas isoler l'alternance. Les pourcentages sont arrondis à l'unité, leur somme peut s'écarter de 100.</div>
 </main>
 <script src="donnees.js"></script>
 <script src="commun.js"></script>
@@ -46,7 +51,7 @@
   var D = window.DONNEES;
   document.querySelectorAll(".date").forEach(function (e) { e.textContent = D.extraction; });
   var sf = serie(D.offres, "France"), sa = serie(D.offres, "AUVERGNE-RHONE-ALPES"), sp = serie(D.offres, "PUY-DE-DOME");
-  courbe("c-fr", sf, "var(--serie1)"); courbe("c-ara", sa, "var(--serie2)"); courbe("c-63", sp, "var(--serie3)");
+  courbe("c-fr", sf, "var(--serie1)"); courbe("c-ara", sa, "var(--serie2)", "", 400); courbe("c-63", sp, "var(--serie3)", "", 400);
   var pic = sf.reduce(function (a, b) { return b.y > a.y ? b : a; }), der = sf[sf.length - 1];
   document.getElementById("texte-offres").textContent =
     "En France, le nombre d'offres enregistrées pour ce métier a atteint " + fmt(pic.y) + " au trimestre " + pic.x +
@@ -61,6 +66,12 @@
   document.getElementById("texte-tension").textContent = "Valeurs publiées pour la France, de " + st[0].x + " à " + st[st.length - 1].x + ".";
   document.getElementById("t-tension").innerHTML = "<tr><th>Année</th><th>Niveau</th><th>Score</th></tr>" +
     st.map(function (p, i) { return "<tr><td>" + p.x + "</td><td>" + niv[i].y + "</td><td>" + String(p.y).replace(".", ",") + "</td></tr>"; }).join("");
+  var C = D.contrats_france, periodes = C.map(function (c) { return c.periode; }).filter(function (p, i, a) { return a.indexOf(p) === i; }).sort().slice(-4);
+  var types = ["CDI", "CDD de 1 à 6 mois", "CDD > 6 mois", "CDD < 1 mois", "Autres (intérim, emplois aidés, apprentissage)"];
+  var pct = function (p, t) { var l = C.filter(function (c) { return c.periode === p && c.contrat === t; })[0]; return l ? String(l.pourcentage).replace(".", ",") + " %" : "n.d."; };
+  document.getElementById("t-contrats").innerHTML = "<tr><th>Type de contrat</th>" + periodes.map(function (p) { return "<th>" + p + "</th>"; }).join("") + "</tr>" +
+    types.map(function (t) { return "<tr><td>" + t + "</td>" + periodes.map(function (p) { return "<td>" + pct(p, t) + "</td>"; }).join("") + "</tr>"; }).join("");
+  document.getElementById("texte-contrats").textContent = "Part de chaque type de contrat dans les offres de chef de produit enregistrées en France, sur les quatre derniers trimestres disponibles (" + periodes[0] + " à " + periodes[periodes.length - 1] + "). Le CDI domine nettement.";
   var ss = serie(D.salaires, "France", "montant");
   document.getElementById("texte-sal").textContent = "Pour la France, la valeur publiée est de " + fmt(ss[ss.length - 1].y) + " en " + ss[ss.length - 1].x + " (la source ne donne que les années " + ss.map(function (p) { return p.x; }).join(" et ") + ").";
   document.getElementById("t-sal").innerHTML = "<tr><th>Territoire</th><th>Année</th><th>Montant</th></tr>" +

@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Annonces · chef de produit</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <h1>Ce que disent les annonces</h1>
+  <p class="chapeau">Les offres de chef de produit publiées en ligne : où, chez qui, avec quel contrat et quel salaire.</p>
+
+  <div class="cartes" id="cartes"></div>
+  <p class="source">Requête : API Adzuna (agrégateur d'annonces), pays France, expression exacte « chef de produit », tri par date. Extraction du <span class="date"></span>. Script : <code>scripts/adzuna.ps1</code>. Données : <code>data/adzuna_offres_AAAA-MM-JJ.csv</code>.</p>
+  <div class="limite"><strong>Limites générales.</strong> Adzuna reprend des annonces d'autres sites : ce n'est pas le marché entier. La recherche remonte aussi d'autres métiers (par exemple « vétérinaire chef produit ») : seules les annonces dont le titre contient « chef » et « produit » sont conservées. Certaines annonces restent en ligne longtemps : les dates de publication ne mesurent pas le volume de recrutement.</div>
+
+  <h2>Où sont les offres</h2>
+  <p id="texte-geo"></p>
+  <h3>Carte des annonces par région et par département</h3>
+  <div class="carte-zone">
+    <figure class="carte-france"><div id="carte-france"></div><figcaption>Plus la couleur est foncée, plus le territoire compte d'annonces. Choisissez « Régions » ou « Départements », puis cliquez sur un territoire pour voir ses annonces.</figcaption></figure>
+    <aside class="carte-detail" id="carte-detail" aria-live="polite"></aside>
+  </div>
+  <h3 id="liste">Les annonces</h3>
+  <p>Cliquez sur un territoire de la carte pour afficher ses annonces, ou cherchez par mot (poste, entreprise, ville). Chaque annonce renvoie vers sa page pour postuler.</p>
+  <div class="recherche">
+    <input id="q" type="search" placeholder="Rechercher : poste, entreprise, ville…" aria-label="Rechercher dans les annonces">
+    <button id="toutes" type="button">Toute la France</button>
+    <label class="filtre-alt"><input type="checkbox" id="alt"> Alternance seulement</label>
+  </div>
+  <p class="discret-liste" id="compte-liste" aria-live="polite"></p>
+  <ul class="annonces" id="liste-annonces"></ul>
+  <button id="plus" type="button" class="bouton-plus">Afficher plus d'annonces</button>
+  <p class="source">Annonces fournies par <a href="https://www.adzuna.fr" rel="noopener noreferrer">Adzuna</a>, classées de la plus récente à la plus ancienne. Le lien ouvre la page de l'annonce chez Adzuna. Une annonce peut ne plus être en ligne au moment du clic. Le salaire n'est indiqué que lorsque l'annonce l'affiche (valeur annuelle plausible, non estimée).</p>
+
+  <figure><div id="b-regions"></div><figcaption>Nombre d'annonces par région (les 8 premières)</figcaption></figure>
+  <div class="limite" id="limite-geo"></div>
+
+  <h2>Quels contrats</h2>
+  <p id="texte-contrat"></p>
+  <p id="texte-alternance"></p>
+  <div class="limite"><strong>Limites.</strong> Le type de contrat n'est renseigné que pour une partie des annonces, et Adzuna ne distingue que « permanent » et « contract ». L'alternance est repérée ici par des mots dans le titre ou dans l'extrait de l'annonce (alternance, apprentissage, contrat de professionnalisation) : c'est une estimation, qui peut en oublier ou en compter à tort. Certaines annonces sont publiées par des écoles ou des centres de formation qui cherchent des entreprises d'accueil, pas par l'employeur.</div>
+
+  <h2>Quels salaires</h2>
+  <p id="texte-sal"></p>
+  <div class="cartes" id="cartes-sal"></div>
+  <div class="limite"><strong>Limites.</strong> Seule une minorité d'annonces affiche un salaire. La comparaison porte sur le salaire minimum affiché, retenu s'il est plausible en valeur annuelle : les valeurs hors de la plage 10 000 à 250 000 sont écartées, car elles correspondent sans doute à d'autres unités (mensuel, horaire). C'est un salaire <em>affiché</em> par l'annonce, pas un salaire réellement versé.</div>
+
+  <h2>Les entreprises qui recrutent</h2>
+  <table id="t-entreprises"></table>
+  <div class="limite"><strong>Limite.</strong> Un cabinet de recrutement ou une école peut publier beaucoup d'annonces pour le compte de clients : ce classement ne dit pas qui embauche réellement.</div>
+
+  <h2>Outils et compétences cités</h2>
+  <table id="t-outils"></table>
+  <div class="limite"><strong>Limite majeure.</strong> L'API ne fournit qu'un extrait d'environ 500 caractères de chaque annonce. Les outils sont presque toujours cités plus bas dans le texte : ces comptages sont donc très sous-estimés et ne permettent <em>pas</em> de conclure qu'un outil n'est pas demandé. Pour compter sérieusement les outils, il faudrait le texte complet des annonces.</div>
+</main>
+<script src="donnees.js"></script>
+<script src="carte_regions.js"></script>
+<script src="carte_departements.js"></script>
+<script src="carte.js"></script>
+<script src="annonces_liste.js"></script>
+<script src="commun.js"></script>
+<script>
+(function () {
+  var A = window.DONNEES.annonces;
+  document.querySelectorAll(".date").forEach(function (e) { e.textContent = A.extraction; });
+  var carte = function (v, l) { return '<div class="carte"><div class="valeur">' + v + '</div><div class="legende">' + l + "</div></div>"; };
+  var annee2026 = (A.annees.filter(function (a) { return a.annee === "2026"; })[0] || {}).nombre || 0;
+  document.getElementById("cartes").innerHTML =
+    carte(fmt(A.total_api), "annonces renvoyées par la recherche") +
+    carte(fmt(A.retenues), "annonces dont le titre est « chef de produit »") +
+    carte(fmt(annee2026), "de ces annonces publiées en 2026") +
+    carte(fmt(A.puy_de_dome), "dans le Puy-de-Dôme");
+
+  document.getElementById("texte-geo").textContent =
+    "Sur " + fmt(A.retenues) + " annonces, " + fmt(A.regions[0].nombre) + " sont en " + A.regions[0].nom + " (" + Math.round(A.regions[0].nombre / A.retenues * 100) +
+    " %). L'Auvergne-Rhône-Alpes en compte " + fmt(A.auvergne_rhone_alpes) + " et le Puy-de-Dôme " + fmt(A.puy_de_dome) + ".";
+  barres("b-regions", A.regions, "var(--serie1)");
+  // Liste des annonces : filtrée par la région choisie sur la carte et par le mot recherché.
+  var LISTE = window.LISTE_ANNONCES || [], PAS = 20, zone = null, affiche = PAS;   // zone : { champ: "region" | "departement", cle, nom }
+  var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
+  var jour = function (iso) { var p = String(iso || "").split("-"); return p.length === 3 ? p[2] + "/" + p[1] + "/" + p[0] : ""; };
+  var contrats = { permanent: "Permanent", contract: "Contrat" };
+  var salaire = function (a) {
+    if (a.salaire_min == null) return "";
+    return a.salaire_max != null && a.salaire_max > a.salaire_min ? fmt(a.salaire_min) + " – " + fmt(a.salaire_max) + " €" : "dès " + fmt(a.salaire_min) + " €";
+  };
+  var dessiner = function () {
+    var q = document.getElementById("q").value.trim().toLowerCase(), altSeule = document.getElementById("alt").checked;
+    var trouvees = LISTE.filter(function (a) {
+      return (!zone || normRegion(a[zone.champ]) === zone.cle) && (!altSeule || a.alternance === 1) && (!q || (a.titre + " " + a.entreprise + " " + a.lieu).toLowerCase().indexOf(q) !== -1);
+    });
+    document.getElementById("compte-liste").textContent = fmt(trouvees.length) + " annonce" + (trouvees.length > 1 ? "s" : "") +
+      (altSeule ? " en alternance" : "") + (zone ? (zone.champ === "departement" ? " dans le département : " : " en ") + zone.nom : " (toute la France)") + (q ? " pour « " + q + " »" : "") + (trouvees.length > affiche ? " — " + affiche + " affichées" : "");
+    document.getElementById("liste-annonces").innerHTML = trouvees.slice(0, affiche).map(function (a) {
+      var meta = [a.entreprise, a.lieu, contrats[a.contrat], salaire(a)].filter(Boolean).map(esc).join(" · ");
+      var lien = /^https:\/\//.test(a.url) ? '<a class="a-lien" href="' + esc(a.url) + '" target="_blank" rel="noopener noreferrer nofollow">Voir l\'annonce et postuler ↗</a>' : "";
+      return '<li class="annonce"><div class="a-tete"><strong>' + esc(a.titre) + '</strong><span class="a-date">' + jour(a.date) + "</span></div>" +
+        '<div class="a-meta">' + meta + "</div>" + lien + "</li>";
+    }).join("") || "<li class='annonce'>Aucune annonce ne correspond.</li>";
+    document.getElementById("plus").style.display = trouvees.length > affiche ? "" : "none";
+  };
+  document.getElementById("q").addEventListener("input", function () { affiche = PAS; dessiner(); });
+  document.getElementById("toutes").addEventListener("click", function () {
+    zone = null; affiche = PAS;
+    document.querySelectorAll("#carte-france .region.choisie").forEach(function (p) { p.classList.remove("choisie"); });
+    dessiner();
+  });
+  document.getElementById("plus").addEventListener("click", function () { affiche += PAS; dessiner(); });
+  document.getElementById("alt").addEventListener("change", function () { affiche = PAS; dessiner(); });
+
+  carteFrance("carte-france", "carte-detail", [
+    { id: "regions", libelle: "Régions", geo: window.GEO_REGIONS, donnees: A.carte },
+    { id: "departements", libelle: "Départements", geo: window.GEO_DEPARTEMENTS, donnees: A.carte_departements }
+  ], function (niveau, cle, nom) {
+    zone = { champ: niveau === "departements" ? "departement" : "region", cle: cle, nom: nom }; affiche = PAS; dessiner();
+  });
+  document.getElementById("limite-geo").innerHTML = "<strong>Limite.</strong> " + fmt(A.sans_region) + " annonces n'ont pas de région renseignée et n'apparaissent pas dans le graphique. Avec " + fmt(A.puy_de_dome) + " annonces dans le Puy-de-Dôme, on ne peut rien conclure sur ce département à partir de ce canal.";
+
+  var c = A.contrats;
+  document.getElementById("texte-contrat").textContent =
+    "Parmi les " + fmt(A.retenues) + " annonces : " + fmt(c.permanent) + " en contrat « permanent » (CDI), " + fmt(c.contract) + " en contrat « contract » (CDD, intérim…) et " + fmt(c.non_renseigne) + " sans type de contrat renseigné.";
+
+  document.getElementById("texte-alternance").textContent =
+    "Environ " + fmt(A.alternance) + " annonces sur " + fmt(A.retenues) + " (" + Math.round(A.alternance / A.retenues * 100) + " %) mentionnent l'alternance. Le filtre « Alternance » de la liste ci-dessous les affiche.";
+  var s = A.salaires;
+  document.getElementById("texte-sal").textContent =
+    fmt(s.avec_salaire) + " annonces sur " + fmt(A.retenues) + " affichent un salaire ; " + fmt(s.retenus) + " ont une valeur annuelle plausible (" + fmt(s.exclus) + " écartées).";
+  document.getElementById("cartes-sal").innerHTML =
+    carte(fmt(s.q1) + " €", "premier quartile (25 % des annonces sont en dessous)") +
+    carte(fmt(s.mediane) + " €", "médiane du salaire minimum affiché") +
+    carte(fmt(s.q3) + " €", "troisième quartile (25 % sont au-dessus)") +
+    carte(fmt(s.min) + " – " + fmt(s.max) + " €", "valeurs extrêmes retenues");
+
+  document.getElementById("t-entreprises").innerHTML = "<tr><th>Entreprise</th><th>Annonces</th></tr>" +
+    A.entreprises.map(function (e) { return "<tr><td>" + e.nom + "</td><td>" + e.nombre + "</td></tr>"; }).join("");
+
+  document.getElementById("t-outils").innerHTML = "<tr><th>Mot cherché</th><th>Annonces (sur " + fmt(A.retenues) + ")</th><th>Part</th></tr>" +
+    A.outils.slice().sort(function (a, b) { return b.nombre - a.nombre; })
+      .map(function (o) { return "<tr><td>" + o.outil + "</td><td>" + o.nombre + "</td><td>" + (o.nombre / A.retenues * 100).toFixed(1).replace(".", ",") + " %</td></tr>"; }).join("");
+})();
+</script>
+</body>
+</html>

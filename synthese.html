@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ce qu'on retient · chef de produit</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <h1>Ce qu'on retient</h1>
+  <p class="chapeau">Les enseignements de la veille sur le métier de chef de produit, chacun renvoyant à la page qui le détaille.</p>
+
+  <h2>Moins d'offres enregistrées, mais des embauches qui tiennent</h2>
+  <p id="t-baisse"></p>
+  <p class="source">Détail : <a href="offres.html">Offres et marché</a>. Source : API France Travail « Marché du travail », indicateurs OFF_1 et EMB_1.</p>
+  <div class="limite"><strong>Limite.</strong> Le nombre d'offres enregistrées mesure ce qui passe par France Travail et ses partenaires : sa baisse n'est pas forcément celle du recrutement, d'autant que les embauches enregistrées ne reculent pas. La cause n'est pas identifiable avec ces données.</div>
+
+  <h2>Des offres concentrées sur l'Île-de-France</h2>
+  <p id="t-geo"></p>
+  <p class="source">Détail : <a href="annonces.html">Annonces</a> et <a href="acteurs.html">Acteurs</a>. Sources : API Adzuna et API « Recherche d'entreprises » (Sirene).</p>
+  <div class="limite"><strong>Limite.</strong> Sur le territoire du Puy-de-Dôme, les volumes sont trop faibles pour être lus finement (valeurs arrondies à la dizaine côté France Travail, deux annonces côté Adzuna). L'analyse locale repose donc plutôt sur la base des entreprises que sur les annonces.</div>
+
+  <h2>Le CDI domine, les salaires affichés sont rares</h2>
+  <p id="t-contrat"></p>
+  <p class="source">Détail : <a href="offres.html">Offres et marché</a> (contrats) et <a href="annonces.html">Annonces</a> (salaires affichés).</p>
+
+  <h2>Des compétences de pilotage, de données et de marketing</h2>
+  <p id="t-comp"></p>
+  <p class="source">Détail : <a href="competences.html">Compétences</a>. Source : fiche ROME 4.0 de M1703, API France Travail.</p>
+
+  <h2>L'intelligence artificielle s'installe dans le métier</h2>
+  <p>Selon l'Apec, le chef de produit fait partie des métiers commercial-marketing dont les offres cadres mentionnent le plus souvent l'IA, même si ces mentions restent minoritaires dans l'ensemble des offres de la fonction. Les compétences attendues portent notamment sur l'automatisation de campagnes, l'intégration d'IA génératives dans les outils marketing et le pilotage de projets IA.</p>
+  <p class="source">Détail : <a href="evolution.html">Évolution</a>. Source : Apec, article du 03/09/2026.</p>
+
+  <h2>Pistes de compétences à travailler</h2>
+  <p>En croisant le référentiel officiel et l'étude de l'Apec, quatre axes ressortent pour un profil qui vise ce métier :</p>
+  <ul class="liste">
+    <li><strong>Analyse de données</strong> : collecter et analyser des données, construire des tableaux de bord de suivi du produit.</li>
+    <li><strong>Gestion de projet</strong> : concevoir et gérer un projet, avec les équipes de développement et de données.</li>
+    <li><strong>Marketing digital et automatisation</strong> : plan marketing, campagnes personnalisées, outils d'automatisation.</li>
+    <li><strong>Intelligence artificielle appliquée</strong> : usage des IA génératives, pilotage de projets IA.</li>
+  </ul>
+  <div class="limite"><strong>Limite.</strong> Ces pistes sont déduites de deux sources générales (référentiel officiel et étude sur les offres cadres). Elles n'ont pas été vérifiées dans le texte complet d'annonces de chef de produit, qui n'est pas disponible dans les données récupérées.</div>
+</main>
+<script src="donnees.js"></script>
+<script src="commun.js"></script>
+<script>
+(function () {
+  var D = window.DONNEES, A = D.annonces, E = D.entreprises63;
+  var sf = serie(D.offres, "France");
+  var pic = sf.reduce(function (a, b) { return b.y > a.y ? b : a; }), der = sf[sf.length - 1];
+  var se = serie(D.embauches, "France"), ed = se[se.length - 1];
+  document.getElementById("t-baisse").textContent =
+    "Le nombre d'offres de chef de produit enregistrées en France est passé de " + fmt(pic.y) + " au trimestre " + pic.x + " à " + fmt(der.y) + " au trimestre " + der.x +
+    " (" + Math.round((der.y / pic.y - 1) * 100) + " %). Les embauches enregistrées, elles, ne baissent pas sur la même période : " +
+    fmt((se.filter(function (p) { return p.x === pic.x; })[0] || { y: null }).y) + " au trimestre " + pic.x + ", " + fmt(ed.y) + " au trimestre " + ed.x + " (dernier point disponible).";
+
+  var idf = A.regions[0];
+  document.getElementById("t-geo").textContent =
+    "Dans les annonces récupérées, " + Math.round(idf.nombre / A.retenues * 100) + " % se situent en " + idf.nom + " (" + fmt(idf.nombre) + " sur " + fmt(A.retenues) + "), contre " +
+    fmt(A.auvergne_rhone_alpes) + " en Auvergne-Rhône-Alpes et " + fmt(A.puy_de_dome) + " dans le Puy-de-Dôme. Le département compte en revanche " + fmt(E.siege_63) +
+    " entreprises de 50 salariés et plus dont le siège s'y trouve, dont " + fmt(E.nb_grandes) + " grandes entreprises privées.";
+
+  var C = D.contrats_france, periodes = C.map(function (c) { return c.periode; }).filter(function (p, i, a) { return a.indexOf(p) === i; }).sort().slice(-4);
+  var cdi = periodes.map(function (p) { return C.filter(function (c) { return c.periode === p && c.contrat === "CDI"; })[0]; }).filter(Boolean).map(function (c) { return c.pourcentage; });
+  var s = A.salaires;
+  document.getElementById("t-contrat").textContent =
+    "Au niveau national, le CDI représente entre " + Math.min.apply(null, cdi) + " % et " + Math.max.apply(null, cdi) + " % des offres sur les quatre derniers trimestres. " +
+    "Seules " + fmt(s.avec_salaire) + " annonces sur " + fmt(A.retenues) + " affichent un salaire ; sur les " + fmt(s.retenus) + " valeurs annuelles plausibles, le salaire minimum affiché a pour médiane " + fmt(s.mediane) + " € (de " + fmt(s.q1) + " à " + fmt(s.q3) + " € pour la moitié centrale).";
+
+  var macros = D.competences.filter(function (c) { return c.type === "MACRO-SAVOIR-FAIRE"; });
+  document.getElementById("t-comp").textContent =
+    "Le référentiel rattache " + D.competences.length + " compétences au métier, dont " + macros.length + " grands savoir-faire : par exemple « " + macros[0].competence.toLowerCase() + " », « collecter et analyser des données », « réaliser une veille de marché » ou « élaborer un plan marketing ».";
+})();
+</script>
+</body>
+</html>
