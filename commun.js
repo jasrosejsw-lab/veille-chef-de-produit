@@ -42,9 +42,7 @@ function courbe(conteneur, points, couleur, unite, largeur) {
   var Y = function (v) { return H - b - (v - min) / (max - min || 1) * (H - b - h); };
   var id = "aire" + (_idCourbe++);
   var police = ' font-family="Segoe UI, system-ui, sans-serif"';
-  var s = '<svg viewBox="0 0 ' + L + " " + H + '" role="img" aria-label="Courbe ' + (unite || "") + '">' +
-    '<defs><linearGradient id="' + id + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="' + couleur + '" stop-opacity=".28"/>' +
-    '<stop offset="100%" stop-color="' + couleur + '" stop-opacity="0"/></linearGradient></defs>';
+  var s = '<svg viewBox="0 0 ' + L + " " + H + '" role="img" aria-label="Courbe ' + (unite || "") + '">';
   [0, 0.5, 1].forEach(function (t) {
     var v = min + t * (max - min), y = Y(v);
     s += '<line x1="' + g + '" x2="' + (L - d) + '" y1="' + y + '" y2="' + y + '" stroke="var(--trait)" stroke-dasharray="' + (t === 0 ? "0" : "3 4") + '"/>' +
@@ -55,13 +53,13 @@ function courbe(conteneur, points, couleur, unite, largeur) {
       s += '<text x="' + X(i) + '" y="' + (H - 10) + '" text-anchor="middle" font-size="11.5" fill="var(--discret)"' + police + ">" + p.x + "</text>";
   });
   var trace = points.map(function (p, i) { return X(i) + "," + Y(p.y); }).join(" ");
-  s += '<polygon fill="url(#' + id + ')" points="' + X(0) + "," + Y(0) + " " + trace + " " + X(points.length - 1) + "," + Y(0) + '"/>';
-  s += '<polyline fill="none" stroke="' + couleur + '" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" points="' + trace + '"/>';
+  s += '<polygon fill="' + couleur + '" fill-opacity=".1" points="' + X(0) + "," + Y(0) + " " + trace + " " + X(points.length - 1) + "," + Y(0) + '"/>';
+  s += '<polyline fill="none" stroke="' + couleur + '" stroke-width="2" stroke-linejoin="miter" points="' + trace + '"/>';
   var im = ys.indexOf(max), dern = points.length - 1;
   [im, dern].forEach(function (i, k) {
     if (k === 1 && i === im) return;
     var ancre = i === dern ? "end" : (i === 0 ? "start" : "middle");
-    s += '<circle cx="' + X(i) + '" cy="' + Y(points[i].y) + '" r="5" fill="var(--carte)" stroke="' + couleur + '" stroke-width="2.6"/>' +
+    s += '<rect x="' + (X(i) - 4) + '" y="' + (Y(points[i].y) - 4) + '" width="8" height="8" fill="' + couleur + '"/>' +
       '<text x="' + X(i) + '" y="' + (Y(points[i].y) - 11) + '" text-anchor="' + ancre +
       '" font-size="13" font-weight="700" fill="var(--texte)"' + police + ">" + fmt(points[i].y) + "</text>";
   });
