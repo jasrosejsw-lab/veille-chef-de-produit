@@ -1,19 +1,12 @@
-/* Style éditorial : papier, encre, filets fins, une couleur d'accent. Aucune police ni bibliothèque externe. */
+/* Style éditorial : papier, encre, filets fins, une couleur d'accent. Aucune police ni bibliothèque externe. Thème clair uniquement. */
 :root {
+  color-scheme: light;
   --fond: #f6f3ec; --carte: #fffdf8; --texte: #14171c; --discret: #5f6168; --trait: #d9d3c4;
   --encre: #14171c; --accent: #b3341b; --accent-doux: #efe9db;
   --limite: #14171c; --limite-fond: #efe9db; --limite-trait: #b3341b;
   --serie1: #1f3a93; --serie2: #b3341b; --serie3: #2f6b4f;
   --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
   --police: "Segoe UI Variable", "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --fond: #121316; --carte: #1a1c21; --texte: #ece8de; --discret: #a3a198; --trait: #34363d;
-    --encre: #ece8de; --accent: #ff8a67; --accent-doux: #23252b;
-    --limite: #ece8de; --limite-fond: #23252b; --limite-trait: #ff8a67;
-    --serie1: #8fa8ff; --serie2: #ff8a67; --serie3: #7fcaa0;
-  }
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
