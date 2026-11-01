@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Évolution du métier · chef de produit</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <h1>Comment le métier bouge</h1>
+  <p class="chapeau">Ce que les chiffres montrent déjà, et ce qu'il reste à documenter.</p>
+
+  <h2>Ce que montrent les données</h2>
+  <ul class="liste" id="constats"></ul>
+  <p class="source">Source : API France Travail « Marché du travail » (OFF_1 et EMB_1), extraction du <span class="date"></span>. Une tendance se lit sur plusieurs extractions : celle-ci est la première, les suivantes seront ajoutées avec leur date.</p>
+
+  <h2>Les mots qui montent</h2>
+  <div class="afaire">À faire : relever dans des annonces datées les termes qui apparaissent (IA générative, automation, data, GEO…) et ceux qui reculent. Cela demande un canal d'annonces, pas encore disponible.</div>
+
+  <h2>Une source emploi</h2>
+  <div class="afaire">À faire : citer et résumer une source d'observation de l'emploi (APEC sur l'IA dans les métiers du commercial-marketing, WEF Future of Jobs 2025, ou France Travail), avec la référence exacte.</div>
+
+  <h2>Ce que les professionnels en ont dit</h2>
+  <div class="afaire">À faire après chaque journée professionnelle (prochaine date : 17/12 avec Samir Aouiche, puis le 17/02 avec Marjorie Charbonnier) : noter ce que l'intervenant dit de l'évolution du métier, avec la date.</div>
+</main>
+<script src="donnees.js"></script>
+<script src="commun.js"></script>
+<script>
+(function () {
+  var D = window.DONNEES;
+  document.querySelectorAll(".date").forEach(function (e) { e.textContent = D.extraction; });
+  var li = [];
+  var sf = serie(D.offres, "France"), pic = sf.reduce(function (a, b) { return b.y > a.y ? b : a; }), der = sf[sf.length - 1];
+  li.push("Le volume d'offres enregistrées en France est passé de " + fmt(pic.y) + " (" + pic.x + ") à " + fmt(der.y) + " (" + der.x + ").");
+  var a2025 = sf.filter(function (p) { return p.x.indexOf("2025") === 0; }), a2022 = sf.filter(function (p) { return p.x.indexOf("2022") === 0; });
+  var somme = function (l) { return l.reduce(function (s, p) { return s + p.y; }, 0); };
+  li.push("Sur une année entière, 2022 compte " + fmt(somme(a2022)) + " offres enregistrées contre " + fmt(somme(a2025)) + " en 2025.");
+  var se = serie(D.embauches, "France");
+  var pe = se.reduce(function (a, b) { return b.y > a.y ? b : a; }), de = se[se.length - 1];
+  li.push("Les embauches enregistrées vont de " + fmt(Math.min.apply(null, se.map(function (p) { return p.y; }))) + " à " + fmt(pe.y) + " par trimestre (maximum en " + pe.x + ", dernier point : " + fmt(de.y) + " en " + de.x + ").");
+  document.getElementById("constats").innerHTML = li.map(function (t) { return "<li>" + t + "</li>"; }).join("");
+})();
+</script>
+</body>
+</html>

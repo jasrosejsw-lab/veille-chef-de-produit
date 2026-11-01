@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Comment c'est fait · chef de produit</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <h1>Comment le site est fait</h1>
+  <p class="chapeau">Les canaux branchés, les scripts, les données, les règles et les limites rencontrées.</p>
+
+  <h2>Les canaux</h2>
+  <table>
+    <tr><th>Canal</th><th>Ce qu'il apporte</th><th>État</th></tr>
+    <tr><td>API France Travail « Marché du travail »</td><td>Offres, embauches, tension, salaires en poste, par trimestre ou par année</td><td>Branché</td></tr>
+    <tr><td>API France Travail « ROME 4.0 » (métiers, fiches métiers)</td><td>Appellations et compétences officielles de M1703</td><td>Branché</td></tr>
+    <tr><td>API France Travail « Offres d'emploi »</td><td>Annonces détaillées (salaires affichés, compétences)</td><td>Absente de mon compte développeur</td></tr>
+    <tr><td>API France Travail « La Bonne Boite »</td><td>Entreprises à fort potentiel d'embauche</td><td>Activée mais erreur 403</td></tr>
+  </table>
+  <p>Aucun scraping de LinkedIn, de l'APEC ou d'Indeed : leurs conditions d'utilisation l'interdisent.</p>
+
+  <h2>Les scripts et les données</h2>
+  <ul class="liste">
+    <li><code>scripts/test_connexion.ps1</code> : teste la connexion à l'API (n'affiche jamais les identifiants).</li>
+    <li><code>scripts/marche_du_travail.ps1</code> : offres par trimestre → <code>data/marche_travail_AAAA-MM-JJ.csv</code>.</li>
+    <li><code>scripts/indicateurs_marche.ps1</code> : tension, embauches, salaires → <code>data/indicateurs_AAAA-MM-JJ.csv</code>.</li>
+    <li><code>scripts/rome.ps1</code> : appellations et compétences → <code>data/rome_*.csv</code>.</li>
+    <li><code>scripts/build_site.ps1</code> : prépare <code>donnees.js</code>, lu par les pages.</li>
+    <li><code>data/raw/</code> : les réponses brutes de l'API, conservées pour vérifier chaque chiffre.</li>
+  </ul>
+  <p>Chaque fichier de données porte la date de son extraction dans son nom. Relancer un script crée un nouveau fichier daté : plusieurs extractions permettent de voir le marché bouger.</p>
+
+  <h2>Les règles</h2>
+  <ul class="liste">
+    <li>Chaque chiffre est présenté avec sa requête, sa date, son canal et ses limites.</li>
+    <li>Les identifiants de l'API sont dans un fichier <code>.env</code> exclu du dépôt et du zip.</li>
+    <li><strong>RGPD :</strong> aucun contact nominatif n'est collecté dans ce site. Un contact n'est conservé que pour une finalité claire (candidature), en lien avec sa fonction, avec possibilité de s'opposer.</li>
+  </ul>
+
+  <h2>Les limites rencontrées</h2>
+  <ul class="liste">
+    <li>L'API « Offres d'emploi » n'apparaît pas dans le catalogue de mon compte : je n'ai pas d'annonces détaillées.</li>
+    <li>« La Bonne Boite » répond 403 malgré une activation et un jeton accepté.</li>
+    <li>Les statistiques sont arrondies et agrégées : elles décrivent le marché, pas des offres individuelles.</li>
+  </ul>
+
+  <p>Le dépôt est aussi en ligne : <a href="https://github.com/jasrosejsw-lab/veille-chef-de-produit">github.com/jasrosejsw-lab/veille-chef-de-produit</a>.</p>
+</main>
+<script src="donnees.js"></script>
+<script src="commun.js"></script>
+</body>
+</html>

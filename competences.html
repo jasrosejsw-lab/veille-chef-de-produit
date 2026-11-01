@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Compétences · chef de produit</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <h1>Compétences et outils</h1>
+  <p class="chapeau">Ce que le référentiel officiel attend d'un chef de produit, en attendant de le confronter aux annonces et à la formation.</p>
+
+  <h2>Les compétences du référentiel ROME 4.0</h2>
+  <p id="intro"></p>
+  <div id="liste"></div>
+  <p class="source">Source : fiche métier ROME 4.0 de M1703 (API France Travail « fiches métiers »), extraction du <span class="date"></span>. Script : <code>scripts/rome.ps1</code>.</p>
+  <div class="limite"><strong>Limite.</strong> C'est le référentiel officiel, pas la réalité des annonces. Une compétence présente ici n'est pas forcément demandée dans les offres, et un outil précis (HubSpot, GA4, SQL…) n'y figure pas.</div>
+
+  <h2>Ce que la formation ne donne pas</h2>
+  <div class="afaire">À faire : comparer cette liste avec la maquette du M2 MOD, surligner ce qui n'y figure pas, et la compléter avec les outils comptés dans de vraies annonces. Cette comparaison sera ma liste de ce qu'il faut aller chercher cette année.</div>
+
+  <h2>Outils comptés dans les annonces</h2>
+  <div class="afaire">À faire : le canal « Offres d'emploi » de France Travail n'est pas ouvert sur mon compte développeur (voir « Comment c'est fait »). Il me faut un autre canal d'annonces pour compter les outils.</div>
+</main>
+<script src="donnees.js"></script>
+<script src="commun.js"></script>
+<script>
+(function () {
+  var D = window.DONNEES;
+  document.querySelectorAll(".date").forEach(function (e) { e.textContent = D.extraction; });
+  var types = { "MACRO-SAVOIR-FAIRE": "Macro savoir-faire", "COMPETENCE-DETAILLEE": "Compétence détaillée", "MACRO-SAVOIR-ETRE-PROFESSIONNEL": "Savoir-être professionnel" };
+  var nbMacro = D.competences.filter(function (c) { return c.type === "MACRO-SAVOIR-FAIRE"; }).length;
+  document.getElementById("intro").textContent = D.competences.length + " compétences sont rattachées à M1703, dont " + nbMacro + " macro savoir-faire, groupées par enjeu.";
+  var groupes = {};
+  D.competences.forEach(function (c) { (groupes[c.enjeu] = groupes[c.enjeu] || []).push(c); });
+  var html = "";
+  Object.keys(groupes).sort().forEach(function (enjeu) {
+    html += "<h3>" + enjeu + "</h3><ul class='liste'>" + groupes[enjeu].map(function (c) {
+      return "<li>" + c.competence + " <small style='color:var(--discret)'>(" + (types[c.type] || c.type) + ")</small></li>"; }).join("") + "</ul>";
+  });
+  document.getElementById("liste").innerHTML = html;
+})();
+</script>
+</body>
+</html>

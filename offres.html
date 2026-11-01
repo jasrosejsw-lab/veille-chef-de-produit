@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Offres et marché · chef de produit</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <h1>Ce que disent les offres</h1>
+  <p class="chapeau">Volume, géographie, embauches, tension de recrutement et salaires pour le métier M1703, d'après les statistiques officielles de France Travail.</p>
+
+  <h2>Le volume d'offres, trimestre par trimestre</h2>
+  <p id="texte-offres"></p>
+  <figure><div id="c-fr"></div><figcaption>France entière · offres « Chef / Cheffe de produit » enregistrées par trimestre</figcaption></figure>
+  <figure><div id="c-ara"></div><figcaption>Auvergne-Rhône-Alpes</figcaption></figure>
+  <figure><div id="c-63"></div><figcaption>Puy-de-Dôme</figcaption></figure>
+  <p class="source">Requête : indicateur OFF_1, ROME M1703, origine « toutes offres », période trimestrielle, territoires France / région 84 / département 63. Canal : API France Travail « Marché du travail ». Extraction du <span class="date"></span>. Script : <code>scripts/marche_du_travail.ps1</code>.</p>
+  <div class="limite"><strong>Limites.</strong> Les nombres semblent arrondis à la dizaine, ce qui rend les chiffres du Puy-de-Dôme peu précis (10 à 40 offres par trimestre). Ce sont des offres enregistrées par France Travail et ses partenaires, pas l'ensemble des offres du marché. Je n'ai pas vérifié si les offres d'alternance sont comptées.</div>
+
+  <h2>Les embauches</h2>
+  <p id="texte-emb"></p>
+  <figure><div id="c-emb"></div><figcaption>France entière · embauches sur le métier, par trimestre</figcaption></figure>
+  <p class="source">Requête : indicateur EMB_1, ROME M1703, candidats inscrits ou non, toutes durées de contrat, trimestriel. Canal : API France Travail « Marché du travail ». Script : <code>scripts/indicateurs_marche.ps1</code>.</p>
+  <div class="limite"><strong>Limite.</strong> Offres et embauches ne sont pas deux mesures du même phénomène : on ne peut pas en déduire un taux de réussite. Dans le Puy-de-Dôme, les embauches sont de l'ordre de 10 par trimestre, trop faibles pour être lues finement.</div>
+
+  <h2>La tension de recrutement</h2>
+  <p id="texte-tension"></p>
+  <table id="t-tension"></table>
+  <p class="source">Requête : indicateur PERSP_2 (indicateur principal de tension), ROME M1703, annuel. Aucune donnée pour le Puy-de-Dôme.</p>
+  <div class="limite"><strong>Limite.</strong> Je n'ai pas encore vérifié la signification exacte de l'échelle (niveau et score). Je rapporte les valeurs sans les interpréter.</div>
+
+  <h2>Les salaires</h2>
+  <p id="texte-sal"></p>
+  <table id="t-sal"></table>
+  <div class="limite"><strong>Limites.</strong> Ce sont des salaires de personnes <em>en poste</em>, pas des salaires <em>affichés</em> dans les annonces : on ne les confond pas. Ils concernent la famille professionnelle « cadres commerciaux, acheteurs et cadres de la mercatique », plus large que le seul chef de produit. L'unité (mensuelle ou autre) reste à confirmer.</div>
+
+  <h2>Contrats</h2>
+  <div class="afaire">À compléter : la répartition par type de contrat est disponible dans les données (colonne « caractéristique »), mais elle contient des incohérences (nombre à 0 avec un pourcentage non nul). Je ne la publie pas avant de l'avoir vérifiée.</div>
+</main>
+<script src="donnees.js"></script>
+<script src="commun.js"></script>
+<script>
+(function () {
+  var D = window.DONNEES;
+  document.querySelectorAll(".date").forEach(function (e) { e.textContent = D.extraction; });
+  var sf = serie(D.offres, "France"), sa = serie(D.offres, "AUVERGNE-RHONE-ALPES"), sp = serie(D.offres, "PUY-DE-DOME");
+  courbe("c-fr", sf, "var(--serie1)"); courbe("c-ara", sa, "var(--serie2)"); courbe("c-63", sp, "var(--serie3)");
+  var pic = sf.reduce(function (a, b) { return b.y > a.y ? b : a; }), der = sf[sf.length - 1];
+  document.getElementById("texte-offres").textContent =
+    "En France, le nombre d'offres enregistrées pour ce métier a atteint " + fmt(pic.y) + " au trimestre " + pic.x +
+    ", contre " + fmt(der.y) + " au trimestre " + der.x + " (" + Math.round((der.y / pic.y - 1) * 100) + " % par rapport au pic). " +
+    "Dans le Puy-de-Dôme, on compte entre " + fmt(Math.min.apply(null, sp.map(function (p) { return p.y; }))) + " et " +
+    fmt(Math.max.apply(null, sp.map(function (p) { return p.y; }))) + " offres par trimestre.";
+  var se = serie(D.embauches, "France"); courbe("c-emb", se, "var(--serie1)");
+  var ed = se[se.length - 1];
+  document.getElementById("texte-emb").textContent = "En France, " + fmt(ed.y) + " embauches ont été enregistrées au trimestre " + ed.x + ".";
+  var st = serie(D.tension, "France", "score");
+  var niv = serie(D.tension, "France", "niveau");
+  document.getElementById("texte-tension").textContent = "Valeurs publiées pour la France, de " + st[0].x + " à " + st[st.length - 1].x + ".";
+  document.getElementById("t-tension").innerHTML = "<tr><th>Année</th><th>Niveau</th><th>Score</th></tr>" +
+    st.map(function (p, i) { return "<tr><td>" + p.x + "</td><td>" + niv[i].y + "</td><td>" + String(p.y).replace(".", ",") + "</td></tr>"; }).join("");
+  var ss = serie(D.salaires, "France", "montant");
+  document.getElementById("texte-sal").textContent = "Pour la France, la valeur publiée est de " + fmt(ss[ss.length - 1].y) + " en " + ss[ss.length - 1].x + " (la source ne donne que les années " + ss.map(function (p) { return p.x; }).join(" et ") + ").";
+  document.getElementById("t-sal").innerHTML = "<tr><th>Territoire</th><th>Année</th><th>Montant</th></tr>" +
+    D.salaires.sort(function (a, b) { return a.territoire + a.periode < b.territoire + b.periode ? -1 : 1; })
+      .map(function (r) { return "<tr><td>" + r.territoire + "</td><td>" + r.periode + "</td><td>" + fmt(r.montant) + "</td></tr>"; }).join("");
+})();
+</script>
+</body>
+</html>

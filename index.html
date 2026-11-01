@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chef de produit · veille métier</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <h1>Chef de produit : un métier compté, pas raconté</h1>
+  <p class="chapeau">Veille sur le marché du métier de chef de produit, réalisée dans le cadre des séminaires métiers du M2 Marketing Opérationnel &amp; Digital (IAE Clermont Auvergne).</p>
+
+  <div class="cartes" id="cartes"></div>
+
+  <h2>Le métier tel que le marché le nomme</h2>
+  <p>Le diplôme dit « marketing opérationnel et digital ». Le marché, lui, écrit « chef de produit ». Pour le compter, il faut l'appeler par son nom dans les offres et par son code <strong>ROME M1703</strong> (« Chef / Cheffe de produit »), le référentiel de France Travail qui regroupe les appellations d'un même métier.</p>
+  <h3>Les appellations officielles rattachées à M1703</h3>
+  <ul class="liste" id="appellations"></ul>
+  <p class="source">Source : API France Travail ROME 4.0 (métiers), extraction du <span class="date"></span>. Script : <code>scripts/rome.ps1</code>.</p>
+
+  <h3>Ce que dit le référentiel</h3>
+  <p>Le chef de produit suit un produit ou une gamme, de sa conception à sa commercialisation, selon la stratégie commerciale et marketing de l'entreprise. L'emploi est accessible avec un diplôme de niveau Bac+3 à Bac+5 en commerce ou marketing, et l'anglais peut être exigé.</p>
+  <p class="source">Source : fiche ROME 4.0 de M1703 (API rome-metiers), réponse brute dans <code>data/raw/</code>.</p>
+
+  <h2>Les questions posées à ce marché</h2>
+  <ol class="liste">
+    <li>Combien d'offres, en France, en Auvergne-Rhône-Alpes et dans le Puy-de-Dôme ? Et comment évolue ce volume ?</li>
+    <li>Quels contrats et quels salaires ?</li>
+    <li>Quelles compétences et quels outils reviennent, et lesquels la formation ne donne pas ?</li>
+    <li>Comment le métier bouge-t-il ?</li>
+    <li>Quelles entreprises recrutent cet intitulé, et lesquelles pourraient en avoir besoin sans publier d'annonce ?</li>
+  </ol>
+  <p>Les réponses sont dans les pages suivantes, avec leurs limites. Chaque chiffre porte sa source, sa date et son canal.</p>
+</main>
+<script src="donnees.js"></script>
+<script src="commun.js"></script>
+<script>
+(function () {
+  var D = window.DONNEES;
+  document.querySelectorAll(".date").forEach(function (e) { e.textContent = D.extraction; });
+  document.getElementById("appellations").innerHTML = D.appellations.map(function (a) { return "<li>" + a + "</li>"; }).join("");
+  var der = function (liste, terr) { var s = serie(liste, terr); return s[s.length - 1]; };
+  var f = der(D.offres, "France"), p = der(D.offres, "PUY-DE-DOME"), e = der(D.embauches, "France");
+  var carte = function (v, l) { return '<div class="carte"><div class="valeur">' + v + '</div><div class="legende">' + l + "</div></div>"; };
+  document.getElementById("cartes").innerHTML =
+    carte(fmt(f.y), "offres enregistrées en France, " + f.x) +
+    carte(fmt(p.y), "offres enregistrées dans le Puy-de-Dôme, " + p.x) +
+    carte(fmt(e.y), "embauches en France, " + e.x) +
+    carte("M1703", "code ROME du métier");
+})();
+</script>
+</body>
+</html>
