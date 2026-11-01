@@ -54,12 +54,12 @@ function courbe(conteneur, points, couleur, unite, largeur) {
   });
   var trace = points.map(function (p, i) { return X(i) + "," + Y(p.y); }).join(" ");
   s += '<polygon fill="' + couleur + '" fill-opacity=".1" points="' + X(0) + "," + Y(0) + " " + trace + " " + X(points.length - 1) + "," + Y(0) + '"/>';
-  s += '<polyline fill="none" stroke="' + couleur + '" stroke-width="2" stroke-linejoin="miter" points="' + trace + '"/>';
+  s += '<polyline fill="none" stroke="' + couleur + '" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" points="' + trace + '"/>';
   var im = ys.indexOf(max), dern = points.length - 1;
   [im, dern].forEach(function (i, k) {
     if (k === 1 && i === im) return;
     var ancre = i === dern ? "end" : (i === 0 ? "start" : "middle");
-    s += '<rect x="' + (X(i) - 4) + '" y="' + (Y(points[i].y) - 4) + '" width="8" height="8" fill="' + couleur + '"/>' +
+    s += '<circle cx="' + X(i) + '" cy="' + Y(points[i].y) + '" r="5" fill="#fff" stroke="' + couleur + '" stroke-width="2.6"/>' +
       '<text x="' + X(i) + '" y="' + (Y(points[i].y) - 11) + '" text-anchor="' + ancre +
       '" font-size="13" font-weight="700" fill="var(--texte)"' + police + ">" + fmt(points[i].y) + "</text>";
   });
@@ -81,3 +81,28 @@ function serie(liste, territoire, cle) {
     .sort(function (a, b) { return a.periode < b.periode ? -1 : 1; })
     .map(function (r) { return { x: r.periode, y: r[cle || "nombre"] }; });
 }
+
+// Bandeau d'en-tête : le titre et le chapeau de chaque page y sont déplacés ; sur l'accueil, trois chiffres l'accompagnent.
+(function () {
+  var main = document.querySelector("main"), h1 = main && main.querySelector("h1"), chapeau = main && main.querySelector("p.chapeau");
+  if (!h1) return;
+  var accueil = main.classList.contains("accueil");
+  var hero = document.createElement("section");
+  hero.className = "hero" + (accueil ? " hero-accueil" : "");
+  hero.innerHTML = '<div class="contenu"><div class="hero-texte"><p class="surtitre">M2 Marketing Opérationnel &amp; Digital · IAE Clermont Auvergne</p></div></div>';
+  var texte = hero.querySelector(".hero-texte");
+  texte.appendChild(h1);
+  if (chapeau) texte.appendChild(chapeau);
+  if (accueil && window.DONNEES) {
+    var D = window.DONNEES, f = serie(D.offres, "France"), e = serie(D.embauches, "France");
+    var ligne = function (v, l) { return '<div><div class="valeur">' + v + '</div><div class="legende">' + l + "</div></div>"; };
+    var panneau = document.createElement("div");
+    panneau.className = "hero-chiffres";
+    panneau.innerHTML =
+      ligne(fmt(f[f.length - 1].y), "offres de chef de produit enregistrées en France, " + f[f.length - 1].x) +
+      ligne(fmt(e[e.length - 1].y), "embauches enregistrées en France, " + e[e.length - 1].x) +
+      (D.annonces ? ligne(fmt(D.annonces.retenues), "annonces en ligne analysées, dont " + fmt(D.annonces.alternance) + " en alternance") : "");
+    hero.querySelector(".contenu").appendChild(panneau);
+  }
+  main.parentNode.insertBefore(hero, main);
+})();
