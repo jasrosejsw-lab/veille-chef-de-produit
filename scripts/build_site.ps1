@@ -122,6 +122,17 @@ if ($fEnt) {
     "entreprises_liste.js ecrit : $($listeEnt.Count) entreprises"
 }
 
+# Numéro de version des fichiers du site dans les pages : évite qu'un navigateur mélange d'anciens fichiers avec les nouveaux
+# (GitHub Pages garde les fichiers en cache jusqu'à 10 minutes). À relancer avant chaque mise en ligne.
+$version = Get-Date -Format "yyyyMMddHHmm"
+$icone = '<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=''http://www.w3.org/2000/svg'' viewBox=''0 0 32 32''%3E%3Crect width=''32'' height=''32'' rx=''7'' fill=''%230b5fff''/%3E%3C/svg%3E">'
+foreach ($page in Get-ChildItem (Join-Path $racine "*.html")) {
+    $t = [IO.File]::ReadAllText($page.FullName, [Text.Encoding]::UTF8)
+    $t = [regex]::Replace($t, '(src|href)="(style\.css|commun\.js|carte(?:_regions|_departements)?\.js|donnees\.js|annonces_liste\.js|entreprises_liste\.js)(?:\?v=\d+)?"', "`$1=`"`$2?v=$version`"")
+    if ($t -notmatch 'rel="icon"') { $t = $t -replace '(<link rel="stylesheet")', "$icone`n`$1" }
+    [IO.File]::WriteAllText($page.FullName, $t, [Text.UTF8Encoding]::new($false))
+}
+
 $js = "window.DONNEES = " + ($donnees | ConvertTo-Json -Depth 5 -Compress) + ";"
 [IO.File]::WriteAllText((Join-Path $racine "donnees.js"), $js, [Text.UTF8Encoding]::new($false))
 "donnees.js ecrit : $($donnees.offres.Count) offres, $($donnees.embauches.Count) embauches, $($donnees.tension.Count) tension, $($donnees.salaires.Count) salaires, $($donnees.appellations.Count) appellations, $($donnees.competences.Count) competences"
