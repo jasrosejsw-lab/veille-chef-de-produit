@@ -27,11 +27,34 @@
   <h3>Les plus grandes entreprises privées dont le siège est dans le département</h3>
   <p id="texte-grandes"></p>
   <table id="t-grandes"></table>
+
+  <h3 id="repertoire">Rechercher une entreprise à contacter</h3>
+  <p>Ces entreprises ne publient pas forcément d'annonce : elles peuvent être contactées en candidature spontanée. Filtrez par commune, secteur ou taille ; chaque ligne renvoie vers la fiche officielle de l'entreprise (adresse, site, coordonnées publiques).</p>
+  <div class="recherche">
+    <input id="e-q" type="search" placeholder="Rechercher une entreprise par son nom…" aria-label="Rechercher une entreprise">
+    <select id="e-commune" aria-label="Commune"><option value="">Toutes les communes</option></select>
+    <select id="e-secteur" aria-label="Secteur d'activité"><option value="">Tous les secteurs</option></select>
+    <select id="e-taille" aria-label="Taille de l'entreprise">
+      <option value="0">Toutes tailles (50 salariés et plus)</option>
+      <option value="3">200 salariés et plus</option>
+      <option value="5">500 salariés et plus</option>
+      <option value="7">2 000 salariés et plus</option>
+    </select>
+  </div>
+  <div class="recherche">
+    <label class="filtre-alt"><input type="checkbox" id="e-siege" checked> Siège dans le Puy-de-Dôme</label>
+    <label class="filtre-alt"><input type="checkbox" id="e-prive" checked> Hors administration, enseignement, santé</label>
+  </div>
+  <p class="discret-liste" id="e-compte" aria-live="polite"></p>
+  <ul class="annonces" id="e-liste"></ul>
+  <button id="e-plus" type="button" class="bouton-plus">Afficher plus d'entreprises</button>
+  <div class="limite"><strong>Limite.</strong> Être dans cette liste ne signifie pas que l'entreprise recrute un chef de produit. La taille est celle de l'entreprise entière, et le poste se trouve plus souvent au siège qu'en établissement local. Les fiches sont celles de l'Annuaire des entreprises (data.gouv.fr), issues de Sirene.</div>
   <p class="source">Source : API « Recherche d'entreprises » (Sirene), département 63, entreprises actives de 50 salariés et plus, extraction du <span class="date-ent"></span>. Script : <code>scripts/entreprises63.ps1</code>. Données : <code>data/entreprises_63_AAAA-MM-JJ.csv</code>.</p>
   <div class="limite"><strong>Limites.</strong> L'effectif filtré est celui de l'entreprise entière, pas celui de l'établissement local : une chaîne nationale avec un petit magasin dans le département est comptée. Le « siège dans le 63 » est un meilleur indice : les postes de chef de produit se trouvent plus souvent au siège. Rien n'indique pour autant qu'une entreprise de la liste recrute ce profil. La liste contient aussi des hôpitaux, des collectivités et des établissements d'enseignement, écartés de la liste des grandes entreprises mais présents dans le graphique par secteur.</div>
   <div class="limite"><strong>Canal écarté.</strong> L'API « La Bonne Boite » de France Travail, qui classe les entreprises à fort potentiel d'embauche par métier, est activée sur le compte développeur mais refuse les requêtes (erreur 403 sans message). Elle n'est donc pas utilisée.</div>
 </main>
 <script src="donnees.js"></script>
+<script src="entreprises_liste.js"></script>
 <script src="commun.js"></script>
 <script>
 (function () {
@@ -47,7 +70,7 @@
     carte(fmt(E.total), "entreprises de 50 salariés et plus avec un établissement dans le 63") +
     carte(fmt(E.siege_63), "dont le siège est dans le département") +
     carte(fmt(E.nb_grandes), "grandes entreprises privées (500 salariés et plus) avec siège dans le 63");
-  var casse = function (s) { return s.toLowerCase().replace(/(^|[ '-])([a-zàâéèêëîïôùûç])/g, function (m, a, b) { return a + b.toUpperCase(); }); };
+  var casse = casseNom;
   barres("b-communes", E.communes.map(function (c) { return { nom: casse(c.nom), nombre: c.nombre }; }), "var(--serie1)");
   var sections = { A: "Agriculture", B: "Industries extractives", C: "Industrie manufacturière", D: "Énergie", E: "Eau, déchets", F: "Construction", G: "Commerce", H: "Transports, entreposage", I: "Hébergement, restauration", J: "Information, communication", K: "Finance, assurance", L: "Immobilier", M: "Activités spécialisées, scientifiques", N: "Services administratifs et de soutien", O: "Administration publique", P: "Enseignement", Q: "Santé, action sociale", R: "Arts, spectacles", S: "Autres services" };
   barres("b-sections", E.sections.map(function (s) { return { nom: sections[s.code] || s.code, nombre: s.nombre }; }), "var(--serie3)");
@@ -55,6 +78,46 @@
   document.getElementById("texte-grandes").textContent = "Parmi les " + fmt(E.nb_grandes) + " grandes entreprises privées (500 salariés et plus, hors administration, enseignement et santé), voici les " + E.grandes.length + " plus grosses par tranche d'effectif de l'entreprise.";
   document.getElementById("t-grandes").innerHTML = "<tr><th>Entreprise</th><th>Siège</th><th>Secteur</th><th>Effectif</th></tr>" +
     E.grandes.map(function (g) { return "<tr><td>" + casse(g.nom) + "</td><td>" + casse(g.commune) + "</td><td>" + (sections[g.section] || g.section) + "</td><td>" + (tranches[g.tranche] || g.tranche) + "</td></tr>"; }).join("");
+})();
+</script>
+<script>
+// Répertoire des entreprises du Puy-de-Dôme : filtres combinables, liste paginée, lien vers la fiche officielle.
+(function () {
+  var LISTE = window.LISTE_ENTREPRISES || [], PAS = 20, affiche = PAS;
+  var SECTIONS = { A: "Agriculture", B: "Industries extractives", C: "Industrie manufacturière", D: "Énergie", E: "Eau, déchets", F: "Construction", G: "Commerce", H: "Transports, entreposage", I: "Hébergement, restauration", J: "Information, communication", K: "Finance, assurance", L: "Immobilier", M: "Activités spécialisées, scientifiques", N: "Services administratifs et de soutien", O: "Administration publique", P: "Enseignement", Q: "Santé, action sociale", R: "Arts, spectacles", S: "Autres services" };
+  var TRANCHES = { "21": "50 – 99 salariés", "22": "100 – 199", "31": "200 – 249", "32": "250 – 499", "41": "500 – 999", "42": "1 000 – 1 999", "51": "2 000 – 4 999", "52": "5 000 – 9 999", "53": "10 000 +" };
+  var RANG = { "21": 1, "22": 2, "31": 3, "32": 4, "41": 5, "42": 6, "51": 7, "52": 8, "53": 9 };
+  var casse = casseNom;
+  var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
+  var communesDe = function (e) { var l = e.communes ? e.communes.split(" / ") : []; if (e.siege && l.indexOf(e.siege) === -1) l.push(e.siege); return l; };
+
+  // Options des menus : communes les plus représentées, secteurs présents.
+  var compte = {}, secteurs = {};
+  LISTE.forEach(function (e) { communesDe(e).forEach(function (c) { compte[c] = (compte[c] || 0) + 1; }); secteurs[e.section] = true; });
+  var communes = Object.keys(compte).sort(function (a, b) { return compte[b] - compte[a] || (a < b ? -1 : 1); }).slice(0, 40);
+  document.getElementById("e-commune").insertAdjacentHTML("beforeend", communes.map(function (c) { return '<option value="' + esc(c) + '">' + esc(casse(c)) + " (" + compte[c] + ")</option>"; }).join(""));
+  document.getElementById("e-secteur").insertAdjacentHTML("beforeend", Object.keys(secteurs).filter(function (k) { return SECTIONS[k]; }).sort(function (a, b) { return SECTIONS[a] < SECTIONS[b] ? -1 : 1; })
+    .map(function (k) { return '<option value="' + k + '">' + esc(SECTIONS[k]) + "</option>"; }).join(""));
+
+  var dessiner = function () {
+    var q = document.getElementById("e-q").value.trim().toLowerCase(), commune = document.getElementById("e-commune").value, secteur = document.getElementById("e-secteur").value;
+    var taille = parseInt(document.getElementById("e-taille").value, 10), siege = document.getElementById("e-siege").checked, prive = document.getElementById("e-prive").checked;
+    var trouvees = LISTE.filter(function (e) {
+      return (!siege || e.s63 === 1) && (!prive || (["O", "P", "Q"].indexOf(e.section) === -1 && !/ASSOCIATION|HOSPITAL/i.test(e.nom))) && (!secteur || e.section === secteur) &&
+        (!taille || (RANG[e.tranche] || 0) >= taille) && (!commune || communesDe(e).indexOf(commune) !== -1) && (!q || String(e.nom).toLowerCase().indexOf(q) !== -1);
+    }).sort(function (a, b) { return (RANG[b.tranche] || 0) - (RANG[a.tranche] || 0) || (a.nom < b.nom ? -1 : 1); });
+    document.getElementById("e-compte").textContent = fmt(trouvees.length) + " entreprise" + (trouvees.length > 1 ? "s" : "") + (trouvees.length > affiche ? " — " + affiche + " affichées, les plus grandes d'abord" : "");
+    document.getElementById("e-liste").innerHTML = trouvees.slice(0, affiche).map(function (e) {
+      var meta = [e.s63 ? "Siège : " + casse(e.siege) : "Siège : " + casse(e.siege) + " (établissement dans le 63)", SECTIONS[e.section], TRANCHES[e.tranche] ? TRANCHES[e.tranche] + (RANG[e.tranche] > 1 ? " salariés" : "") : ""].filter(Boolean).map(esc).join(" · ");
+      return '<li class="annonce"><div class="a-tete"><strong>' + esc(casse(e.nom)) + "</strong></div><div class=\"a-meta\">" + meta + "</div>" +
+        '<a class="a-lien" href="https://annuaire-entreprises.data.gouv.fr/entreprise/' + encodeURIComponent(e.siren) + '" target="_blank" rel="noopener noreferrer">Voir la fiche officielle ↗</a></li>';
+    }).join("") || "<li class='annonce'>Aucune entreprise ne correspond.</li>";
+    document.getElementById("e-plus").style.display = trouvees.length > affiche ? "" : "none";
+  };
+  ["e-q"].forEach(function (id) { document.getElementById(id).addEventListener("input", function () { affiche = PAS; dessiner(); }); });
+  ["e-commune", "e-secteur", "e-taille", "e-siege", "e-prive"].forEach(function (id) { document.getElementById(id).addEventListener("change", function () { affiche = PAS; dessiner(); }); });
+  document.getElementById("e-plus").addEventListener("click", function () { affiche += PAS; dessiner(); });
+  dessiner();
 })();
 </script>
 </body>

@@ -16,7 +16,7 @@ Un site statique qui compte le métier de **chef de produit** (code ROME **M1703
 | Annonces | Carte des annonces par région et par département, liste filtrable avec liens pour postuler, filtre alternance (API Adzuna) |
 | Compétences | Référentiel officiel ROME 4.0 |
 | Évolution | Évolution du volume d'offres et effet de l'IA d'après l'Apec |
-| Acteurs | Entreprises qui publient, entreprises de 50 salariés et plus du Puy-de-Dôme (API Recherche d'entreprises) |
+| Acteurs | Entreprises qui publient, entreprises de 50 salariés et plus du Puy-de-Dôme avec un répertoire filtrable pour les candidatures spontanées (API Recherche d'entreprises) |
 | Méthode | Sources, scripts, données, RGPD et limites |
 
 Chaque chiffre du site est présenté avec sa requête, sa date, son canal et ses limites.

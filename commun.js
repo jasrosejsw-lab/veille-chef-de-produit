@@ -76,6 +76,15 @@ function barres(conteneur, lignes, couleur) {
   }).join("");
 }
 
+// Met en forme un nom en capitales (« MANUFACTURE FRANCAISE DES PNEUMATIQUES MICHELIN ») : majuscule initiale, petits mots en minuscules, sigles entre parenthèses en capitales.
+function casseNom(s) {
+  return String(s || "").toLowerCase()
+    .replace(/(^|[ '\-(])([a-zàâéèêëîïôùûç])/g, function (m, a, b) { return a + b.toUpperCase(); })
+    .replace(/ (De|Des|Du|Et|La|Le|Les|Sur|En|Au|Aux)(?= )/g, function (m) { return m.toLowerCase(); })
+    .replace(/\b([DL])'([A-ZÀ-Ý])/g, function (m, a, b) { return a.toLowerCase() + "'" + b; })
+    .replace(/\(([^)]{2,6})\)/g, function (m, x) { return "(" + x.toUpperCase() + ")"; });
+}
+
 function serie(liste, territoire, cle) {
   return liste.filter(function (r) { return r.territoire === territoire; })
     .sort(function (a, b) { return a.periode < b.periode ? -1 : 1; })

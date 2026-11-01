@@ -125,6 +125,8 @@ path.region.choisie { stroke: var(--encre); stroke-width: 3; }
 .recherche { display: flex; gap: 10px; flex-wrap: wrap; margin: 14px 0 6px; }
 .recherche input[type="search"] { flex: 1 1 260px; font: inherit; font-size: 15px; padding: 11px 14px; border: 1px solid var(--trait); border-radius: 10px; background: #fff; color: var(--texte); }
 .recherche input[type="search"]:focus { outline: 3px solid var(--accent-doux); border-color: var(--accent); }
+.recherche select { font: inherit; font-size: 14.5px; padding: 10px 12px; border: 1px solid var(--trait); border-radius: 10px; background: #fff; color: var(--texte); max-width: 100%; }
+.recherche select:focus { outline: 3px solid var(--accent-doux); border-color: var(--accent); }
 .recherche button, .bouton-plus { font: inherit; font-size: 14px; font-weight: 600; padding: 10px 16px; border: 1px solid var(--trait); border-radius: 10px; background: #fff; color: var(--texte); cursor: pointer; transition: border-color .12s; }
 .recherche button:hover, .bouton-plus:hover { border-color: var(--encre); }
 .filtre-alt { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; padding: 10px 14px; border: 1px solid var(--trait); border-radius: 10px; background: #fff; cursor: pointer; }

@@ -113,6 +113,15 @@ if ($fEnt) {
     }
 }
 
+# Liste consultable des entreprises du 63 pour la page "Acteurs" (fichier séparé, chargé uniquement par cette page). Aucune donnée personnelle.
+if ($fEnt) {
+    $listeEnt = @($ent | ForEach-Object {
+            [ordered]@{ siren = $_.siren; nom = $_.nom; siege = $_.siege_commune; s63 = [int]$_.siege_dans_63; section = $_.section_activite; tranche = $_.tranche_effectif; communes = $_.communes_63 } })
+    $jsEnt = "window.LISTE_ENTREPRISES = " + ($listeEnt | ConvertTo-Json -Depth 3 -Compress) + ";"
+    [IO.File]::WriteAllText((Join-Path $racine "entreprises_liste.js"), $jsEnt, [Text.UTF8Encoding]::new($false))
+    "entreprises_liste.js ecrit : $($listeEnt.Count) entreprises"
+}
+
 $js = "window.DONNEES = " + ($donnees | ConvertTo-Json -Depth 5 -Compress) + ";"
 [IO.File]::WriteAllText((Join-Path $racine "donnees.js"), $js, [Text.UTF8Encoding]::new($false))
 "donnees.js ecrit : $($donnees.offres.Count) offres, $($donnees.embauches.Count) embauches, $($donnees.tension.Count) tension, $($donnees.salaires.Count) salaires, $($donnees.appellations.Count) appellations, $($donnees.competences.Count) competences"

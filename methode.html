@@ -31,7 +31,7 @@
     <li><code>scripts/indicateurs_marche.ps1</code> : tension, embauches, salaires → <code>data/indicateurs_AAAA-MM-JJ.csv</code>.</li>
     <li><code>scripts/adzuna.ps1</code> : annonces → <code>data/adzuna_offres_AAAA-MM-JJ.csv</code>.</li>
     <li><code>scripts/adzuna_compteurs.ps1</code> : relevé léger du nombre d'annonces, daté → <code>data/adzuna_compteurs.csv</code>.</li>
-    <li><code>scripts/entreprises63.ps1</code> : entreprises du Puy-de-Dôme → <code>data/entreprises_63_AAAA-MM-JJ.csv</code> (aucune donnée sur les dirigeants).</li>
+    <li><code>scripts/entreprises63.ps1</code> : entreprises du Puy-de-Dôme → <code>data/entreprises_63_AAAA-MM-JJ.csv</code> (aucune donnée sur les dirigeants). Le répertoire consultable de la page « Acteurs » (<code>entreprises_liste.js</code>) en est tiré ; chaque ligne renvoie vers la fiche de l'Annuaire des entreprises.</li>
     <li><code>scripts/rome.ps1</code> : appellations et compétences → <code>data/rome_*.csv</code>.</li>
     <li><code>carte_regions.js</code>, <code>carte_departements.js</code>, <code>carte.js</code> : contours simplifiés des régions et des départements, et code de la carte de la page « Annonces ». Source des contours : dépôt public <em>france-geojson</em> (Grégoire David), fichiers <code>regions-version-simplifiee.geojson</code> et <code>departements-version-simplifiee.geojson</code>, d'après les données Etalab / IGN ; coordonnées arrondies.</li>
     <li><code>scripts/completer_departement.ps1</code> : ajoute le département de chaque annonce au CSV Adzuna à partir des réponses brutes (sans nouvel appel à l'API).</li>
