@@ -3,62 +3,79 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Comment c'est fait · chef de produit</title>
+<title>Méthode · chef de produit</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b5fff'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="style.css?v=202611012035">
+<link rel="stylesheet" href="style.css?v=202611012043">
 </head>
 <body>
 <main>
-  <h1>Comment le site est fait</h1>
-  <p class="chapeau">Les canaux branchés, les scripts, les données, les règles et les limites rencontrées.</p>
+  <h1>Méthode</h1>
+  <p class="chapeau">D'où viennent les chiffres, comment les lire, et ce qu'il faut savoir avant de s'y fier.</p>
 
-  <h2>Les canaux</h2>
+  <h2>D'où viennent les chiffres</h2>
+  <p>Tout vient de sources publiques, consultées par programme, sauf l'étude de l'Apec, lue puis résumée. Aucune annonce n'a été copiée automatiquement sur LinkedIn, l'Apec ou Indeed, dont les conditions d'utilisation l'interdisent.</p>
   <table>
-    <tr><th>Canal</th><th>Ce qu'il apporte</th><th>État</th></tr>
-    <tr><td>API France Travail « Marché du travail »</td><td>Offres, embauches, tension, salaires en poste, par trimestre ou par année</td><td>Branché</td></tr>
-    <tr><td>API France Travail « ROME 4.0 » (métiers, fiches métiers)</td><td>Appellations et compétences officielles de M1703</td><td>Branché</td></tr>
-    <tr><td>API « Recherche d'entreprises » (Sirene, data.gouv.fr)</td><td>Entreprises de 50 salariés et plus du Puy-de-Dôme, siège, secteur, effectif</td><td>Branché</td></tr>
-    <tr><td>Études de l'emploi (Apec)</td><td>Évolution du métier, impact de l'IA</td><td>Source citée</td></tr>
-    <tr><td>API Adzuna (agrégateur d'annonces)</td><td>Annonces individuelles : lieu, entreprise, contrat, salaire affiché, extrait de texte</td><td>Branché</td></tr>
-    <tr><td>API France Travail « Offres d'emploi »</td><td>Annonces détaillées (salaires affichés, compétences)</td><td>Absente du compte développeur</td></tr>
-    <tr><td>API France Travail « La Bonne Boite »</td><td>Entreprises à fort potentiel d'embauche</td><td>Activée mais erreur 403</td></tr>
+    <tr><th>Source</th><th>Ce qu'elle apporte</th><th>Où sur le site</th></tr>
+    <tr><td><a href="https://francetravail.io" rel="noopener noreferrer">France Travail</a> : statistiques du marché du travail</td><td>Nombre d'offres et d'embauches par trimestre, tension de recrutement, salaires, types de contrat</td><td>Offres et marché, Ce qu'on retient, Évolution</td></tr>
+    <tr><td><a href="https://francetravail.io" rel="noopener noreferrer">France Travail</a> : référentiel des métiers (ROME)</td><td>Définition du métier, intitulés officiels, compétences</td><td>Présentation, Compétences</td></tr>
+    <tr><td><a href="https://www.adzuna.fr" rel="noopener noreferrer">Adzuna</a> : moteur d'annonces</td><td>Annonces en ligne : entreprise, lieu, contrat, salaire quand il est affiché</td><td>Annonces (carte et liste), Acteurs</td></tr>
+    <tr><td><a href="https://recherche-entreprises.api.gouv.fr" rel="noopener noreferrer">Recherche d'entreprises</a> (État, base Sirene)</td><td>Entreprises du Puy-de-Dôme de 50 salariés et plus : siège, secteur, taille</td><td>Acteurs</td></tr>
+    <tr><td><a href="https://www.apec.fr" rel="noopener noreferrer">Apec</a> : étude sur l'IA dans le commercial-marketing</td><td>Évolution du métier et compétences liées à l'intelligence artificielle</td><td>Évolution, Ce qu'on retient</td></tr>
   </table>
-  <p>Aucun scraping de LinkedIn, de l'APEC ou d'Indeed : leurs conditions d'utilisation l'interdisent.</p>
 
-  <h2>Les scripts et les données</h2>
+  <h2>Comment lire les chiffres</h2>
   <ul class="liste">
-    <li><code>scripts/test_connexion.ps1</code> : teste la connexion à l'API (n'affiche jamais les identifiants).</li>
-    <li><code>scripts/marche_du_travail.ps1</code> : offres par trimestre → <code>data/marche_travail_AAAA-MM-JJ.csv</code>.</li>
-    <li><code>scripts/indicateurs_marche.ps1</code> : tension, embauches, salaires → <code>data/indicateurs_AAAA-MM-JJ.csv</code>.</li>
-    <li><code>scripts/adzuna.ps1</code> : annonces → <code>data/adzuna_offres_AAAA-MM-JJ.csv</code>.</li>
-    <li><code>scripts/adzuna_compteurs.ps1</code> : relevé léger du nombre d'annonces, daté → <code>data/adzuna_compteurs.csv</code>.</li>
-    <li><code>scripts/entreprises63.ps1</code> : entreprises du Puy-de-Dôme → <code>data/entreprises_63_AAAA-MM-JJ.csv</code> (aucune donnée sur les dirigeants). Le répertoire consultable de la page « Acteurs » (<code>entreprises_liste.js</code>) en est tiré ; chaque ligne renvoie vers la fiche de l'Annuaire des entreprises.</li>
-    <li><code>scripts/rome.ps1</code> : appellations et compétences → <code>data/rome_*.csv</code>.</li>
-    <li><code>carte_regions.js</code>, <code>carte_departements.js</code>, <code>carte.js</code> : contours simplifiés des régions et des départements, et code de la carte de la page « Annonces ». Source des contours : dépôt public <em>france-geojson</em> (Grégoire David), fichiers <code>regions-version-simplifiee.geojson</code> et <code>departements-version-simplifiee.geojson</code>, d'après les données Etalab / IGN ; coordonnées arrondies.</li>
-    <li><code>scripts/completer_departement.ps1</code> : ajoute le département de chaque annonce au CSV Adzuna à partir des réponses brutes (sans nouvel appel à l'API).</li>
-    <li><code>scripts/build_site.ps1</code> : prépare <code>donnees.js</code>, lu par les pages.</li>
-    <li><code>data/raw/</code> : les réponses brutes de l'API, conservées pour vérifier chaque chiffre.</li>
-  </ul>
-  <p>Chaque fichier de données porte la date de son extraction dans son nom. Relancer un script crée un nouveau fichier daté : plusieurs extractions permettent de voir le marché bouger.</p>
-
-  <h2>Les règles</h2>
-  <ul class="liste">
-    <li>Chaque chiffre est présenté avec sa requête, sa date, son canal et ses limites.</li>
-    <li>Les identifiants de l'API sont dans un fichier <code>.env</code> exclu du dépôt et du zip.</li>
-    <li><strong>RGPD :</strong> aucun contact nominatif n'est collecté dans ce site. Un contact n'est conservé que pour une finalité claire (candidature), en lien avec sa fonction, avec possibilité de s'opposer.</li>
+    <li><strong>Chaque chiffre a sa source, sa date et ses limites</strong>, indiquées juste sous le graphique ou le tableau. La date en bas de chaque page est celle de la dernière extraction.</li>
+    <li><strong>Une offre enregistrée n'est pas un recrutement.</strong> Les offres comptées par France Travail ne sont qu'une partie du marché, et leur baisse ne signifie pas forcément que l'on recrute moins : les embauches enregistrées, elles, n'ont pas baissé.</li>
+    <li><strong>Les nombres sont arrondis.</strong> Dans le Puy-de-Dôme, les volumes sont trop faibles pour être lus finement.</li>
+    <li><strong>Les annonces forment un échantillon, pas l'ensemble du marché.</strong> Une annonce peut ne plus être en ligne quand vous cliquez dessus.</li>
+    <li><strong>L'alternance est estimée</strong> d'après des mots dans le titre ou l'extrait de l'annonce : c'est un ordre de grandeur.</li>
   </ul>
 
-  <h2>Les limites rencontrées</h2>
+  <h2>Ce qu'il faut savoir</h2>
   <ul class="liste">
-    <li>L'API « Offres d'emploi » n'apparaît pas dans le catalogue du compte développeur : le site passe par Adzuna, qui ne donne qu'un extrait d'environ 500 caractères par annonce.</li>
-    <li>« La Bonne Boite » répond 403 malgré une activation et un jeton accepté.</li>
-    <li>La clé Adzuna est en « activation en attente » : elle est limitée à un quota d'appels d'essai. Une extraction complète en demande une trentaine, donc les extractions Adzuna sont comptées et espacées.</li>
-    <li>Les statistiques sont arrondies et agrégées : elles décrivent le marché, pas des offres individuelles.</li>
+    <li><strong>Pas d'annonces complètes.</strong> L'accès aux offres officielles de France Travail n'était pas disponible pour ce projet. Les annonces viennent d'Adzuna, qui ne fournit qu'un extrait d'environ 500 caractères : les outils (HubSpot, SQL, Google Analytics…) ne peuvent donc pas être comptés sérieusement.</li>
+    <li><strong>Une couverture partielle du Puy-de-Dôme.</strong> Seulement 2 annonces sur la période, contre plus de 350 en Île-de-France. Pour le département, le répertoire des entreprises est plus utile que les annonces.</li>
+    <li><strong>Un classement d'entreprises incomplet.</strong> Le service qui classe les entreprises selon leur potentiel d'embauche (La Bonne Boite) n'a pas répondu : il n'est pas utilisé.</li>
+    <li><strong>Peu de recul dans le temps pour les annonces.</strong> Une seule extraction complète est disponible, complétée par de simples relevés du nombre d'annonces à plusieurs dates.</li>
   </ul>
 
-  <p>Le dépôt est aussi en ligne : <a href="https://github.com/jasrosejsw-lab/veille-chef-de-produit">github.com/jasrosejsw-lab/veille-chef-de-produit</a>.</p>
+  <h2>Données personnelles</h2>
+  <p>Ce site n'utilise aucun outil de suivi : pas de compte, pas de cookie publicitaire, pas de statistiques de visite. Il ne publie aucune donnée personnelle : seulement des entreprises, jamais de noms de dirigeants ni de contacts nominatifs. Les coordonnées d'une entreprise se trouvent sur sa fiche officielle, vers laquelle le site renvoie. Toute prise de contact avec une personne relève de la règle suivante : une finalité claire (par exemple une candidature), en lien avec sa fonction, avec possibilité de s'opposer.</p>
+
+  <h2>Pour vérifier ou reproduire</h2>
+  <p>Le projet est entièrement ouvert : le code, les données et les réponses d'origine des services sont publiés.</p>
+
+  <details>
+    <summary>Les fichiers et les scripts</summary>
+    <ul class="liste">
+      <li><code>scripts/marche_du_travail.ps1</code> : offres par trimestre → <code>data/marche_travail_AAAA-MM-JJ.csv</code>.</li>
+      <li><code>scripts/indicateurs_marche.ps1</code> : tension, embauches, salaires → <code>data/indicateurs_AAAA-MM-JJ.csv</code>.</li>
+      <li><code>scripts/rome.ps1</code> : appellations et compétences → <code>data/rome_*.csv</code>.</li>
+      <li><code>scripts/adzuna.ps1</code> : annonces → <code>data/adzuna_offres_AAAA-MM-JJ.csv</code> (sans le texte des annonces, qui est un contenu de tiers).</li>
+      <li><code>scripts/adzuna_compteurs.ps1</code> : relevé léger du nombre d'annonces, daté → <code>data/adzuna_compteurs.csv</code>.</li>
+      <li><code>scripts/completer_departement.ps1</code> : ajoute le département de chaque annonce, sans nouvelle requête.</li>
+      <li><code>scripts/entreprises63.ps1</code> : entreprises du Puy-de-Dôme → <code>data/entreprises_63_AAAA-MM-JJ.csv</code>, d'où est tiré le répertoire de la page Acteurs.</li>
+      <li><code>scripts/build_site.ps1</code> : prépare les données lues par les pages du site.</li>
+      <li><code>data/raw/</code> : les réponses d'origine des services, conservées pour vérifier chaque chiffre.</li>
+      <li><code>carte_regions.js</code>, <code>carte_departements.js</code>, <code>carte.js</code> : la carte de la page Annonces. Contours simplifiés issus du dépôt public <em>france-geojson</em> (Grégoire David, données Etalab / IGN), coordonnées arrondies.</li>
+    </ul>
+    <p>Chaque fichier de données porte la date de son extraction dans son nom : relancer un script crée un nouveau fichier daté.</p>
+  </details>
+
+  <details>
+    <summary>Comment les données sont mises à jour</summary>
+    <p>Les mises à jour sont lancées à la main, sans automatisation planifiée : on exécute les scripts, puis <code>build_site.ps1</code> prépare les pages, et le tout est publié sur GitHub. Les identifiants des services sont dans un fichier <code>.env</code> qui n'est jamais publié. La clé Adzuna utilisée est une clé d'essai au quota limité : une extraction complète en consomme une trentaine, d'où l'usage de relevés légers (5 requêtes) entre deux extractions complètes.</p>
+  </details>
+
+  <details>
+    <summary>Les services techniques utilisés</summary>
+    <p>France Travail (API « Marché du travail », API « ROME 4.0 »), Adzuna (API de recherche d'offres), Recherche d'entreprises (API de l'État, base Sirene). Les services demandés mais non utilisés : « Offres d'emploi » de France Travail (absente du compte développeur) et « La Bonne Boite » (accès refusé malgré l'activation).</p>
+  </details>
+
+  <p>Code et données : <a href="https://github.com/jasrosejsw-lab/veille-chef-de-produit" rel="noopener noreferrer">github.com/jasrosejsw-lab/veille-chef-de-produit</a>.</p>
 </main>
-<script src="donnees.js?v=202611012035"></script>
-<script src="commun.js?v=202611012035"></script>
+<script src="donnees.js?v=202611012043"></script>
+<script src="commun.js?v=202611012043"></script>
 </body>
 </html>

@@ -158,6 +158,15 @@ th { background: #f8f9fc; color: var(--discret); font-size: 12px; letter-spacing
 tr + tr td { border-top: 1px solid var(--trait); }
 @media (max-width: 640px) { table { display: block; overflow-x: auto; } }
 
+/* Blocs repliables */
+details { background: #fff; border: 1px solid var(--trait); border-radius: 12px; padding: 0 18px; margin: 10px 0; max-width: 68ch; }
+details[open] { padding-bottom: 6px; }
+summary { cursor: pointer; font-weight: 650; padding: 14px 0; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; font-size: 1.3rem; line-height: 1; color: var(--accent); }
+details[open] summary::after { content: "–"; }
+details p, details ul { font-size: 15px; }
+
 /* Pied de page */
 footer { background: var(--bande); border-top: 1px solid var(--trait); padding: 26px 24px 40px; font-size: 13px; color: var(--discret); text-align: center; }
 @media (max-width: 560px) { body { font-size: 16px; } main { padding-top: 32px; } h2 { margin-top: 48px; } }
