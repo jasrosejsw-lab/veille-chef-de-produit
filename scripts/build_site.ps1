@@ -96,6 +96,13 @@ if ($fAdz) {
 $donnees["contrats_france"] = @($marche | Where-Object { $_.caracteristique -eq "TYPECTR" -and $_.type_territoire -eq "NAT" } | ForEach-Object {
         [ordered]@{ periode = $_.periode; contrat = $_.libelle; pourcentage = (Nombre $_.pourcentage); nombre = (Nombre $_.nombre) } })
 
+# Relevés légers Adzuna (nombre d'annonces à plusieurs dates)
+$fCpt = Join-Path $racine "data\adzuna_compteurs.csv"
+if (Test-Path $fCpt) {
+    $donnees["compteurs"] = @(Import-Csv $fCpt -Delimiter ";" | ForEach-Object {
+            [ordered]@{ date = $_.date_releve; requete = $_.requete; nombre = (Nombre $_.nombre_annonces) } })
+}
+
 # Entreprises du 63 (API Recherche d'entreprises) : on met en avant celles dont le siège est dans le département.
 $fEnt = Dernier "entreprises_63_*.csv"
 if ($fEnt) {

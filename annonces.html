@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Annonces · chef de produit</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b5fff'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="style.css?v=202611012043">
+<link rel="stylesheet" href="style.css?v=202611071952">
 </head>
 <body>
 <main>
@@ -48,6 +48,12 @@
   <div class="cartes" id="cartes-sal"></div>
   <div class="limite"><strong>Limites.</strong> Seule une minorité d'annonces affiche un salaire. La comparaison porte sur le salaire minimum affiché, retenu s'il est plausible en valeur annuelle : les valeurs hors de la plage 10 000 à 250 000 sont écartées, car elles correspondent sans doute à d'autres unités (mensuel, horaire). C'est un salaire <em>affiché</em> par l'annonce, pas un salaire réellement versé.</div>
 
+  <h2>Évolution du nombre d'annonces</h2>
+  <p id="texte-evolution"></p>
+  <table id="t-evolution"></table>
+  <p class="source">Requêtes : nombre d'annonces renvoyé par l'API Adzuna pour chaque recherche (expression exacte « chef de produit » ou « product manager », pays France), relevé à chaque date indiquée. Script : <code>scripts/adzuna_compteurs.ps1</code>. Données : <code>data/adzuna_compteurs.csv</code>.</p>
+  <div class="limite"><strong>Limites.</strong> Ces nombres comptent toutes les annonces qui contiennent l'expression, y compris d'autres métiers (sur les annonces du 1er novembre, environ six sur dix portaient bien un titre « chef de produit »). Une annonce reste en ligne longtemps : la variation mélange nouvelles annonces et annonces retirées. Avec si peu de relevés, il s'agit d'un ordre de grandeur, pas d'une tendance.</div>
+
   <h2>Les entreprises qui recrutent</h2>
   <table id="t-entreprises"></table>
   <div class="limite"><strong>Limite.</strong> Un cabinet de recrutement ou une école peut publier beaucoup d'annonces pour le compte de clients : ce classement ne dit pas qui embauche réellement.</div>
@@ -56,12 +62,12 @@
   <table id="t-outils"></table>
   <div class="limite"><strong>Limite majeure.</strong> L'API ne fournit qu'un extrait d'environ 500 caractères de chaque annonce. Les outils sont presque toujours cités plus bas dans le texte : ces comptages sont donc très sous-estimés et ne permettent <em>pas</em> de conclure qu'un outil n'est pas demandé. Pour compter sérieusement les outils, il faudrait le texte complet des annonces.</div>
 </main>
-<script src="donnees.js?v=202611012043"></script>
-<script src="carte_regions.js?v=202611012043"></script>
-<script src="carte_departements.js?v=202611012043"></script>
-<script src="carte.js?v=202611012043"></script>
-<script src="annonces_liste.js?v=202611012043"></script>
-<script src="commun.js?v=202611012043"></script>
+<script src="donnees.js?v=202611071952"></script>
+<script src="carte_regions.js?v=202611071952"></script>
+<script src="carte_departements.js?v=202611071952"></script>
+<script src="carte.js?v=202611071952"></script>
+<script src="annonces_liste.js?v=202611071952"></script>
+<script src="commun.js?v=202611071952"></script>
 <script>
 (function () {
   var A = window.DONNEES.annonces;
@@ -125,6 +131,30 @@
 
   document.getElementById("texte-alternance").textContent =
     "Environ " + fmt(A.alternance) + " annonces sur " + fmt(A.retenues) + " (" + Math.round(A.alternance / A.retenues * 100) + " %) mentionnent l'alternance. Le filtre « Alternance » de la liste ci-dessous les affiche.";
+  // Évolution : un relevé par date et par requête, avec la variation entre le premier et le dernier relevé.
+  var CPT = window.DONNEES.compteurs || [];
+  var dates = CPT.map(function (c) { return c.date; }).filter(function (d, i, a) { return a.indexOf(d) === i; }).sort();
+  var libelles = {
+    "France - chef de produit": "France, « chef de produit »",
+    "Clermont-Ferrand 50 km - chef de produit": "Clermont-Ferrand et 50 km, « chef de produit »",
+    "France - chef de produit avec salaire affiche": "France, « chef de produit » avec salaire affiché",
+    "France - chef de produit, categorie marketing": "France, « chef de produit », catégorie marketing",
+    "France - product manager": "France, « product manager »"
+  };
+  var jourFr = function (iso) { var p = iso.split("-"); return p[2] + "/" + p[1] + "/" + p[0]; };
+  if (dates.length) {
+    var requetes = Object.keys(libelles).filter(function (r) { return CPT.some(function (c) { return c.requete === r; }); });
+    var valeur = function (r, d) { var l = CPT.filter(function (c) { return c.requete === r && c.date === d; })[0]; return l ? l.nombre : null; };
+    var entete = "<tr><th>Recherche</th>" + dates.map(function (d) { return "<th>" + jourFr(d) + "</th>"; }).join("") + (dates.length > 1 ? "<th>Variation</th>" : "") + "</tr>";
+    var lignes = requetes.map(function (r) {
+      var v0 = valeur(r, dates[0]), v1 = valeur(r, dates[dates.length - 1]);
+      var variation = dates.length > 1 && v0 != null && v1 != null ? (v1 - v0 > 0 ? "+" : "") + fmt(v1 - v0) + (v0 ? " (" + (v1 >= v0 ? "+" : "") + (((v1 - v0) / v0) * 100).toFixed(1).replace(".", ",") + " %)" : "") : "";
+      return "<tr><td>" + libelles[r] + "</td>" + dates.map(function (d) { return "<td>" + fmt(valeur(r, d)) + "</td>"; }).join("") + (dates.length > 1 ? "<td>" + variation + "</td>" : "") + "</tr>";
+    }).join("");
+    document.getElementById("t-evolution").innerHTML = entete + lignes;
+    document.getElementById("texte-evolution").textContent = dates.length + " relevé" + (dates.length > 1 ? "s" : "") + " du nombre d'annonces, du " + jourFr(dates[0]) + (dates.length > 1 ? " au " + jourFr(dates[dates.length - 1]) : "") +
+      ". Le nombre d'annonces est suivi à intervalles réguliers pour voir si le marché bouge.";
+  }
   var s = A.salaires;
   document.getElementById("texte-sal").textContent =
     fmt(s.avec_salaire) + " annonces sur " + fmt(A.retenues) + " affichent un salaire ; " + fmt(s.retenus) + " ont une valeur annuelle plausible (" + fmt(s.exclus) + " écartées).";
