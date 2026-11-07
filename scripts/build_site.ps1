@@ -18,10 +18,6 @@ $donnees = [ordered]@{
             [ordered]@{ territoire = $_.territoire; periode = $_.periode; nombre = (Nombre $_.nombre) } })
     embauches = @($ind | Where-Object { $_.indicateur -eq "EMB_1" } | ForEach-Object {
             [ordered]@{ territoire = $_.territoire; periode = $_.periode; nombre = (Nombre $_.valeur_nombre) } })
-    tension = @($ind | Where-Object { $_.indicateur -eq "PERSP_2" } | ForEach-Object {
-            [ordered]@{ territoire = $_.territoire; periode = $_.periode; niveau = (Nombre $_.valeur_nombre); score = (Nombre $_.valeur_decimale) } })
-    salaires = @($ind | Where-Object { $_.indicateur -eq "SAL_3" } | ForEach-Object {
-            [ordered]@{ territoire = $_.territoire; periode = $_.periode; montant = (Nombre $_.valeur_montant); famille = $_.activite } })
     appellations = @(Import-Csv $fApp.FullName -Delimiter ";" | ForEach-Object { $_.appellation })
     competences = @(Import-Csv $fComp.FullName -Delimiter ";" | ForEach-Object {
             [ordered]@{ enjeu = $_.enjeu; type = $_.type_competence; competence = $_.competence } })

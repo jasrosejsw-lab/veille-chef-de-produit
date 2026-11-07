@@ -14,7 +14,7 @@ Ce document reprend, pour le séminaire, les éléments demandés : les canaux b
 
 | Canal | Ce qu'il apporte | État |
 |---|---|---|
-| API France Travail « Marché du travail » | Offres, embauches, tension, salaires en poste, par trimestre ou par année | Branché |
+| API France Travail « Marché du travail » | Offres, embauches et types de contrat, par trimestre | Branché |
 | API France Travail « ROME 4.0 » (métiers, fiches métiers) | Appellations et compétences officielles de M1703 | Branché |
 | API « Recherche d'entreprises » (Sirene, data.gouv.fr) | Entreprises de 50 salariés et plus du Puy-de-Dôme : siège, secteur, effectif | Branché |
 | Études de l'emploi (Apec) | Évolution du métier, impact de l'IA | Source citée |
@@ -74,7 +74,7 @@ Les mises à jour sont lancées à la main, sans automatisation planifiée : on 
 |---|---|
 | Présentation | Le métier, les intitulés, les 5 questions posées au marché et la page qui répond à chacune |
 | Ce qu'on retient | Synthèse en quelques points |
-| Offres et marché | Offres, embauches, salaires et contrats (API France Travail « Marché du travail ») |
+| Offres et marché | Offres, embauches et contrats (API France Travail « Marché du travail ») |
 | Annonces | Carte des annonces par région et par département, liste filtrable avec liens pour postuler, filtre alternance (API Adzuna) |
 | Compétences | Référentiel officiel ROME 4.0 |
 | Évolution | Évolution du volume d'offres et effet de l'IA d'après l'Apec |
