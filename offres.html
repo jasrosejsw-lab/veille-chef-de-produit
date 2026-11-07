@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Offres et marché · chef de produit</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b5fff'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="style.css?v=202611071952">
+<link rel="stylesheet" href="style.css?v=202611071958">
 </head>
 <body>
 <main>
   <h1>Ce que disent les offres</h1>
-  <p class="chapeau">Volume, géographie, embauches, tension de recrutement et salaires pour le métier M1703, d'après les statistiques officielles de France Travail.</p>
+  <p class="chapeau">Volume, géographie, embauches, salaires et contrats pour le métier M1703, d'après les statistiques officielles de France Travail.</p>
 
   <h2>Le volume d'offres, trimestre par trimestre</h2>
   <p id="texte-offres"></p>
@@ -29,10 +29,7 @@
   <div class="limite"><strong>Limite.</strong> Offres et embauches ne sont pas deux mesures du même phénomène : on ne peut pas en déduire un taux de réussite. Dans le Puy-de-Dôme, les embauches sont de l'ordre de 10 par trimestre, trop faibles pour être lues finement.</div>
 
   <h2>La tension de recrutement</h2>
-  <p id="texte-tension"></p>
-  <table id="t-tension"></table>
-  <p class="source">Requête : indicateur PERSP_2 (indicateur principal de tension), ROME M1703, annuel. Aucune donnée pour le Puy-de-Dôme.</p>
-  <div class="limite"><strong>Limite.</strong> La signification exacte de l'échelle (niveau et score) n'est pas détaillée dans la source consultée : les valeurs sont rapportées sans interprétation.</div>
+  <p>La tension de recrutement mesure la difficulté qu'ont les entreprises à recruter pour un métier : un métier est « en tension » quand elles trouvent peu de candidats adaptés à leurs besoins. France Travail publie un indicateur de tension pour ce métier, mais son échelle n'est pas documentée dans la source utilisée : il n'est donc pas interprété ici.</p>
 
   <h2>Les salaires</h2>
   <p id="texte-sal"></p>
@@ -45,8 +42,8 @@
   <p class="source">Requête : indicateur OFF_1, ROME M1703, toutes offres, caractéristique « type de contrat », France entière, par trimestre. Canal : API France Travail « Marché du travail ». Les pourcentages sont ceux de l'API.</p>
   <div class="limite"><strong>Limites.</strong> Seuls les pourcentages sont exploitables : les nombres sont arrondis à la dizaine, et pour les petits effectifs (Puy-de-Dôme) ils sont parfois à 0 alors que le pourcentage ne l'est pas, ce qui rend la répartition locale inutilisable. La catégorie « Autres » regroupe l'intérim, les emplois aidés et l'apprentissage : on ne peut pas isoler l'alternance. Les pourcentages sont arrondis à l'unité, leur somme peut s'écarter de 100.</div>
 </main>
-<script src="donnees.js?v=202611071952"></script>
-<script src="commun.js?v=202611071952"></script>
+<script src="donnees.js?v=202611071958"></script>
+<script src="commun.js?v=202611071958"></script>
 <script>
 (function () {
   var D = window.DONNEES;
@@ -62,11 +59,6 @@
   var se = serie(D.embauches, "France"); courbe("c-emb", se, "var(--serie1)");
   var ed = se[se.length - 1];
   document.getElementById("texte-emb").textContent = "En France, " + fmt(ed.y) + " embauches ont été enregistrées au trimestre " + ed.x + ".";
-  var st = serie(D.tension, "France", "score");
-  var niv = serie(D.tension, "France", "niveau");
-  document.getElementById("texte-tension").textContent = "Valeurs publiées pour la France, de " + st[0].x + " à " + st[st.length - 1].x + ".";
-  document.getElementById("t-tension").innerHTML = "<tr><th>Année</th><th>Niveau</th><th>Score</th></tr>" +
-    st.map(function (p, i) { return "<tr><td>" + p.x + "</td><td>" + niv[i].y + "</td><td>" + String(p.y).replace(".", ",") + "</td></tr>"; }).join("");
   var C = D.contrats_france, periodes = C.map(function (c) { return c.periode; }).filter(function (p, i, a) { return a.indexOf(p) === i; }).sort().slice(-4);
   var types = ["CDI", "CDD de 1 à 6 mois", "CDD > 6 mois", "CDD < 1 mois", "Autres (intérim, emplois aidés, apprentissage)"];
   var pct = function (p, t) { var l = C.filter(function (c) { return c.periode === p && c.contrat === t; })[0]; return l ? String(l.pourcentage).replace(".", ",") + " %" : "n.d."; };
