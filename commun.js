@@ -30,12 +30,6 @@
     (window.DONNEES && window.DONNEES.maj ? jourFr(window.DONNEES.maj.derniere) : "?") + "</strong> · <a href=\"methode.html\">Détail par source</a></footer>");
 })();
 
-// « 2026T2 » → « 2e trimestre 2026 »
-function trimestreFr(t) {
-  var m = /^(\d{4})T(\d)$/.exec(String(t || ""));
-  return m ? (m[2] === "1" ? "1er" : m[2] + "e") + " trimestre " + m[1] : String(t || "");
-}
-
 // « 2026-11-18 » → « 18/11/2026 »
 function jourFr(iso) {
   var p = String(iso || "").split("-");
@@ -110,28 +104,15 @@ function serie(liste, territoire, cle) {
     .map(function (r) { return { x: r.periode, y: r[cle || "nombre"] }; });
 }
 
-// Bandeau d'en-tête : le titre et le chapeau de chaque page y sont déplacés ; sur l'accueil, trois chiffres l'accompagnent.
+// Bandeau d'en-tête : le titre et le chapeau de chaque page y sont déplacés.
 (function () {
   var main = document.querySelector("main"), h1 = main && main.querySelector("h1"), chapeau = main && main.querySelector("p.chapeau");
   if (!h1) return;
-  var accueil = main.classList.contains("accueil");
   var hero = document.createElement("section");
-  hero.className = "hero" + (accueil ? " hero-accueil" : "");
+  hero.className = "hero";
   hero.innerHTML = '<div class="contenu"><div class="hero-texte"><p class="surtitre">M2 Marketing Opérationnel &amp; Digital · IAE Clermont Auvergne</p></div></div>';
   var texte = hero.querySelector(".hero-texte");
   texte.appendChild(h1);
   if (chapeau) texte.appendChild(chapeau);
-  if (accueil && window.DONNEES) {
-    var D = window.DONNEES, f = serie(D.offres, "France"), e = serie(D.embauches, "France");
-    var ligne = function (v, l) { return '<div><div class="valeur">' + v + '</div><div class="legende">' + l + "</div></div>"; };
-    var panneau = document.createElement("div");
-    panneau.className = "hero-chiffres";
-    panneau.innerHTML =
-      ligne(fmt(f[f.length - 1].y), "offres enregistrées en France au " + trimestreFr(f[f.length - 1].x) + " <span class='source-chiffre'>(France Travail, cumul sur 3 mois)</span>") +
-      ligne(fmt(e[e.length - 1].y), "embauches enregistrées en France au " + trimestreFr(e[e.length - 1].x) + " <span class='source-chiffre'>(France Travail, cumul sur 3 mois)</span>") +
-      (D.annonces ? ligne(fmt(D.annonces.retenues), "annonces en ligne chez Adzuna au " + jourFr(D.maj.annonces) + ", dont " + fmt((D.annonces.genres.filter(function (g) { return g.genre === "stage"; })[0] || {}).n) + " stages et " + fmt(D.annonces.alternance) + " en alternance <span class='source-chiffre'>(instantané, partiel)</span>") : "") +
-      "<div class='note-chiffres'>Trois sources et trois périodes différentes : ces nombres ne se comparent pas entre eux.</div>";
-    hero.querySelector(".contenu").appendChild(panneau);
-  }
   main.parentNode.insertBefore(hero, main);
 })();

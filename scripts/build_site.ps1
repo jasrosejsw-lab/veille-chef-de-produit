@@ -46,7 +46,7 @@ if ($fAdz) {
     # Salaires : salaire minimum annuel affiché ; on écarte les valeurs hors d'une plage annuelle plausible (10 000 à 250 000).
     $brutSal = @($f | Where-Object { $_.salaire_min } | ForEach-Object { [double]($_.salaire_min -replace ',', '.') })
     $sal = @($brutSal | Where-Object { $_ -ge 10000 -and $_ -le 250000 } | Sort-Object)
-    $outils = [ordered]@{ "Excel" = "excel"; "SQL" = "\bsql\b"; "Power BI" = "power ?bi"; "Python" = "python"; "Salesforce" = "salesforce"; "HubSpot" = "hubspot"; "Google Analytics / GA4" = "google analytics|\bga4\b"; "Jira" = "\bjira\b"; "SEO" = "\bseo\b"; "CRM" = "\bcrm\b"; "Agile / Scrum" = "agile|scrum"; "Anglais" = "anglais|english"; "IA" = "\bia\b|intelligence artificielle|chatgpt"; "Data / données" = "\bdata\b|donn(é|e)es"; "E-commerce" = "e-?commerce" }
+    $outils = [ordered]@{ "Excel" = "excel"; "SQL" = "\bsql\b"; "Power BI" = "power ?bi"; "Python" = "python"; "Salesforce" = "salesforce"; "HubSpot" = "hubspot"; "Google Analytics / GA4" = "google analytics|\bga4\b"; "Jira" = "\bjira\b"; "SEO" = "\bseo\b"; "CRM" = "\bcrm\b"; "Agile / Scrum" = "agile|scrum"; "Anglais" = "anglais|english"; "IA" = "\bia\b|intelligence artificielle|chatgpt"; "Data" = "\bdata\b|donn.es"; "E-commerce" = "e-?commerce" }
     $donnees["annonces"] = [ordered]@{
         extraction = ($fAdz.BaseName -replace '.*_', '')
         total_api = $toutes.Count
