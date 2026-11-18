@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Méthode · chef de produit</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b5fff'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="style.css?v=202611182140">
+<link rel="stylesheet" href="style.css?v=202611182158">
 </head>
 <body>
 <main>
@@ -35,7 +35,7 @@
   <h2>Ce qu'il faut savoir</h2>
   <ul class="liste">
     <li><strong>Pas d'annonces complètes.</strong> L'accès aux offres officielles de France Travail n'était pas disponible pour ce projet. Les annonces viennent d'Adzuna, qui ne fournit qu'un extrait d'environ 500 caractères : les outils (HubSpot, SQL, Google Analytics…) ne peuvent donc pas être comptés sérieusement.</li>
-    <li><strong>Une couverture partielle du Puy-de-Dôme.</strong> Seulement 2 annonces sur la période, contre plus de 350 en Île-de-France. Pour le département, le répertoire des entreprises est plus utile que les annonces.</li>
+    <li><strong>Une couverture partielle du Puy-de-Dôme.</strong> Deux annonces dans la liste du 1er novembre, aucune dans celle du 18 novembre, contre près de 300 en Île-de-France. Pour le département, le répertoire des entreprises est plus utile que les annonces.</li>
     <li><strong>Un classement d'entreprises incomplet.</strong> Le service qui classe les entreprises selon leur potentiel d'embauche (La Bonne Boite) n'a pas répondu : il n'est pas utilisé.</li>
     <li><strong>Peu de recul dans le temps pour les annonces.</strong> Une seule extraction complète est disponible, complétée par de simples relevés du nombre d'annonces à plusieurs dates.</li>
   </ul>
@@ -76,7 +76,7 @@
 
   <p>Code et données : <a href="https://github.com/jasrosejsw-lab/veille-chef-de-produit" rel="noopener noreferrer">github.com/jasrosejsw-lab/veille-chef-de-produit</a>.</p>
 </main>
-<script src="donnees.js?v=202611182140"></script>
+<script src="donnees.js?v=202611182158"></script>
 <script>
 // Les dates viennent du fichier de données généré à chaque mise à jour du site.
 window.addEventListener("load", function () {
@@ -89,6 +89,6 @@ window.addEventListener("load", function () {
   met("m-adzuna", "Annonces du " + jourFr(M.annonces) + " ; relevés du nombre d'annonces : " + M.releves.map(jourFr).join(", "));
 });
 </script>
-<script src="commun.js?v=202611182140"></script>
+<script src="commun.js?v=202611182158"></script>
 </body>
 </html>

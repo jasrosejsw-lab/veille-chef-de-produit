@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Annonces · chef de produit</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b5fff'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="style.css?v=202611182140">
+<link rel="stylesheet" href="style.css?v=202611182158">
 </head>
 <body>
 <main>
@@ -14,7 +14,7 @@
 
   <div class="cartes" id="cartes"></div>
   <p class="source">Requête : API Adzuna (agrégateur d'annonces), pays France, expression exacte « chef de produit », tri par date. Extraction du <span class="date"></span>. Script : <code>scripts/adzuna.ps1</code>. Données : <code>data/adzuna_offres_AAAA-MM-JJ.csv</code>.</p>
-  <div class="limite"><strong>Limites générales.</strong> Adzuna reprend des annonces d'autres sites : ce n'est pas le marché entier. La recherche remonte aussi d'autres métiers (par exemple « vétérinaire chef produit ») : seules les annonces dont le titre contient « chef » et « produit » sont conservées. Certaines annonces restent en ligne longtemps : les dates de publication ne mesurent pas le volume de recrutement.</div>
+  <div class="limite"><strong>Limites générales.</strong> Adzuna reprend des annonces d'autres sites : ce n'est pas le marché entier. La recherche remonte aussi d'autres métiers (par exemple « vétérinaire chef produit ») : seules les annonces dont le titre contient « chef » et « produit » sont conservées. Les annonces disparaissent vite (environ la moitié de celles relevées le 1er novembre n'étaient plus en ligne au 18 novembre) : la liste est un instantané, et les dates de publication ne mesurent pas le volume de recrutement.</div>
 
   <h2>Où sont les offres</h2>
   <p id="texte-geo"></p>
@@ -29,11 +29,17 @@
     <input id="q" type="search" placeholder="Rechercher : poste, entreprise, ville…" aria-label="Rechercher dans les annonces">
     <button id="toutes" type="button">Toute la France</button>
     <label class="filtre-alt"><input type="checkbox" id="alt"> Alternance seulement</label>
+    <select id="age" aria-label="Ancienneté de l'annonce">
+      <option value="7">Publiées depuis moins de 7 jours</option>
+      <option value="15" selected>Publiées depuis moins de 15 jours</option>
+      <option value="30">Publiées depuis moins de 30 jours</option>
+      <option value="0">Toutes les dates</option>
+    </select>
   </div>
   <p class="discret-liste" id="compte-liste" aria-live="polite"></p>
   <ul class="annonces" id="liste-annonces"></ul>
   <button id="plus" type="button" class="bouton-plus">Afficher plus d'annonces</button>
-  <p class="source">Annonces fournies par <a href="https://www.adzuna.fr" rel="noopener noreferrer">Adzuna</a>, classées de la plus récente à la plus ancienne. Le lien ouvre la page de l'annonce chez Adzuna. Une annonce peut ne plus être en ligne au moment du clic. Le salaire n'est indiqué que lorsque l'annonce l'affiche (valeur annuelle plausible, non estimée).</p>
+  <p class="source">Annonces fournies par <a href="https://www.adzuna.fr" rel="noopener noreferrer">Adzuna</a>, relevées le <span class="date"></span> et classées de la plus récente à la plus ancienne. Le lien ouvre la page de l'annonce chez Adzuna. Par défaut, seules les annonces publiées depuis moins de 15 jours sont affichées : les plus anciennes risquent davantage d'être fermées. Une annonce peut ne plus être disponible au moment du clic, y compris chez l'employeur, où le lien mène ensuite. Le salaire n'est indiqué que lorsque l'annonce l'affiche (valeur annuelle plausible, non estimée).</p>
 
   <figure><div id="b-regions"></div><figcaption>Nombre d'annonces par région (les 8 premières)</figcaption></figure>
   <div class="limite" id="limite-geo"></div>
@@ -57,7 +63,7 @@
   <p id="texte-evolution"></p>
   <table id="t-evolution"></table>
   <p class="source">Requêtes : nombre d'annonces renvoyé par l'API Adzuna pour chaque recherche (expression exacte « chef de produit » ou « product manager », pays France), relevé à chaque date indiquée. Script : <code>scripts/adzuna_compteurs.ps1</code>. Données : <code>data/adzuna_compteurs.csv</code>.</p>
-  <div class="limite"><strong>Limites.</strong> Ces nombres comptent toutes les annonces qui contiennent l'expression, y compris d'autres métiers (sur les annonces du 1er novembre, environ six sur dix portaient bien un titre « chef de produit »). Une annonce reste en ligne longtemps : la variation mélange nouvelles annonces et annonces retirées. Avec si peu de relevés, il s'agit d'un ordre de grandeur, pas d'une tendance.</div>
+  <div class="limite"><strong>Limites.</strong> Ces nombres comptent toutes les annonces qui contiennent l'expression, y compris d'autres métiers (environ six annonces sur dix portent bien un titre « chef de produit »). Les annonces disparaissent vite : environ la moitié de celles relevées le 1er novembre n'étaient plus en ligne au 18 novembre, donc la variation mélange nouvelles annonces et annonces retirées. Avec si peu de relevés, il s'agit d'un ordre de grandeur, pas d'une tendance.</div>
 
   <h2>Les entreprises qui recrutent</h2>
   <table id="t-entreprises"></table>
@@ -67,12 +73,12 @@
   <table id="t-outils"></table>
   <div class="limite"><strong>Limite majeure.</strong> L'API ne fournit qu'un extrait d'environ 500 caractères de chaque annonce. Les outils sont presque toujours cités plus bas dans le texte : ces comptages sont donc très sous-estimés et ne permettent <em>pas</em> de conclure qu'un outil n'est pas demandé. Pour compter sérieusement les outils, il faudrait le texte complet des annonces.</div>
 </main>
-<script src="donnees.js?v=202611182140"></script>
-<script src="carte_regions.js?v=202611182140"></script>
-<script src="carte_departements.js?v=202611182140"></script>
-<script src="carte.js?v=202611182140"></script>
-<script src="annonces_liste.js?v=202611182140"></script>
-<script src="commun.js?v=202611182140"></script>
+<script src="donnees.js?v=202611182158"></script>
+<script src="carte_regions.js?v=202611182158"></script>
+<script src="carte_departements.js?v=202611182158"></script>
+<script src="carte.js?v=202611182158"></script>
+<script src="annonces_liste.js?v=202611182158"></script>
+<script src="commun.js?v=202611182158"></script>
 <script>
 (function () {
   var A = window.DONNEES.annonces;
@@ -98,17 +104,20 @@
     if (a.salaire_min == null) return "";
     return a.salaire_max != null && a.salaire_max > a.salaire_min ? fmt(a.salaire_min) + " – " + fmt(a.salaire_max) + " €" : "dès " + fmt(a.salaire_min) + " €";
   };
+  // Ancienneté d'une annonce, comptée à partir d'aujourd'hui (une annonce ancienne risque davantage d'être fermée côté employeur).
+  var ageDe = function (iso) { var p = String(iso || "").split("-"); return Math.max(0, Math.floor((Date.now() - new Date(+p[0], +p[1] - 1, +p[2]).getTime()) / 86400000)); };
+  var ilYa = function (iso) { var n = ageDe(iso); return n === 0 ? "aujourd'hui" : n === 1 ? "hier" : "il y a " + n + " jours"; };
   var dessiner = function () {
-    var q = document.getElementById("q").value.trim().toLowerCase(), altSeule = document.getElementById("alt").checked;
+    var q = document.getElementById("q").value.trim().toLowerCase(), altSeule = document.getElementById("alt").checked, ageMax = parseInt(document.getElementById("age").value, 10);
     var trouvees = LISTE.filter(function (a) {
-      return (!zone || normRegion(a[zone.champ]) === zone.cle) && (!altSeule || a.alternance === 1) && (!q || (a.titre + " " + a.entreprise + " " + a.lieu).toLowerCase().indexOf(q) !== -1);
+      return (!zone || normRegion(a[zone.champ]) === zone.cle) && (!altSeule || a.alternance === 1) && (!ageMax || ageDe(a.date) <= ageMax) && (!q || (a.titre + " " + a.entreprise + " " + a.lieu).toLowerCase().indexOf(q) !== -1);
     });
     document.getElementById("compte-liste").textContent = fmt(trouvees.length) + " annonce" + (trouvees.length > 1 ? "s" : "") +
-      (altSeule ? " en alternance" : "") + (zone ? (zone.champ === "departement" ? " dans le département : " : " en ") + zone.nom : " (toute la France)") + (q ? " pour « " + q + " »" : "") + (trouvees.length > affiche ? " — " + affiche + " affichées" : "");
+      (altSeule ? " en alternance" : "") + (ageMax ? " publiées depuis moins de " + ageMax + " jours" : "") + (zone ? (zone.champ === "departement" ? " dans le département : " : " en ") + zone.nom : " (toute la France)") + (q ? " pour « " + q + " »" : "") + (trouvees.length > affiche ? " — " + affiche + " affichées" : "");
     document.getElementById("liste-annonces").innerHTML = trouvees.slice(0, affiche).map(function (a) {
       var meta = [a.entreprise, a.lieu, contrats[a.contrat], salaire(a)].filter(Boolean).map(esc).join(" · ");
       var lien = /^https:\/\//.test(a.url) ? '<a class="a-lien" href="' + esc(a.url) + '" target="_blank" rel="noopener noreferrer nofollow">Voir l\'annonce et postuler ↗</a>' : "";
-      return '<li class="annonce"><div class="a-tete"><strong>' + esc(a.titre) + '</strong><span class="a-date">' + jour(a.date) + "</span></div>" +
+      return '<li class="annonce"><div class="a-tete"><strong>' + esc(a.titre) + '</strong><span class="a-date">' + jour(a.date) + " · " + ilYa(a.date) + "</span></div>" +
         '<div class="a-meta">' + meta + "</div>" + lien + "</li>";
     }).join("") || "<li class='annonce'>Aucune annonce ne correspond.</li>";
     document.getElementById("plus").style.display = trouvees.length > affiche ? "" : "none";
@@ -121,6 +130,7 @@
   });
   document.getElementById("plus").addEventListener("click", function () { affiche += PAS; dessiner(); });
   document.getElementById("alt").addEventListener("change", function () { affiche = PAS; dessiner(); });
+  document.getElementById("age").addEventListener("change", function () { affiche = PAS; dessiner(); });
 
   carteFrance("carte-france", "carte-detail", [
     { id: "regions", libelle: "Régions", geo: window.GEO_REGIONS, donnees: A.carte },
