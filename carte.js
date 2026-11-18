@@ -26,9 +26,10 @@ function carteFrance(idCarte, idDetail, niveaux, auChoix) {
   // Barre de choix du niveau + zone du dessin + note sur les territoires hors carte.
   conteneur.innerHTML = '<div class="carte-niveaux" role="group" aria-label="Niveau de la carte"></div><div class="carte-dessin"></div><div class="carte-note"></div>';
   var barre = conteneur.querySelector(".carte-niveaux"), dessin = conteneur.querySelector(".carte-dessin"), note = conteneur.querySelector(".carte-note");
-  var courant = null;
+  var courant = null, choisie = null;
 
-  var afficherNiveau = function (niv) {
+  // conserver = true : on redessine avec de nouvelles données en gardant le territoire choisi (utilisé quand les filtres de la page changent).
+  var afficherNiveau = function (niv, conserver) {
     courant = niv;
     var parNom = {}, noms = {}, total = 0, max = 1;
     niv.donnees.forEach(function (d) { parNom[norm(d.region)] = d; });
@@ -47,13 +48,14 @@ function carteFrance(idCarte, idDetail, niveaux, auChoix) {
     note.innerHTML = inconnues.length ? "<p class='discret' style='font-size:13px;margin:6px 4px 0'>Non affichées (hors France métropolitaine) : " +
       inconnues.map(function (d) { return d.region + " (" + d.nombre + ")"; }).join(", ") + ".</p>" : "";
 
-    var choisir = function (cle) {
+    var choisir = function (cle, silencieux) {
+      choisie = cle;
       var d = parNom[cle], n = d ? d.nombre : 0;
       dessin.querySelectorAll(".region").forEach(function (p) { p.classList.toggle("choisie", p.getAttribute("data-region") === cle); });
       detail.innerHTML = "<h4>" + noms[cle] + "</h4><p class='gros'>" + fmt(n) + " annonces</p>" +
         "<p class='discret'>" + (total ? Math.round(n / total * 100) : 0) + " % des annonces dont le territoire est connu à ce niveau (" + fmt(total) + ").</p>" +
         (d && d.entreprises.length ? "<p class='discret'>Entreprises qui publient le plus :</p><ul>" + d.entreprises.map(function (x) { return "<li>" + x.nom + " <b>" + x.nombre + "</b></li>"; }).join("") + "</ul>" : "<p class='discret'>Aucune annonce dans les données.</p>");
-      if (auChoix) auChoix(niv.id, cle, noms[cle]);
+      if (auChoix && !silencieux) auChoix(niv.id, cle, noms[cle]);
     };
     dessin.querySelectorAll(".region").forEach(function (p) {
       var cle = p.getAttribute("data-region");
@@ -62,7 +64,10 @@ function carteFrance(idCarte, idDetail, niveaux, auChoix) {
     });
     barre.querySelectorAll("button").forEach(function (b) { var actif = b.getAttribute("data-niveau") === niv.id; b.classList.toggle("actif", actif); b.setAttribute("aria-pressed", actif); });
     var premiere = Object.keys(parNom).filter(function (k) { return noms[k]; }).sort(function (a, b) { return parNom[b].nombre - parNom[a].nombre; })[0];
-    if (premiere) choisir(premiere);
+    if (conserver) {
+      if (choisie && noms[choisie]) choisir(choisie, true);
+      else { choisie = null; detail.innerHTML = "<p class='discret'>Cliquez sur un territoire de la carte pour voir ses annonces.</p>"; }
+    } else if (premiere) choisir(premiere);
   };
 
   niveaux.forEach(function (niv) {
@@ -72,4 +77,15 @@ function carteFrance(idCarte, idDetail, niveaux, auChoix) {
     barre.appendChild(b);
   });
   afficherNiveau(niveaux[0]);
+
+  return {
+    // Remplace les données de chaque niveau (même ordre que « niveaux ») et redessine la carte, sans changer de territoire choisi.
+    maj: function (donnees) { niveaux.forEach(function (n, i) { n.donnees = donnees[i]; }); afficherNiveau(courant, true); },
+    // Retire la sélection (bouton « Toute la France »).
+    deselectionner: function () {
+      choisie = null;
+      dessin.querySelectorAll(".region.choisie").forEach(function (p) { p.classList.remove("choisie"); });
+      detail.innerHTML = "<p class='discret'>Cliquez sur un territoire de la carte pour voir ses annonces.</p>";
+    }
+  };
 }
