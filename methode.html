@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Méthode · chef de produit</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b5fff'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="style.css?v=202611182207">
+<link rel="stylesheet" href="style.css?v=202611182217">
 </head>
 <body>
 <main>
@@ -29,7 +29,7 @@
     <li><strong>Une offre enregistrée n'est pas un recrutement.</strong> Les offres comptées par France Travail ne sont qu'une partie du marché, et leur baisse ne signifie pas forcément que l'on recrute moins : les embauches enregistrées, elles, n'ont pas baissé.</li>
     <li><strong>Les nombres sont arrondis.</strong> Dans le Puy-de-Dôme, les volumes sont trop faibles pour être lus finement.</li>
     <li><strong>Les annonces forment un échantillon, pas l'ensemble du marché.</strong> Une annonce peut ne plus être en ligne quand vous cliquez dessus.</li>
-    <li><strong>L'alternance est estimée</strong> d'après des mots dans le titre ou l'extrait de l'annonce : c'est un ordre de grandeur.</li>
+    <li><strong>Le type de poste (emploi, alternance, stage) est estimé</strong> d'après des mots dans le titre ou l'extrait de l'annonce : c'est un ordre de grandeur. Une annonce sur trois environ est un stage, ce qui compte pour qui cherche un emploi.</li>
   </ul>
 
   <h2>Ce qu'il faut savoir</h2>
@@ -76,7 +76,7 @@
 
   <p>Code et données : <a href="https://github.com/jasrosejsw-lab/veille-chef-de-produit" rel="noopener noreferrer">github.com/jasrosejsw-lab/veille-chef-de-produit</a>.</p>
 </main>
-<script src="donnees.js?v=202611182207"></script>
+<script src="donnees.js?v=202611182217"></script>
 <script>
 // Les dates viennent du fichier de données généré à chaque mise à jour du site.
 window.addEventListener("load", function () {
@@ -89,6 +89,6 @@ window.addEventListener("load", function () {
   met("m-adzuna", "Annonces du " + jourFr(M.annonces) + " ; relevés du nombre d'annonces : " + M.releves.map(jourFr).join(", "));
 });
 </script>
-<script src="commun.js?v=202611182207"></script>
+<script src="commun.js?v=202611182217"></script>
 </body>
 </html>

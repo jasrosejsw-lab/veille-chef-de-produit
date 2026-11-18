@@ -76,7 +76,7 @@ Les mises à jour sont lancées à la main, sans automatisation planifiée : on 
 | Présentation | Le métier, les intitulés, les 5 questions posées au marché et la page qui répond à chacune |
 | Ce qu'on retient | Synthèse en quelques points |
 | Offres et marché | Offres, embauches et contrats (API France Travail « Marché du travail ») |
-| Annonces | Carte des annonces par région et par département, liste filtrable avec liens pour postuler, filtre alternance (API Adzuna) |
+| Annonces | Carte des annonces par région et par département, liste filtrable avec liens pour postuler, filtres emploi / alternance / stage et ancienneté (API Adzuna) |
 | Compétences | Référentiel officiel ROME 4.0 |
 | Évolution | Évolution du volume d'offres et effet de l'IA d'après l'Apec |
 | Acteurs | Entreprises qui publient, entreprises de 50 salariés et plus du Puy-de-Dôme avec un répertoire filtrable pour les candidatures spontanées (API Recherche d'entreprises) |

@@ -35,6 +35,12 @@ if ($fAdz) {
         if ($o.PSObject.Properties.Name -contains "alternance") { return ($o.alternance -eq "1") }
         return (($o.titre + " " + $o.description) -match '(?i)alternance|apprenti|contrat de professionnalisation|contrat pro\b')
     }
+    # Genre de poste : stage (le titre le dit), alternance (titre ou extrait), sinon emploi (CDI, CDD, intérim…).
+    function GenrePoste($o) {
+        if ($o.titre -match '(?i)\bstage\b|stagiaire|internship|\bintern\b') { return "stage" }
+        if (EstAlternance $o) { return "alternance" }
+        return "emploi"
+    }
     function Top($liste, $cle, $n) { @($liste | Where-Object { $_.$cle } | Group-Object $cle | Sort-Object Count -Descending | Select-Object -First $n | ForEach-Object { [ordered]@{ nom = $_.Name; nombre = $_.Count } }) }
     function Quantile($tri, $q) { $tri[[math]::Min($tri.Count - 1, [math]::Floor($q * ($tri.Count - 1) + 0.5))] }
     # Salaires : salaire minimum annuel affiché ; on écarte les valeurs hors d'une plage annuelle plausible (10 000 à 250 000).
@@ -78,7 +84,7 @@ if ($fAdz) {
             $plausible = ($null -ne $min) -and ($min -ge 10000) -and ($min -le 250000) -and ($_.salaire_estime -ne "1")
             [ordered]@{
                 titre = $_.titre; entreprise = $_.entreprise; lieu = $_.lieu; region = $_.region; departement = $_.departement; contrat = $_.contrat_type
-                alternance = [int](EstAlternance $_)
+                alternance = [int](EstAlternance $_); genre = (GenrePoste $_)
                 salaire_min = $(if ($plausible) { $min } else { $null }); salaire_max = $(if ($plausible -and $max -ge $min) { $max } else { $null })
                 date = $_.date_publication
                 url = (($_.url -replace 'utm_source=[^&]*&?', '') -replace '[?&]+$', '')
@@ -130,13 +136,25 @@ if ($fAdz) {
         if ($titre -match '(?i)senior|confirm|exp.riment') { return "confirme" }
         return "autres"
     }
+    # Emploi, alternance ou stage : un stage n'est pas un emploi, et sa gratification n'est pas un salaire comparable.
+    $donnees["annonces"]["genres"] = @("emploi", "alternance", "stage" | ForEach-Object {
+            $id = $_
+            $s = StatsAnnonces @($f | Where-Object { (GenrePoste $_) -eq $id })
+            $s["genre"] = $id
+            $s })
+    $donnees["annonces"]["alternance"] = @($f | Where-Object { (GenrePoste $_) -eq "alternance" }).Count
+    # Le tableau des niveaux porte sur les annonces hors stages ; les stages « assistant » sont comptés à part.
+    $hors = @($f | Where-Object { (GenrePoste $_) -ne "stage" })
+    $donnees["annonces"]["niveaux_base"] = $hors.Count
+    $donnees["annonces"]["assistant_stages"] = @($f | Where-Object { (GenrePoste $_) -eq "stage" -and (NiveauPoste $_.titre) -eq "assistant" }).Count
     $donnees["annonces"]["niveaux"] = @("assistant", "junior", "confirme", "autres" | ForEach-Object {
             $id = $_
-            $groupe = @($f | Where-Object { (NiveauPoste $_.titre) -eq $id })
+            $groupe = @($hors | Where-Object { (NiveauPoste $_.titre) -eq $id })
             $s = StatsAnnonces $groupe
+            $s["part"] = $(if ($hors.Count) { [math]::Round(100 * $groupe.Count / $hors.Count, 1) } else { 0 })
             $s["niveau"] = $id
             $s })
-    $donnees["annonces"]["salaire_mediane_tous"] = (StatsAnnonces $f).salaire_mediane
+    $donnees["annonces"]["salaire_mediane_tous"] = (StatsAnnonces $hors).salaire_mediane
 }
 
 # Fiches des intitulés du métier (ROME 4.0) : type, compétences clés, et mesures dans les annonces quand l'intitulé figure dans les titres.

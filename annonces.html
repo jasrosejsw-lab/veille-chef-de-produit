@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Annonces · chef de produit</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b5fff'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="style.css?v=202611182207">
+<link rel="stylesheet" href="style.css?v=202611182217">
 </head>
 <body>
 <main>
@@ -28,7 +28,12 @@
   <div class="recherche">
     <input id="q" type="search" placeholder="Rechercher : poste, entreprise, ville…" aria-label="Rechercher dans les annonces">
     <button id="toutes" type="button">Toute la France</button>
-    <label class="filtre-alt"><input type="checkbox" id="alt"> Alternance seulement</label>
+    <select id="genre" aria-label="Type de poste">
+      <option value="">Emploi, alternance et stage</option>
+      <option value="emploi">Emploi (CDI, CDD…) seulement</option>
+      <option value="alternance">Alternance seulement</option>
+      <option value="stage">Stage seulement</option>
+    </select>
     <select id="age" aria-label="Ancienneté de l'annonce">
       <option value="7">Publiées depuis moins de 7 jours</option>
       <option value="15" selected>Publiées depuis moins de 15 jours</option>
@@ -44,15 +49,19 @@
   <figure><div id="b-regions"></div><figcaption>Nombre d'annonces par région, toutes dates confondues (les 8 premières)</figcaption></figure>
   <div class="limite" id="limite-geo"></div>
 
+  <h2>Emploi, alternance ou stage</h2>
+  <p id="texte-genres"></p>
+  <table id="t-genres"></table>
+  <div class="limite"><strong>Limites.</strong> Le type de poste est déduit des mots de l'annonce : « stage » dans le titre pour un stage, « alternance » ou « apprentissage » dans le titre ou l'extrait pour l'alternance, le reste est classé en emploi. C'est une estimation, qui peut en oublier ou en compter à tort. Une gratification de stage n'est pas un salaire : elle n'est pas comparée aux salaires des emplois.</div>
+
   <h2>Quels contrats</h2>
   <p id="texte-contrat"></p>
-  <p id="texte-alternance"></p>
   <div class="limite"><strong>Limites.</strong> Le type de contrat n'est renseigné que pour une partie des annonces, et Adzuna ne distingue que « permanent » et « contract ». L'alternance est repérée ici par des mots dans le titre ou dans l'extrait de l'annonce (alternance, apprentissage, contrat de professionnalisation) : c'est une estimation, qui peut en oublier ou en compter à tort. Certaines annonces sont publiées par des écoles ou des centres de formation qui cherchent des entreprises d'accueil, pas par l'employeur.</div>
 
   <h2>Quel niveau de poste</h2>
   <p id="texte-niveaux"></p>
   <table id="t-niveaux"></table>
-  <div class="limite"><strong>Limites.</strong> Le niveau est déduit du titre de l'annonce (« assistant », « junior », « confirmé » ou « senior »). La catégorie « niveau non précisé » regroupe les annonces dont le titre dit seulement « chef de produit ». Les salaires sont les salaires minimum affichés : certaines catégories ont très peu d'annonces avec salaire, ce qui est indiqué dans le tableau. Un salaire « non indiqué » ne veut pas dire qu'il est nul.</div>
+  <div class="limite"><strong>Limites.</strong> Le niveau est déduit du titre de l'annonce (« assistant », « junior », « confirmé » ou « senior »). La catégorie « niveau non précisé » regroupe les annonces dont le titre dit seulement « chef de produit ». Les stages sont exclus de ce tableau (ils font l'objet de la section précédente). Les salaires sont les salaires minimum affichés : certaines catégories ont très peu d'annonces avec salaire, ce qui est indiqué dans le tableau. Un salaire « non indiqué » ne veut pas dire qu'il est nul.</div>
 
   <h2>Quels salaires</h2>
   <p id="texte-sal"></p>
@@ -73,12 +82,12 @@
   <table id="t-outils"></table>
   <div class="limite"><strong>Limite majeure.</strong> L'API ne fournit qu'un extrait d'environ 500 caractères de chaque annonce. Les outils sont presque toujours cités plus bas dans le texte : ces comptages sont donc très sous-estimés et ne permettent <em>pas</em> de conclure qu'un outil n'est pas demandé. Pour compter sérieusement les outils, il faudrait le texte complet des annonces.</div>
 </main>
-<script src="donnees.js?v=202611182207"></script>
-<script src="carte_regions.js?v=202611182207"></script>
-<script src="carte_departements.js?v=202611182207"></script>
-<script src="carte.js?v=202611182207"></script>
-<script src="annonces_liste.js?v=202611182207"></script>
-<script src="commun.js?v=202611182207"></script>
+<script src="donnees.js?v=202611182217"></script>
+<script src="carte_regions.js?v=202611182217"></script>
+<script src="carte_departements.js?v=202611182217"></script>
+<script src="carte.js?v=202611182217"></script>
+<script src="annonces_liste.js?v=202611182217"></script>
+<script src="commun.js?v=202611182217"></script>
 <script>
 (function () {
   var D = window.DONNEES, A = D.annonces;
@@ -108,9 +117,9 @@
   var ageDe = function (iso) { var p = String(iso || "").split("-"); return Math.max(0, Math.floor((Date.now() - new Date(+p[0], +p[1] - 1, +p[2]).getTime()) / 86400000)); };
   var ilYa = function (iso) { var n = ageDe(iso); return n === 0 ? "aujourd'hui" : n === 1 ? "hier" : "il y a " + n + " jours"; };
   // Filtres communs à la liste et à la carte : ancienneté, alternance, mot recherché.
-  var filtres = function () { return { q: document.getElementById("q").value.trim().toLowerCase(), altSeule: document.getElementById("alt").checked, ageMax: parseInt(document.getElementById("age").value, 10) }; };
+  var filtres = function () { return { q: document.getElementById("q").value.trim().toLowerCase(), genre: document.getElementById("genre").value, ageMax: parseInt(document.getElementById("age").value, 10) }; };
   var passe = function (a, f) {
-    return (!f.altSeule || a.alternance === 1) && (!f.ageMax || ageDe(a.date) <= f.ageMax) && (!f.q || (a.titre + " " + a.entreprise + " " + a.lieu).toLowerCase().indexOf(f.q) !== -1);
+    return (!f.genre || a.genre === f.genre) && (!f.ageMax || ageDe(a.date) <= f.ageMax) && (!f.q || (a.titre + " " + a.entreprise + " " + a.lieu).toLowerCase().indexOf(f.q) !== -1);
   };
   // Données de la carte recalculées à partir de la liste filtrée : [par région, par département].
   var donneesCarte = function () {
@@ -127,12 +136,12 @@
   var cartoFrance = null;
   var majCarte = function () { if (cartoFrance) cartoFrance.maj(donneesCarte()); };
   var dessiner = function () {
-    var f = filtres(), q = f.q, altSeule = f.altSeule, ageMax = f.ageMax;
+    var f = filtres(), q = f.q, genre = f.genre, ageMax = f.ageMax;
     var trouvees = LISTE.filter(function (a) { return (!zone || normRegion(a[zone.champ]) === zone.cle) && passe(a, f); });
     document.getElementById("compte-liste").textContent = fmt(trouvees.length) + " annonce" + (trouvees.length > 1 ? "s" : "") +
-      (altSeule ? " en alternance" : "") + (ageMax ? " publiées depuis moins de " + ageMax + " jours" : "") + (zone ? (zone.champ === "departement" ? " dans le département : " : " en ") + zone.nom : " (toute la France)") + (q ? " pour « " + q + " »" : "") + (trouvees.length > affiche ? " — " + affiche + " affichées" : "");
+      (genre ? { emploi: " en emploi", alternance: " en alternance", stage: " en stage" }[genre] : "") + (ageMax ? " publiées depuis moins de " + ageMax + " jours" : "") + (zone ? (zone.champ === "departement" ? " dans le département : " : " en ") + zone.nom : " (toute la France)") + (q ? " pour « " + q + " »" : "") + (trouvees.length > affiche ? " — " + affiche + " affichées" : "");
     document.getElementById("liste-annonces").innerHTML = trouvees.slice(0, affiche).map(function (a) {
-      var meta = [a.entreprise, a.lieu, contrats[a.contrat], salaire(a)].filter(Boolean).map(esc).join(" · ");
+      var meta = [{ stage: "Stage", alternance: "Alternance" }[a.genre], a.entreprise, a.lieu, contrats[a.contrat], a.genre === "stage" ? "" : salaire(a)].filter(Boolean).map(esc).join(" · ");
       var lien = /^https:\/\//.test(a.url) ? '<a class="a-lien" href="' + esc(a.url) + '" target="_blank" rel="noopener noreferrer nofollow">Voir l\'annonce et postuler ↗</a>' : "";
       return '<li class="annonce"><div class="a-tete"><strong>' + esc(a.titre) + '</strong><span class="a-date">' + jour(a.date) + " · " + ilYa(a.date) + "</span></div>" +
         '<div class="a-meta">' + meta + "</div>" + lien + "</li>";
@@ -142,7 +151,7 @@
   // Un changement de filtre met à jour la liste ET la carte.
   var filtreChange = function () { affiche = PAS; majCarte(); dessiner(); };
   document.getElementById("q").addEventListener("input", filtreChange);
-  document.getElementById("alt").addEventListener("change", filtreChange);
+  document.getElementById("genre").addEventListener("change", filtreChange);
   document.getElementById("age").addEventListener("change", filtreChange);
   document.getElementById("toutes").addEventListener("click", function () {
     zone = null; affiche = PAS;
@@ -164,8 +173,18 @@
   document.getElementById("texte-contrat").textContent =
     "Parmi les " + fmt(A.retenues) + " annonces : " + fmt(c.permanent) + " en contrat « permanent » (CDI), " + fmt(c.contract) + " en contrat « contract » (CDD, intérim…) et " + fmt(c.non_renseigne) + " sans type de contrat renseigné.";
 
-  document.getElementById("texte-alternance").textContent =
-    "Environ " + fmt(A.alternance) + " annonces sur " + fmt(A.retenues) + " (" + Math.round(A.alternance / A.retenues * 100) + " %) mentionnent l'alternance. Le filtre « Alternance » de la liste ci-dessous les affiche.";
+  // Emploi, alternance ou stage : part des annonces et salaire minimum affiché médian (non calculé pour les stages).
+  var GENRES_NOM = { emploi: "Emploi (CDI, CDD, intérim…)", alternance: "Alternance", stage: "Stage" };
+  var parGenre = {}; (A.genres || []).forEach(function (g) { parGenre[g.genre] = g; });
+  if (A.genres) {
+    document.getElementById("t-genres").innerHTML = "<tr><th>Type de poste</th><th>Annonces</th><th>Part</th><th>Salaire minimum affiché médian</th></tr>" +
+      ["emploi", "alternance", "stage"].map(function (k) {
+        var g = parGenre[k], sal = k === "stage" ? "gratification, non comparable" : (g.salaires_n >= 5 ? fmt(g.salaire_mediane) + " € (" + g.salaires_n + " annonces)" : (g.salaires_n ? "trop peu d'annonces (" + g.salaires_n + ")" : "aucun salaire affiché"));
+        return "<tr><td>" + GENRES_NOM[k] + "</td><td>" + fmt(g.n) + "</td><td>" + String(g.part).replace(".", ",") + " %</td><td>" + sal + "</td></tr>"; }).join("");
+    document.getElementById("texte-genres").textContent =
+      "Sur les " + fmt(A.retenues) + " annonces, " + Math.round(parGenre.stage.part) + " % sont des stages, " + Math.round(parGenre.alternance.part) + " % de l'alternance et " + Math.round(parGenre.emploi.part) + " % des emplois. " +
+      "Le filtre « type de poste » de la liste permet de n'afficher que l'un d'eux.";
+  }
   // Évolution : un relevé par date et par requête, avec la variation entre le premier et le dernier relevé.
   var CPT = window.DONNEES.compteurs || [];
   var dates = CPT.map(function (c) { return c.date; }).filter(function (d, i, a) { return a.indexOf(d) === i; }).sort();
@@ -199,8 +218,8 @@
         var n = par[k]; return "<tr><td>" + NIVEAUX[k] + "</td><td>" + fmt(n.n) + "</td><td>" + String(n.part).replace(".", ",") + " %</td><td>" + salNiv(n) + "</td><td>" + fmt(n.alternance) + "</td></tr>"; }).join("");
     var a = par.assistant, c = par.autres;
     document.getElementById("texte-niveaux").textContent =
-      "Les postes d'assistant chef de produit représentent " + Math.round(a.part) + " % des " + fmt(A.retenues) + " annonces, le niveau d'entrée le plus visible. " +
-      (a.salaires_n >= 5 && c.salaires_n >= 5 ? "Leur salaire minimum affiché médian est de " + fmt(a.salaire_mediane) + " € (" + a.salaires_n + " annonces), contre " + fmt(c.salaire_mediane) + " € pour les annonces « chef de produit » sans niveau précisé (" + c.salaires_n + " annonces)." : "");
+      "Hors stages, les postes d'assistant chef de produit représentent " + Math.round(a.part) + " % des " + fmt(A.niveaux_base) + " annonces d'emploi et d'alternance. À cela s'ajoutent " + fmt(A.assistant_stages) + " stages d'assistant : la plupart des annonces « assistant » sont donc des stages. " +
+      (a.salaires_n >= 5 && c.salaires_n >= 5 ? "Pour les emplois et l'alternance, le salaire minimum affiché médian est de " + fmt(a.salaire_mediane) + " € pour les assistants (" + a.salaires_n + " annonces seulement), contre " + fmt(c.salaire_mediane) + " € pour les annonces « chef de produit » sans niveau précisé (" + c.salaires_n + " annonces)." : "");
   }
   var s = A.salaires;
   document.getElementById("texte-sal").textContent =

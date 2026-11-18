@@ -129,7 +129,7 @@ function serie(liste, territoire, cle) {
     panneau.innerHTML =
       ligne(fmt(f[f.length - 1].y), "offres enregistrées en France au " + trimestreFr(f[f.length - 1].x) + " <span class='source-chiffre'>(France Travail, cumul sur 3 mois)</span>") +
       ligne(fmt(e[e.length - 1].y), "embauches enregistrées en France au " + trimestreFr(e[e.length - 1].x) + " <span class='source-chiffre'>(France Travail, cumul sur 3 mois)</span>") +
-      (D.annonces ? ligne(fmt(D.annonces.retenues), "annonces en ligne chez Adzuna au " + jourFr(D.maj.annonces) + ", dont " + fmt(D.annonces.alternance) + " en alternance <span class='source-chiffre'>(instantané, partiel)</span>") : "") +
+      (D.annonces ? ligne(fmt(D.annonces.retenues), "annonces en ligne chez Adzuna au " + jourFr(D.maj.annonces) + ", dont " + fmt((D.annonces.genres.filter(function (g) { return g.genre === "stage"; })[0] || {}).n) + " stages et " + fmt(D.annonces.alternance) + " en alternance <span class='source-chiffre'>(instantané, partiel)</span>") : "") +
       "<div class='note-chiffres'>Trois sources et trois périodes différentes : ces nombres ne se comparent pas entre eux.</div>";
     hero.querySelector(".contenu").appendChild(panneau);
   }
