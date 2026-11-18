@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chef de produit · veille métier</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b5fff'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="style.css?v=202611182241">
+<link rel="stylesheet" href="style.css?v=202611182250">
 </head>
 <body>
 <main class="accueil">
@@ -14,6 +14,15 @@
 
   <div class="texte">
     <p>Le chef de produit suit un produit ou une gamme de produits, de sa conception à sa commercialisation, selon la stratégie commerciale et marketing de l'entreprise (code ROME <strong>M1703</strong>). Le métier est accessible avec un diplôme de niveau Bac+3 à Bac+5 en commerce ou marketing, et l'anglais peut être exigé.</p>
+
+    <h2>Ce qu'il fait</h2>
+    <ul class="liste">
+      <li>Définit la stratégie produit en cohérence avec les objectifs de l'entreprise.</li>
+      <li>Analyse les tendances du marché et les besoins des consommateurs.</li>
+      <li>Travaille avec les équipes de développement pour concevoir le produit.</li>
+      <li>Gère le cycle de vie du produit, de la conception à la commercialisation.</li>
+      <li>Assure la rentabilité et le retour sur investissement des produits gérés.</li>
+    </ul>
   </div>
 
   <div class="boutons">
@@ -28,53 +37,44 @@
 
   <section class="questions">
     <h2>Les questions posées au marché</h2>
-    <p>Cinq questions guident la veille. Chacune renvoie à la page qui y répond, avec son état.</p>
+    <p>Cinq questions guident la veille. Chacune renvoie à la page qui y répond.</p>
     <ol>
       <li>
         <div class="q-texte"><strong>Combien d'offres, en France, en Auvergne-Rhône-Alpes et dans le Puy-de-Dôme, et quelle part en alternance ?</strong>
         <span>Le volume est compté par trimestre et par territoire. La part d'alternance est estimée à partir du texte des annonces.</span></div>
-        <div class="q-etat"><em class="partiel">En partie</em><a href="offres.html">Offres et marché</a></div>
+        <div class="q-etat"><a href="offres.html">Offres et marché</a></div>
       </li>
       <li>
         <div class="q-texte"><strong>Quels contrats et quels salaires ?</strong>
         <span>Répartition des contrats au niveau France, et salaires affichés dans les annonces.</span></div>
-        <div class="q-etat"><em class="repondu">Répondu</em><a href="offres.html">Offres et marché</a><a href="annonces.html">Annonces</a></div>
+        <div class="q-etat"><a href="offres.html">Offres et marché</a><a href="annonces.html">Annonces</a></div>
       </li>
       <li>
         <div class="q-texte"><strong>Quels outils et compétences reviennent, et lesquels la formation ne donne pas ?</strong>
         <span>Compétences du référentiel officiel. Les annonces sont trop courtes pour compter les outils, et la comparaison avec la formation n'est pas faite.</span></div>
-        <div class="q-etat"><em class="partiel">En partie</em><a href="competences.html">Compétences</a></div>
+        <div class="q-etat"><a href="competences.html">Compétences</a></div>
       </li>
       <li>
         <div class="q-texte"><strong>Comment le métier bouge-t-il ?</strong>
         <span>Évolution du volume d'offres et des embauches depuis 2021, et effet de l'intelligence artificielle d'après l'Apec.</span></div>
-        <div class="q-etat"><em class="partiel">En partie</em><a href="evolution.html">Évolution</a></div>
+        <div class="q-etat"><a href="evolution.html">Évolution</a></div>
       </li>
       <li>
         <div class="q-texte"><strong>Quelles entreprises recrutent cet intitulé, et lesquelles du Puy-de-Dôme pourraient en avoir besoin sans l'annoncer ?</strong>
         <span>Entreprises qui publient le plus d'annonces, et entreprises de 50 salariés et plus du département.</span></div>
-        <div class="q-etat"><em class="repondu">Répondu</em><a href="acteurs.html">Acteurs</a></div>
+        <div class="q-etat"><a href="acteurs.html">Acteurs</a></div>
       </li>
     </ol>
   </section>
 
   <div class="texte">
-    <h2>Ce qu'il fait</h2>
-    <ul class="liste">
-      <li>Définit la stratégie produit en cohérence avec les objectifs de l'entreprise.</li>
-      <li>Analyse les tendances du marché et les besoins des consommateurs.</li>
-      <li>Travaille avec les équipes de développement pour concevoir le produit.</li>
-      <li>Gère le cycle de vie du produit, de la conception à la commercialisation.</li>
-      <li>Assure la rentabilité et le retour sur investissement des produits gérés.</li>
-    </ul>
-
     <h2>Les intitulés du métier</h2>
     <ul class="puces" id="appellations"></ul>
     <p class="source" style="margin-top:16px">Source : fiche ROME 4.0 de M1703, API France Travail, extraction du <span class="date"></span>.</p>
   </div>
 </main>
-<script src="donnees.js?v=202611182241"></script>
-<script src="commun.js?v=202611182241"></script>
+<script src="donnees.js?v=202611182250"></script>
+<script src="commun.js?v=202611182250"></script>
 <script>
 (function () {
   var D = window.DONNEES;
