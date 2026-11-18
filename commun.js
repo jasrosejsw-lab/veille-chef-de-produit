@@ -26,9 +26,22 @@
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") etat(false); });
 
   document.body.insertAdjacentHTML("beforeend",
-    "<footer>Séminaires métiers · M2 Marketing Opérationnel &amp; Digital · IAE Clermont Auvergne · Données au " +
-    (window.DONNEES ? window.DONNEES.extraction : "?") + " · Site statique, aucune donnée collectée.</footer>");
+    "<footer>Séminaires métiers · M2 Marketing Opérationnel &amp; Digital · IAE Clermont Auvergne · <strong>Dernière mise à jour des données : " +
+    (window.DONNEES && window.DONNEES.maj ? jourFr(window.DONNEES.maj.derniere) : "?") + "</strong> · <a href=\"methode.html\">Détail par source</a></footer>");
 })();
+
+// « 2026-11-18 » → « 18/11/2026 »
+function jourFr(iso) {
+  var p = String(iso || "").split("-");
+  return p.length === 3 ? p[2] + "/" + p[1] + "/" + p[0] : (iso || "?");
+}
+
+// Les dates écrites en « 2026-11-01 » par les pages sont affichées en « 01/11/2026 ».
+window.addEventListener("load", function () {
+  document.querySelectorAll(".date, .date-ent").forEach(function (e) {
+    if (/^\d{4}-\d{2}-\d{2}$/.test(e.textContent.trim())) e.textContent = jourFr(e.textContent.trim());
+  });
+});
 
 var fmt = function (n) { return n == null ? "n.d." : Math.round(n).toLocaleString("fr-FR"); };
 

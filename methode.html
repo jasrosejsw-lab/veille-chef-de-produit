@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Méthode · chef de produit</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b5fff'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="style.css?v=202611182115">
+<link rel="stylesheet" href="style.css?v=202611182126">
 </head>
 <body>
 <main>
@@ -15,12 +15,12 @@
   <h2>D'où viennent les chiffres</h2>
   <p>Tout vient de sources publiques, consultées par programme, sauf l'étude de l'Apec, lue puis résumée. Aucune annonce n'a été copiée automatiquement sur LinkedIn, l'Apec ou Indeed, dont les conditions d'utilisation l'interdisent.</p>
   <table>
-    <tr><th>Source</th><th>Ce qu'elle apporte</th><th>Où sur le site</th></tr>
-    <tr><td><a href="https://francetravail.io" rel="noopener noreferrer">France Travail</a> : statistiques du marché du travail</td><td>Nombre d'offres et d'embauches par trimestre, types de contrat</td><td>Offres et marché, Ce qu'on retient, Évolution</td></tr>
-    <tr><td><a href="https://francetravail.io" rel="noopener noreferrer">France Travail</a> : référentiel des métiers (ROME)</td><td>Définition du métier, intitulés officiels, compétences</td><td>Présentation, Compétences</td></tr>
-    <tr><td><a href="https://www.adzuna.fr" rel="noopener noreferrer">Adzuna</a> : moteur d'annonces</td><td>Annonces en ligne : entreprise, lieu, contrat, salaire quand il est affiché</td><td>Annonces (carte et liste), Acteurs</td></tr>
-    <tr><td><a href="https://recherche-entreprises.api.gouv.fr" rel="noopener noreferrer">Recherche d'entreprises</a> (État, base Sirene)</td><td>Entreprises du Puy-de-Dôme de 50 salariés et plus : siège, secteur, taille</td><td>Acteurs</td></tr>
-    <tr><td><a href="https://www.apec.fr" rel="noopener noreferrer">Apec</a> : étude sur l'IA dans le commercial-marketing</td><td>Évolution du métier et compétences liées à l'intelligence artificielle</td><td>Évolution, Ce qu'on retient</td></tr>
+    <tr><th>Source</th><th>Ce qu'elle apporte</th><th>Où sur le site</th><th>Données du</th></tr>
+    <tr><td><a href="https://francetravail.io" rel="noopener noreferrer">France Travail</a> : statistiques du marché du travail</td><td>Nombre d'offres et d'embauches par trimestre, types de contrat</td><td>Offres et marché, Ce qu'on retient, Évolution</td><td id="m-marche">…</td></tr>
+    <tr><td><a href="https://francetravail.io" rel="noopener noreferrer">France Travail</a> : référentiel des métiers (ROME)</td><td>Définition du métier, intitulés officiels, compétences</td><td>Présentation, Compétences</td><td id="m-rome">…</td></tr>
+    <tr><td><a href="https://www.adzuna.fr" rel="noopener noreferrer">Adzuna</a> : moteur d'annonces</td><td>Annonces en ligne : entreprise, lieu, contrat, salaire quand il est affiché</td><td>Annonces (carte et liste), Acteurs</td><td id="m-adzuna">…</td></tr>
+    <tr><td><a href="https://recherche-entreprises.api.gouv.fr" rel="noopener noreferrer">Recherche d'entreprises</a> (État, base Sirene)</td><td>Entreprises du Puy-de-Dôme de 50 salariés et plus : siège, secteur, taille</td><td>Acteurs</td><td id="m-ent">…</td></tr>
+    <tr><td><a href="https://www.apec.fr" rel="noopener noreferrer">Apec</a> : étude sur l'IA dans le commercial-marketing</td><td>Évolution du métier et compétences liées à l'intelligence artificielle</td><td>Évolution, Ce qu'on retient</td><td>Article du 03/09/2026</td></tr>
   </table>
 
   <h2>Comment lire les chiffres</h2>
@@ -75,7 +75,19 @@
 
   <p>Code et données : <a href="https://github.com/jasrosejsw-lab/veille-chef-de-produit" rel="noopener noreferrer">github.com/jasrosejsw-lab/veille-chef-de-produit</a>.</p>
 </main>
-<script src="donnees.js?v=202611182115"></script>
-<script src="commun.js?v=202611182115"></script>
+<script src="donnees.js?v=202611182126"></script>
+<script>
+// Les dates viennent du fichier de données généré à chaque mise à jour du site.
+window.addEventListener("load", function () {
+  var M = window.DONNEES && window.DONNEES.maj;
+  if (!M) return;
+  var met = function (id, txt) { var e = document.getElementById(id); if (e) e.textContent = txt; };
+  met("m-marche", "Extraction du " + jourFr(M.marche));
+  met("m-rome", "Extraction du " + jourFr(M.rome));
+  met("m-ent", "Extraction du " + jourFr(M.entreprises));
+  met("m-adzuna", "Annonces du " + jourFr(M.annonces) + " ; relevés du nombre d'annonces : " + M.releves.map(jourFr).join(", "));
+});
+</script>
+<script src="commun.js?v=202611182126"></script>
 </body>
 </html>

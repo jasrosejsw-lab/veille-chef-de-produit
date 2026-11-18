@@ -125,6 +125,19 @@ if ($fEnt) {
     "entreprises_liste.js ecrit : $($listeEnt.Count) entreprises"
 }
 
+# Dates des données, par source (lues dans les noms de fichiers et le fichier de relevés), pour les afficher sur le site.
+function DateDe($fichier) { if ($fichier) { return ($fichier.BaseName -replace '.*_', '') } else { return $null } }
+$datesReleves = @()
+if (Test-Path $fCpt) { $datesReleves = @(Import-Csv $fCpt -Delimiter ";" | ForEach-Object { $_.date_releve } | Sort-Object -Unique) }
+$maj = [ordered]@{
+    marche = (DateDe $fMarche); indicateurs = (DateDe $fInd); rome = (DateDe $fApp)
+    annonces = (DateDe $fAdz); entreprises = (DateDe $fEnt)
+    releves = $datesReleves
+}
+$toutes = @($maj.marche, $maj.indicateurs, $maj.rome, $maj.annonces, $maj.entreprises) + $datesReleves | Where-Object { $_ }
+$maj["derniere"] = ($toutes | Sort-Object | Select-Object -Last 1)
+$donnees["maj"] = $maj
+
 # Numéro de version des fichiers du site dans les pages : évite qu'un navigateur mélange d'anciens fichiers avec les nouveaux
 # (GitHub Pages garde les fichiers en cache jusqu'à 10 minutes). À relancer avant chaque mise en ligne.
 $version = Get-Date -Format "yyyyMMddHHmm"
@@ -138,4 +151,4 @@ foreach ($page in Get-ChildItem (Join-Path $racine "*.html")) {
 
 $js = "window.DONNEES = " + ($donnees | ConvertTo-Json -Depth 5 -Compress) + ";"
 [IO.File]::WriteAllText((Join-Path $racine "donnees.js"), $js, [Text.UTF8Encoding]::new($false))
-"donnees.js ecrit : $($donnees.offres.Count) offres, $($donnees.embauches.Count) embauches, $($donnees.tension.Count) tension, $($donnees.salaires.Count) salaires, $($donnees.appellations.Count) appellations, $($donnees.competences.Count) competences"
+"donnees.js ecrit : $($donnees.offres.Count) offres, $($donnees.embauches.Count) embauches, $($donnees.appellations.Count) appellations, $($donnees.competences.Count) competences ; derniere mise a jour des donnees : $($maj.derniere)"
