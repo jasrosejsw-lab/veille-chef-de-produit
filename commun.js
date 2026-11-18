@@ -30,6 +30,12 @@
     (window.DONNEES && window.DONNEES.maj ? jourFr(window.DONNEES.maj.derniere) : "?") + "</strong> · <a href=\"methode.html\">Détail par source</a></footer>");
 })();
 
+// « 2026T2 » → « 2e trimestre 2026 »
+function trimestreFr(t) {
+  var m = /^(\d{4})T(\d)$/.exec(String(t || ""));
+  return m ? (m[2] === "1" ? "1er" : m[2] + "e") + " trimestre " + m[1] : String(t || "");
+}
+
 // « 2026-11-18 » → « 18/11/2026 »
 function jourFr(iso) {
   var p = String(iso || "").split("-");
@@ -121,9 +127,10 @@ function serie(liste, territoire, cle) {
     var panneau = document.createElement("div");
     panneau.className = "hero-chiffres";
     panneau.innerHTML =
-      ligne(fmt(f[f.length - 1].y), "offres de chef de produit enregistrées en France, " + f[f.length - 1].x) +
-      ligne(fmt(e[e.length - 1].y), "embauches enregistrées en France, " + e[e.length - 1].x) +
-      (D.annonces ? ligne(fmt(D.annonces.retenues), "annonces en ligne analysées, dont " + fmt(D.annonces.alternance) + " en alternance") : "");
+      ligne(fmt(f[f.length - 1].y), "offres enregistrées en France au " + trimestreFr(f[f.length - 1].x) + " <span class='source-chiffre'>(France Travail, cumul sur 3 mois)</span>") +
+      ligne(fmt(e[e.length - 1].y), "embauches enregistrées en France au " + trimestreFr(e[e.length - 1].x) + " <span class='source-chiffre'>(France Travail, cumul sur 3 mois)</span>") +
+      (D.annonces ? ligne(fmt(D.annonces.retenues), "annonces en ligne chez Adzuna au " + jourFr(D.maj.annonces) + ", dont " + fmt(D.annonces.alternance) + " en alternance <span class='source-chiffre'>(instantané, partiel)</span>") : "") +
+      "<div class='note-chiffres'>Trois sources et trois périodes différentes : ces nombres ne se comparent pas entre eux.</div>";
     hero.querySelector(".contenu").appendChild(panneau);
   }
   main.parentNode.insertBefore(hero, main);

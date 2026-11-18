@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Annonces · chef de produit</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b5fff'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="style.css?v=202611182203">
+<link rel="stylesheet" href="style.css?v=202611182207">
 </head>
 <body>
 <main>
@@ -73,23 +73,23 @@
   <table id="t-outils"></table>
   <div class="limite"><strong>Limite majeure.</strong> L'API ne fournit qu'un extrait d'environ 500 caractères de chaque annonce. Les outils sont presque toujours cités plus bas dans le texte : ces comptages sont donc très sous-estimés et ne permettent <em>pas</em> de conclure qu'un outil n'est pas demandé. Pour compter sérieusement les outils, il faudrait le texte complet des annonces.</div>
 </main>
-<script src="donnees.js?v=202611182203"></script>
-<script src="carte_regions.js?v=202611182203"></script>
-<script src="carte_departements.js?v=202611182203"></script>
-<script src="carte.js?v=202611182203"></script>
-<script src="annonces_liste.js?v=202611182203"></script>
-<script src="commun.js?v=202611182203"></script>
+<script src="donnees.js?v=202611182207"></script>
+<script src="carte_regions.js?v=202611182207"></script>
+<script src="carte_departements.js?v=202611182207"></script>
+<script src="carte.js?v=202611182207"></script>
+<script src="annonces_liste.js?v=202611182207"></script>
+<script src="commun.js?v=202611182207"></script>
 <script>
 (function () {
-  var A = window.DONNEES.annonces;
+  var D = window.DONNEES, A = D.annonces;
   document.querySelectorAll(".date").forEach(function (e) { e.textContent = A.extraction; });
   var carte = function (v, l) { return '<div class="carte"><div class="valeur">' + v + '</div><div class="legende">' + l + "</div></div>"; };
   var annee2026 = (A.annees.filter(function (a) { return a.annee === "2026"; })[0] || {}).nombre || 0;
   document.getElementById("cartes").innerHTML =
-    carte(fmt(A.total_api), "annonces renvoyées par la recherche") +
+    carte(fmt(A.total_api), "annonces trouvées par Adzuna avec l'expression « chef de produit » (relevé du " + jourFr(D.maj.annonces) + ")") +
     carte(fmt(A.retenues), "annonces dont le titre est « chef de produit »") +
     carte(fmt(annee2026), "de ces annonces publiées en 2026") +
-    carte(fmt(A.puy_de_dome), "dans le Puy-de-Dôme");
+    carte(fmt(A.puy_de_dome), "dans le Puy-de-Dôme à cette date (France Travail en enregistre environ " + fmt((serie(D.offres, "PUY-DE-DOME").slice(-1)[0] || {}).y) + " par trimestre)");
 
   document.getElementById("texte-geo").textContent =
     "Sur " + fmt(A.retenues) + " annonces, " + fmt(A.regions[0].nombre) + " sont en " + A.regions[0].nom + " (" + Math.round(A.regions[0].nombre / A.retenues * 100) +
@@ -158,7 +158,7 @@
   ], function (niveau, cle, nom) {
     zone = { champ: niveau === "departements" ? "departement" : "region", cle: cle, nom: nom }; affiche = PAS; dessiner();
   });
-  document.getElementById("limite-geo").innerHTML = "<strong>Limite.</strong> " + fmt(A.sans_region) + " annonces n'ont pas de région renseignée et n'apparaissent pas dans le graphique. Avec " + fmt(A.puy_de_dome) + " annonces dans le Puy-de-Dôme, on ne peut rien conclure sur ce département à partir de ce canal.";
+  document.getElementById("limite-geo").innerHTML = "<strong>Limite.</strong> " + fmt(A.sans_region) + " annonces n'ont pas de région renseignée et n'apparaissent pas dans le graphique. Dans le Puy-de-Dôme, " + (A.puy_de_dome ? "seules " + fmt(A.puy_de_dome) + " annonces étaient en ligne" : "aucune annonce « chef de produit » n'était en ligne") + " à cette date (deux l'étaient le 1er novembre) alors que France Travail en enregistre environ " + fmt((serie(D.offres, "PUY-DE-DOME").slice(-1)[0] || {}).y) + " par trimestre : Adzuna ne couvre qu'une partie du marché local, on ne peut donc rien conclure sur ce département à partir de ce canal.";
 
   var c = A.contrats;
   document.getElementById("texte-contrat").textContent =
@@ -176,7 +176,6 @@
     "France - chef de produit, categorie marketing": "France, « chef de produit », catégorie marketing",
     "France - product manager": "France, « product manager »"
   };
-  var jourFr = function (iso) { var p = iso.split("-"); return p[2] + "/" + p[1] + "/" + p[0]; };
   if (dates.length) {
     var requetes = Object.keys(libelles).filter(function (r) { return CPT.some(function (c) { return c.requete === r; }); });
     var valeur = function (r, d) { var l = CPT.filter(function (c) { return c.requete === r && c.date === d; })[0]; return l ? l.nombre : null; };
