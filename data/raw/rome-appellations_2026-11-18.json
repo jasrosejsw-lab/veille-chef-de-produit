@@ -1,0 +1,1234 @@
+[
+    {
+        "obsolete":  false,
+        "code":  "126559",
+        "libelle":  "Chef / Cheffe de produit web mobile",
+        "libelleCourt":  "Chef / Cheffe de produit web mobile",
+        "emploiCadre":  true,
+        "transitionEcologique":  false,
+        "transitionEcologiqueDetaillee":  "EMPLOI_BLANC",
+        "transitionNumerique":  true,
+        "classification":  "SYNONYME",
+        "metier":  {
+                       "code":  "M1703",
+                       "libelle":  "Chef / Cheffe de produit",
+                       "riasecMajeur":  "E",
+                       "riasecMineur":  "C",
+                       "transitionEcologique":  false,
+                       "transitionEcologiqueDetaillee":  "EMPLOI_BLANC",
+                       "transitionNumerique":  true,
+                       "codeIsco":  "1221",
+                       "domaineProfessionnel":  {
+                                                    "code":  "M17",
+                                                    "libelle":  "Stratégie commerciale, marketing et supervision des ventes",
+                                                    "grandDomaine":  {
+                                                                         "code":  "M",
+                                                                         "libelle":  "Support à l\u0027entreprise"
+                                                                     }
+                                                },
+                       "emploiCadre":  true,
+                       "emploiReglemente":  false,
+                       "transitionDemographique":  false
+                   },
+        "appellationEsco":  {
+                                "uri":  "http://data.europa.eu/esco/occupation/9f508305-80ce-4111-8722-f2c9b4a44890",
+                                "libelle":  "chef de produit"
+                            },
+        "competencesCles":  [
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300207",
+                                                       "libelle":  "Maîtriser les caractéristiques d\u0027un produit ou d\u0027un matériau",
+                                                       "codeOgr":  "300207"
+                                                   },
+                                    "frequence":  67
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300366",
+                                                       "libelle":  "Recueillir et analyser les besoins client",
+                                                       "codeOgr":  "300366",
+                                                       "riasecMajeur":  "I"
+                                                   },
+                                    "frequence":  100
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300383",
+                                                       "libelle":  "Réaliser une veille de marché, une veille concurrentielle",
+                                                       "codeOgr":  "300383",
+                                                       "riasecMajeur":  "I"
+                                                   },
+                                    "frequence":  67
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300386",
+                                                       "libelle":  "Elaborer un plan marketing, une stratégie de marque et de communication",
+                                                       "codeOgr":  "300386",
+                                                       "riasecMajeur":  "E"
+                                                   },
+                                    "frequence":  93
+                                }
+                            ]
+    },
+    {
+        "obsolete":  false,
+        "code":  "126560",
+        "libelle":  "Chef / Cheffe de produit digital",
+        "libelleCourt":  "Chef / Cheffe de produit digital",
+        "emploiCadre":  true,
+        "transitionEcologique":  false,
+        "transitionEcologiqueDetaillee":  "EMPLOI_BLANC",
+        "transitionNumerique":  true,
+        "classification":  "SYNONYME",
+        "metier":  {
+                       "code":  "M1703",
+                       "libelle":  "Chef / Cheffe de produit",
+                       "riasecMajeur":  "E",
+                       "riasecMineur":  "C",
+                       "transitionEcologique":  false,
+                       "transitionEcologiqueDetaillee":  "EMPLOI_BLANC",
+                       "transitionNumerique":  true,
+                       "codeIsco":  "1221",
+                       "domaineProfessionnel":  {
+                                                    "code":  "M17",
+                                                    "libelle":  "Stratégie commerciale, marketing et supervision des ventes",
+                                                    "grandDomaine":  {
+                                                                         "code":  "M",
+                                                                         "libelle":  "Support à l\u0027entreprise"
+                                                                     }
+                                                },
+                       "emploiCadre":  true,
+                       "emploiReglemente":  false,
+                       "transitionDemographique":  false
+                   },
+        "appellationEsco":  {
+                                "uri":  "http://data.europa.eu/esco/occupation/9f508305-80ce-4111-8722-f2c9b4a44890",
+                                "libelle":  "chef de produit"
+                            },
+        "competencesCles":  [
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300207",
+                                                       "libelle":  "Maîtriser les caractéristiques d\u0027un produit ou d\u0027un matériau",
+                                                       "codeOgr":  "300207"
+                                                   },
+                                    "frequence":  95
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300366",
+                                                       "libelle":  "Recueillir et analyser les besoins client",
+                                                       "codeOgr":  "300366",
+                                                       "riasecMajeur":  "I"
+                                                   },
+                                    "frequence":  95
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300383",
+                                                       "libelle":  "Réaliser une veille de marché, une veille concurrentielle",
+                                                       "codeOgr":  "300383",
+                                                       "riasecMajeur":  "I"
+                                                   },
+                                    "frequence":  100
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300386",
+                                                       "libelle":  "Elaborer un plan marketing, une stratégie de marque et de communication",
+                                                       "codeOgr":  "300386",
+                                                       "riasecMajeur":  "E"
+                                                   },
+                                    "frequence":  95
+                                }
+                            ]
+    },
+    {
+        "obsolete":  false,
+        "code":  "38790",
+        "libelle":  "Chef / Cheffe de produit web",
+        "libelleCourt":  "Chef / Cheffe de produit web",
+        "emploiCadre":  true,
+        "transitionEcologique":  false,
+        "transitionEcologiqueDetaillee":  "EMPLOI_BLANC",
+        "transitionNumerique":  true,
+        "classification":  "SYNONYME",
+        "metier":  {
+                       "code":  "M1703",
+                       "libelle":  "Chef / Cheffe de produit",
+                       "riasecMajeur":  "E",
+                       "riasecMineur":  "C",
+                       "transitionEcologique":  false,
+                       "transitionEcologiqueDetaillee":  "EMPLOI_BLANC",
+                       "transitionNumerique":  true,
+                       "codeIsco":  "1221",
+                       "domaineProfessionnel":  {
+                                                    "code":  "M17",
+                                                    "libelle":  "Stratégie commerciale, marketing et supervision des ventes",
+                                                    "grandDomaine":  {
+                                                                         "code":  "M",
+                                                                         "libelle":  "Support à l\u0027entreprise"
+                                                                     }
+                                                },
+                       "emploiCadre":  true,
+                       "emploiReglemente":  false,
+                       "transitionDemographique":  false
+                   },
+        "appellationEsco":  {
+                                "uri":  "http://data.europa.eu/esco/occupation/9f508305-80ce-4111-8722-f2c9b4a44890",
+                                "libelle":  "chef de produit"
+                            },
+        "competencesCles":  [
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300207",
+                                                       "libelle":  "Maîtriser les caractéristiques d\u0027un produit ou d\u0027un matériau",
+                                                       "codeOgr":  "300207"
+                                                   },
+                                    "frequence":  100
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300366",
+                                                       "libelle":  "Recueillir et analyser les besoins client",
+                                                       "codeOgr":  "300366",
+                                                       "riasecMajeur":  "I"
+                                                   },
+                                    "frequence":  100
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300383",
+                                                       "libelle":  "Réaliser une veille de marché, une veille concurrentielle",
+                                                       "codeOgr":  "300383",
+                                                       "riasecMajeur":  "I"
+                                                   },
+                                    "frequence":  100
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300386",
+                                                       "libelle":  "Elaborer un plan marketing, une stratégie de marque et de communication",
+                                                       "codeOgr":  "300386",
+                                                       "riasecMajeur":  "E"
+                                                   },
+                                    "frequence":  100
+                                }
+                            ]
+    },
+    {
+        "obsolete":  false,
+        "code":  "38791",
+        "libelle":  "Chef / Cheffe de produit multimédia",
+        "libelleCourt":  "Chef / Cheffe de produit multimédia",
+        "emploiCadre":  true,
+        "transitionEcologique":  false,
+        "transitionEcologiqueDetaillee":  "EMPLOI_BLANC",
+        "transitionNumerique":  true,
+        "classification":  "SYNONYME",
+        "metier":  {
+                       "code":  "M1703",
+                       "libelle":  "Chef / Cheffe de produit",
+                       "riasecMajeur":  "E",
+                       "riasecMineur":  "C",
+                       "transitionEcologique":  false,
+                       "transitionEcologiqueDetaillee":  "EMPLOI_BLANC",
+                       "transitionNumerique":  true,
+                       "codeIsco":  "1221",
+                       "domaineProfessionnel":  {
+                                                    "code":  "M17",
+                                                    "libelle":  "Stratégie commerciale, marketing et supervision des ventes",
+                                                    "grandDomaine":  {
+                                                                         "code":  "M",
+                                                                         "libelle":  "Support à l\u0027entreprise"
+                                                                     }
+                                                },
+                       "emploiCadre":  true,
+                       "emploiReglemente":  false,
+                       "transitionDemographique":  false
+                   },
+        "appellationEsco":  {
+                                "uri":  "http://data.europa.eu/esco/occupation/9f508305-80ce-4111-8722-f2c9b4a44890",
+                                "libelle":  "chef de produit"
+                            },
+        "competencesCles":  [
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300207",
+                                                       "libelle":  "Maîtriser les caractéristiques d\u0027un produit ou d\u0027un matériau",
+                                                       "codeOgr":  "300207"
+                                                   },
+                                    "frequence":  75
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300366",
+                                                       "libelle":  "Recueillir et analyser les besoins client",
+                                                       "codeOgr":  "300366",
+                                                       "riasecMajeur":  "I"
+                                                   },
+                                    "frequence":  100
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300383",
+                                                       "libelle":  "Réaliser une veille de marché, une veille concurrentielle",
+                                                       "codeOgr":  "300383",
+                                                       "riasecMajeur":  "I"
+                                                   },
+                                    "frequence":  75
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300386",
+                                                       "libelle":  "Elaborer un plan marketing, une stratégie de marque et de communication",
+                                                       "codeOgr":  "300386",
+                                                       "riasecMajeur":  "E"
+                                                   },
+                                    "frequence":  75
+                                }
+                            ]
+    },
+    {
+        "obsolete":  false,
+        "code":  "18716",
+        "libelle":  "Responsable de gamme produits",
+        "libelleCourt":  "Responsable de gamme produits",
+        "emploiCadre":  true,
+        "transitionEcologique":  false,
+        "transitionEcologiqueDetaillee":  "EMPLOI_BLANC",
+        "transitionNumerique":  true,
+        "classification":  "SYNONYME",
+        "metier":  {
+                       "code":  "M1703",
+                       "libelle":  "Chef / Cheffe de produit",
+                       "riasecMajeur":  "E",
+                       "riasecMineur":  "C",
+                       "transitionEcologique":  false,
+                       "transitionEcologiqueDetaillee":  "EMPLOI_BLANC",
+                       "transitionNumerique":  true,
+                       "codeIsco":  "1221",
+                       "domaineProfessionnel":  {
+                                                    "code":  "M17",
+                                                    "libelle":  "Stratégie commerciale, marketing et supervision des ventes",
+                                                    "grandDomaine":  {
+                                                                         "code":  "M",
+                                                                         "libelle":  "Support à l\u0027entreprise"
+                                                                     }
+                                                },
+                       "emploiCadre":  true,
+                       "emploiReglemente":  false,
+                       "transitionDemographique":  false
+                   },
+        "appellationEsco":  {
+                                "uri":  "http://data.europa.eu/esco/occupation/9f508305-80ce-4111-8722-f2c9b4a44890",
+                                "libelle":  "chef de produit"
+                            },
+        "competencesCles":  [
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300386",
+                                                       "libelle":  "Elaborer un plan marketing, une stratégie de marque et de communication",
+                                                       "codeOgr":  "300386",
+                                                       "riasecMajeur":  "E"
+                                                   },
+                                    "frequence":  93
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300207",
+                                                       "libelle":  "Maîtriser les caractéristiques d\u0027un produit ou d\u0027un matériau",
+                                                       "codeOgr":  "300207"
+                                                   },
+                                    "frequence":  100
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300366",
+                                                       "libelle":  "Recueillir et analyser les besoins client",
+                                                       "codeOgr":  "300366",
+                                                       "riasecMajeur":  "I"
+                                                   },
+                                    "frequence":  100
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300383",
+                                                       "libelle":  "Réaliser une veille de marché, une veille concurrentielle",
+                                                       "codeOgr":  "300383",
+                                                       "riasecMajeur":  "I"
+                                                   },
+                                    "frequence":  100
+                                }
+                            ]
+    },
+    {
+        "obsolete":  false,
+        "code":  "200147",
+        "libelle":  "Product manager",
+        "libelleCourt":  "Product manager",
+        "emploiCadre":  true,
+        "transitionEcologique":  false,
+        "transitionEcologiqueDetaillee":  "EMPLOI_BLANC",
+        "transitionNumerique":  true,
+        "classification":  "SYNONYME",
+        "metier":  {
+                       "code":  "M1703",
+                       "libelle":  "Chef / Cheffe de produit",
+                       "riasecMajeur":  "E",
+                       "riasecMineur":  "C",
+                       "transitionEcologique":  false,
+                       "transitionEcologiqueDetaillee":  "EMPLOI_BLANC",
+                       "transitionNumerique":  true,
+                       "codeIsco":  "1221",
+                       "domaineProfessionnel":  {
+                                                    "code":  "M17",
+                                                    "libelle":  "Stratégie commerciale, marketing et supervision des ventes",
+                                                    "grandDomaine":  {
+                                                                         "code":  "M",
+                                                                         "libelle":  "Support à l\u0027entreprise"
+                                                                     }
+                                                },
+                       "emploiCadre":  true,
+                       "emploiReglemente":  false,
+                       "transitionDemographique":  false
+                   },
+        "appellationEsco":  {
+                                "uri":  "http://data.europa.eu/esco/occupation/9f508305-80ce-4111-8722-f2c9b4a44890",
+                                "libelle":  "chef de produit"
+                            },
+        "competencesCles":  [
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300207",
+                                                       "libelle":  "Maîtriser les caractéristiques d\u0027un produit ou d\u0027un matériau",
+                                                       "codeOgr":  "300207"
+                                                   },
+                                    "frequence":  97
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300366",
+                                                       "libelle":  "Recueillir et analyser les besoins client",
+                                                       "codeOgr":  "300366",
+                                                       "riasecMajeur":  "I"
+                                                   },
+                                    "frequence":  100
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300383",
+                                                       "libelle":  "Réaliser une veille de marché, une veille concurrentielle",
+                                                       "codeOgr":  "300383",
+                                                       "riasecMajeur":  "I"
+                                                   },
+                                    "frequence":  99
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300386",
+                                                       "libelle":  "Elaborer un plan marketing, une stratégie de marque et de communication",
+                                                       "codeOgr":  "300386",
+                                                       "riasecMajeur":  "E"
+                                                   },
+                                    "frequence":  99
+                                }
+                            ]
+    },
+    {
+        "obsolete":  false,
+        "code":  "11202",
+        "libelle":  "Assistant / Assistante chef de produit",
+        "libelleCourt":  "Assistant / Assistante chef de produit",
+        "emploiCadre":  true,
+        "transitionEcologique":  false,
+        "transitionEcologiqueDetaillee":  "EMPLOI_BLANC",
+        "transitionNumerique":  true,
+        "classification":  "SYNONYME",
+        "metier":  {
+                       "code":  "M1703",
+                       "libelle":  "Chef / Cheffe de produit",
+                       "riasecMajeur":  "E",
+                       "riasecMineur":  "C",
+                       "transitionEcologique":  false,
+                       "transitionEcologiqueDetaillee":  "EMPLOI_BLANC",
+                       "transitionNumerique":  true,
+                       "codeIsco":  "1221",
+                       "domaineProfessionnel":  {
+                                                    "code":  "M17",
+                                                    "libelle":  "Stratégie commerciale, marketing et supervision des ventes",
+                                                    "grandDomaine":  {
+                                                                         "code":  "M",
+                                                                         "libelle":  "Support à l\u0027entreprise"
+                                                                     }
+                                                },
+                       "emploiCadre":  true,
+                       "emploiReglemente":  false,
+                       "transitionDemographique":  false
+                   },
+        "appellationEsco":  {
+                                "uri":  "http://data.europa.eu/esco/occupation/9f508305-80ce-4111-8722-f2c9b4a44890",
+                                "libelle":  "chef de produit"
+                            },
+        "competencesCles":  [
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300207",
+                                                       "libelle":  "Maîtriser les caractéristiques d\u0027un produit ou d\u0027un matériau",
+                                                       "codeOgr":  "300207"
+                                                   },
+                                    "frequence":  95
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300366",
+                                                       "libelle":  "Recueillir et analyser les besoins client",
+                                                       "codeOgr":  "300366",
+                                                       "riasecMajeur":  "I"
+                                                   },
+                                    "frequence":  93
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300383",
+                                                       "libelle":  "Réaliser une veille de marché, une veille concurrentielle",
+                                                       "codeOgr":  "300383",
+                                                       "riasecMajeur":  "I"
+                                                   },
+                                    "frequence":  94
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300386",
+                                                       "libelle":  "Elaborer un plan marketing, une stratégie de marque et de communication",
+                                                       "codeOgr":  "300386",
+                                                       "riasecMajeur":  "E"
+                                                   },
+                                    "frequence":  95
+                                }
+                            ]
+    },
+    {
+        "obsolete":  false,
+        "code":  "15865",
+        "libelle":  "Ingénieur / Ingénieure produit",
+        "libelleCourt":  "Ingénieur / Ingénieure produit",
+        "emploiCadre":  true,
+        "transitionEcologique":  false,
+        "transitionEcologiqueDetaillee":  "EMPLOI_BLANC",
+        "transitionNumerique":  true,
+        "classification":  "SYNONYME",
+        "metier":  {
+                       "code":  "M1703",
+                       "libelle":  "Chef / Cheffe de produit",
+                       "riasecMajeur":  "E",
+                       "riasecMineur":  "C",
+                       "transitionEcologique":  false,
+                       "transitionEcologiqueDetaillee":  "EMPLOI_BLANC",
+                       "transitionNumerique":  true,
+                       "codeIsco":  "1221",
+                       "domaineProfessionnel":  {
+                                                    "code":  "M17",
+                                                    "libelle":  "Stratégie commerciale, marketing et supervision des ventes",
+                                                    "grandDomaine":  {
+                                                                         "code":  "M",
+                                                                         "libelle":  "Support à l\u0027entreprise"
+                                                                     }
+                                                },
+                       "emploiCadre":  true,
+                       "emploiReglemente":  false,
+                       "transitionDemographique":  false
+                   },
+        "appellationEsco":  {
+                                "uri":  "http://data.europa.eu/esco/occupation/9f508305-80ce-4111-8722-f2c9b4a44890",
+                                "libelle":  "chef de produit"
+                            },
+        "competencesCles":  [
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300207",
+                                                       "libelle":  "Maîtriser les caractéristiques d\u0027un produit ou d\u0027un matériau",
+                                                       "codeOgr":  "300207"
+                                                   },
+                                    "frequence":  100
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300366",
+                                                       "libelle":  "Recueillir et analyser les besoins client",
+                                                       "codeOgr":  "300366",
+                                                       "riasecMajeur":  "I"
+                                                   },
+                                    "frequence":  96
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300383",
+                                                       "libelle":  "Réaliser une veille de marché, une veille concurrentielle",
+                                                       "codeOgr":  "300383",
+                                                       "riasecMajeur":  "I"
+                                                   },
+                                    "frequence":  96
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300386",
+                                                       "libelle":  "Elaborer un plan marketing, une stratégie de marque et de communication",
+                                                       "codeOgr":  "300386",
+                                                       "riasecMajeur":  "E"
+                                                   },
+                                    "frequence":  92
+                                }
+                            ]
+    },
+    {
+        "obsolete":  false,
+        "code":  "18817",
+        "libelle":  "Responsable de produit",
+        "libelleCourt":  "Responsable de produit",
+        "emploiCadre":  true,
+        "transitionEcologique":  false,
+        "transitionEcologiqueDetaillee":  "EMPLOI_BLANC",
+        "transitionNumerique":  true,
+        "classification":  "SYNONYME",
+        "metier":  {
+                       "code":  "M1703",
+                       "libelle":  "Chef / Cheffe de produit",
+                       "riasecMajeur":  "E",
+                       "riasecMineur":  "C",
+                       "transitionEcologique":  false,
+                       "transitionEcologiqueDetaillee":  "EMPLOI_BLANC",
+                       "transitionNumerique":  true,
+                       "codeIsco":  "1221",
+                       "domaineProfessionnel":  {
+                                                    "code":  "M17",
+                                                    "libelle":  "Stratégie commerciale, marketing et supervision des ventes",
+                                                    "grandDomaine":  {
+                                                                         "code":  "M",
+                                                                         "libelle":  "Support à l\u0027entreprise"
+                                                                     }
+                                                },
+                       "emploiCadre":  true,
+                       "emploiReglemente":  false,
+                       "transitionDemographique":  false
+                   },
+        "appellationEsco":  {
+                                "uri":  "http://data.europa.eu/esco/occupation/9f508305-80ce-4111-8722-f2c9b4a44890",
+                                "libelle":  "chef de produit"
+                            },
+        "competencesCles":  [
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300207",
+                                                       "libelle":  "Maîtriser les caractéristiques d\u0027un produit ou d\u0027un matériau",
+                                                       "codeOgr":  "300207"
+                                                   },
+                                    "frequence":  100
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300366",
+                                                       "libelle":  "Recueillir et analyser les besoins client",
+                                                       "codeOgr":  "300366",
+                                                       "riasecMajeur":  "I"
+                                                   },
+                                    "frequence":  97
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300383",
+                                                       "libelle":  "Réaliser une veille de marché, une veille concurrentielle",
+                                                       "codeOgr":  "300383",
+                                                       "riasecMajeur":  "I"
+                                                   },
+                                    "frequence":  86
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300386",
+                                                       "libelle":  "Elaborer un plan marketing, une stratégie de marque et de communication",
+                                                       "codeOgr":  "300386",
+                                                       "riasecMajeur":  "E"
+                                                   },
+                                    "frequence":  90
+                                }
+                            ]
+    },
+    {
+        "obsolete":  false,
+        "code":  "11201",
+        "libelle":  "Assistant / Assistante chef de marché",
+        "libelleCourt":  "Assistant / Assistante chef de marché",
+        "emploiCadre":  true,
+        "transitionEcologique":  false,
+        "transitionEcologiqueDetaillee":  "EMPLOI_BLANC",
+        "transitionNumerique":  true,
+        "classification":  "SYNONYME",
+        "metier":  {
+                       "code":  "M1703",
+                       "libelle":  "Chef / Cheffe de produit",
+                       "riasecMajeur":  "E",
+                       "riasecMineur":  "C",
+                       "transitionEcologique":  false,
+                       "transitionEcologiqueDetaillee":  "EMPLOI_BLANC",
+                       "transitionNumerique":  true,
+                       "codeIsco":  "1221",
+                       "domaineProfessionnel":  {
+                                                    "code":  "M17",
+                                                    "libelle":  "Stratégie commerciale, marketing et supervision des ventes",
+                                                    "grandDomaine":  {
+                                                                         "code":  "M",
+                                                                         "libelle":  "Support à l\u0027entreprise"
+                                                                     }
+                                                },
+                       "emploiCadre":  true,
+                       "emploiReglemente":  false,
+                       "transitionDemographique":  false
+                   },
+        "appellationEsco":  {
+                                "uri":  "http://data.europa.eu/esco/occupation/e5a63940-57d3-4065-8713-74b4e2c93063",
+                                "libelle":  "chef de produits marketing"
+                            },
+        "competencesCles":  [
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300207",
+                                                       "libelle":  "Maîtriser les caractéristiques d\u0027un produit ou d\u0027un matériau",
+                                                       "codeOgr":  "300207"
+                                                   },
+                                    "frequence":  83
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300366",
+                                                       "libelle":  "Recueillir et analyser les besoins client",
+                                                       "codeOgr":  "300366",
+                                                       "riasecMajeur":  "I"
+                                                   },
+                                    "frequence":  87
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300383",
+                                                       "libelle":  "Réaliser une veille de marché, une veille concurrentielle",
+                                                       "codeOgr":  "300383",
+                                                       "riasecMajeur":  "I"
+                                                   },
+                                    "frequence":  83
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300386",
+                                                       "libelle":  "Elaborer un plan marketing, une stratégie de marque et de communication",
+                                                       "codeOgr":  "300386",
+                                                       "riasecMajeur":  "E"
+                                                   },
+                                    "frequence":  79
+                                }
+                            ]
+    },
+    {
+        "obsolete":  false,
+        "code":  "12172",
+        "libelle":  "Chef / Cheffe de groupe produits",
+        "libelleCourt":  "Chef / Cheffe de groupe produits",
+        "emploiCadre":  true,
+        "transitionEcologique":  false,
+        "transitionEcologiqueDetaillee":  "EMPLOI_BLANC",
+        "transitionNumerique":  true,
+        "classification":  "SYNONYME",
+        "metier":  {
+                       "code":  "M1703",
+                       "libelle":  "Chef / Cheffe de produit",
+                       "riasecMajeur":  "E",
+                       "riasecMineur":  "C",
+                       "transitionEcologique":  false,
+                       "transitionEcologiqueDetaillee":  "EMPLOI_BLANC",
+                       "transitionNumerique":  true,
+                       "codeIsco":  "1221",
+                       "domaineProfessionnel":  {
+                                                    "code":  "M17",
+                                                    "libelle":  "Stratégie commerciale, marketing et supervision des ventes",
+                                                    "grandDomaine":  {
+                                                                         "code":  "M",
+                                                                         "libelle":  "Support à l\u0027entreprise"
+                                                                     }
+                                                },
+                       "emploiCadre":  true,
+                       "emploiReglemente":  false,
+                       "transitionDemographique":  false
+                   },
+        "appellationEsco":  {
+                                "uri":  "http://data.europa.eu/esco/occupation/9f508305-80ce-4111-8722-f2c9b4a44890",
+                                "libelle":  "chef de produit"
+                            },
+        "competencesCles":  [
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300207",
+                                                       "libelle":  "Maîtriser les caractéristiques d\u0027un produit ou d\u0027un matériau",
+                                                       "codeOgr":  "300207"
+                                                   },
+                                    "frequence":  99
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300366",
+                                                       "libelle":  "Recueillir et analyser les besoins client",
+                                                       "codeOgr":  "300366",
+                                                       "riasecMajeur":  "I"
+                                                   },
+                                    "frequence":  98
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300383",
+                                                       "libelle":  "Réaliser une veille de marché, une veille concurrentielle",
+                                                       "codeOgr":  "300383",
+                                                       "riasecMajeur":  "I"
+                                                   },
+                                    "frequence":  100
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300386",
+                                                       "libelle":  "Elaborer un plan marketing, une stratégie de marque et de communication",
+                                                       "codeOgr":  "300386",
+                                                       "riasecMajeur":  "E"
+                                                   },
+                                    "frequence":  98
+                                }
+                            ]
+    },
+    {
+        "obsolete":  false,
+        "code":  "12192",
+        "libelle":  "Chef / Cheffe de marché",
+        "libelleCourt":  "Chef / Cheffe de marché",
+        "emploiCadre":  true,
+        "transitionEcologique":  false,
+        "transitionEcologiqueDetaillee":  "EMPLOI_BLANC",
+        "transitionNumerique":  true,
+        "classification":  "SYNONYME",
+        "metier":  {
+                       "code":  "M1703",
+                       "libelle":  "Chef / Cheffe de produit",
+                       "riasecMajeur":  "E",
+                       "riasecMineur":  "C",
+                       "transitionEcologique":  false,
+                       "transitionEcologiqueDetaillee":  "EMPLOI_BLANC",
+                       "transitionNumerique":  true,
+                       "codeIsco":  "1221",
+                       "domaineProfessionnel":  {
+                                                    "code":  "M17",
+                                                    "libelle":  "Stratégie commerciale, marketing et supervision des ventes",
+                                                    "grandDomaine":  {
+                                                                         "code":  "M",
+                                                                         "libelle":  "Support à l\u0027entreprise"
+                                                                     }
+                                                },
+                       "emploiCadre":  true,
+                       "emploiReglemente":  false,
+                       "transitionDemographique":  false
+                   },
+        "appellationEsco":  {
+                                "uri":  "http://data.europa.eu/esco/occupation/e5a63940-57d3-4065-8713-74b4e2c93063",
+                                "libelle":  "chef de produits marketing"
+                            },
+        "competencesCles":  [
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300207",
+                                                       "libelle":  "Maîtriser les caractéristiques d\u0027un produit ou d\u0027un matériau",
+                                                       "codeOgr":  "300207"
+                                                   },
+                                    "frequence":  97
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300366",
+                                                       "libelle":  "Recueillir et analyser les besoins client",
+                                                       "codeOgr":  "300366",
+                                                       "riasecMajeur":  "I"
+                                                   },
+                                    "frequence":  99
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300383",
+                                                       "libelle":  "Réaliser une veille de marché, une veille concurrentielle",
+                                                       "codeOgr":  "300383",
+                                                       "riasecMajeur":  "I"
+                                                   },
+                                    "frequence":  99
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300386",
+                                                       "libelle":  "Elaborer un plan marketing, une stratégie de marque et de communication",
+                                                       "codeOgr":  "300386",
+                                                       "riasecMajeur":  "E"
+                                                   },
+                                    "frequence":  97
+                                }
+                            ]
+    },
+    {
+        "obsolete":  false,
+        "code":  "12193",
+        "libelle":  "Chef / Cheffe de marque",
+        "libelleCourt":  "Chef / Cheffe de marque",
+        "emploiCadre":  true,
+        "transitionEcologique":  false,
+        "transitionEcologiqueDetaillee":  "EMPLOI_BLANC",
+        "transitionNumerique":  true,
+        "classification":  "SYNONYME",
+        "metier":  {
+                       "code":  "M1703",
+                       "libelle":  "Chef / Cheffe de produit",
+                       "riasecMajeur":  "E",
+                       "riasecMineur":  "C",
+                       "transitionEcologique":  false,
+                       "transitionEcologiqueDetaillee":  "EMPLOI_BLANC",
+                       "transitionNumerique":  true,
+                       "codeIsco":  "1221",
+                       "domaineProfessionnel":  {
+                                                    "code":  "M17",
+                                                    "libelle":  "Stratégie commerciale, marketing et supervision des ventes",
+                                                    "grandDomaine":  {
+                                                                         "code":  "M",
+                                                                         "libelle":  "Support à l\u0027entreprise"
+                                                                     }
+                                                },
+                       "emploiCadre":  true,
+                       "emploiReglemente":  false,
+                       "transitionDemographique":  false
+                   },
+        "appellationEsco":  {
+                                "uri":  "http://data.europa.eu/esco/occupation/de80bbf0-447d-4a6a-845a-fdba4e0dc30c",
+                                "libelle":  "chef de marque"
+                            },
+        "competencesCles":  [
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300207",
+                                                       "libelle":  "Maîtriser les caractéristiques d\u0027un produit ou d\u0027un matériau",
+                                                       "codeOgr":  "300207"
+                                                   },
+                                    "frequence":  100
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300366",
+                                                       "libelle":  "Recueillir et analyser les besoins client",
+                                                       "codeOgr":  "300366",
+                                                       "riasecMajeur":  "I"
+                                                   },
+                                    "frequence":  100
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300383",
+                                                       "libelle":  "Réaliser une veille de marché, une veille concurrentielle",
+                                                       "codeOgr":  "300383",
+                                                       "riasecMajeur":  "I"
+                                                   },
+                                    "frequence":  100
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300386",
+                                                       "libelle":  "Elaborer un plan marketing, une stratégie de marque et de communication",
+                                                       "codeOgr":  "300386",
+                                                       "riasecMajeur":  "E"
+                                                   },
+                                    "frequence":  100
+                                }
+                            ]
+    },
+    {
+        "obsolete":  false,
+        "code":  "12218",
+        "libelle":  "Chef / Cheffe de produit",
+        "libelleCourt":  "Chef / Cheffe de produit",
+        "emploiCadre":  true,
+        "transitionEcologique":  false,
+        "transitionEcologiqueDetaillee":  "EMPLOI_BLANC",
+        "transitionNumerique":  true,
+        "classification":  "PRINCIPALE",
+        "metier":  {
+                       "code":  "M1703",
+                       "libelle":  "Chef / Cheffe de produit",
+                       "riasecMajeur":  "E",
+                       "riasecMineur":  "C",
+                       "transitionEcologique":  false,
+                       "transitionEcologiqueDetaillee":  "EMPLOI_BLANC",
+                       "transitionNumerique":  true,
+                       "codeIsco":  "1221",
+                       "domaineProfessionnel":  {
+                                                    "code":  "M17",
+                                                    "libelle":  "Stratégie commerciale, marketing et supervision des ventes",
+                                                    "grandDomaine":  {
+                                                                         "code":  "M",
+                                                                         "libelle":  "Support à l\u0027entreprise"
+                                                                     }
+                                                },
+                       "emploiCadre":  true,
+                       "emploiReglemente":  false,
+                       "transitionDemographique":  false
+                   },
+        "appellationEsco":  {
+                                "uri":  "http://data.europa.eu/esco/occupation/9f508305-80ce-4111-8722-f2c9b4a44890",
+                                "libelle":  "chef de produit"
+                            },
+        "competencesCles":  [
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300207",
+                                                       "libelle":  "Maîtriser les caractéristiques d\u0027un produit ou d\u0027un matériau",
+                                                       "codeOgr":  "300207"
+                                                   },
+                                    "frequence":  96
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300366",
+                                                       "libelle":  "Recueillir et analyser les besoins client",
+                                                       "codeOgr":  "300366",
+                                                       "riasecMajeur":  "I"
+                                                   },
+                                    "frequence":  89
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300383",
+                                                       "libelle":  "Réaliser une veille de marché, une veille concurrentielle",
+                                                       "codeOgr":  "300383",
+                                                       "riasecMajeur":  "I"
+                                                   },
+                                    "frequence":  96
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300386",
+                                                       "libelle":  "Elaborer un plan marketing, une stratégie de marque et de communication",
+                                                       "codeOgr":  "300386",
+                                                       "riasecMajeur":  "E"
+                                                   },
+                                    "frequence":  87
+                                }
+                            ]
+    },
+    {
+        "obsolete":  false,
+        "code":  "12219",
+        "libelle":  "Chef / Cheffe de produit à l\u0027international",
+        "libelleCourt":  "Chef / Cheffe de produit à l\u0027international",
+        "emploiCadre":  true,
+        "transitionEcologique":  false,
+        "transitionEcologiqueDetaillee":  "EMPLOI_BLANC",
+        "transitionNumerique":  true,
+        "classification":  "SYNONYME",
+        "metier":  {
+                       "code":  "M1703",
+                       "libelle":  "Chef / Cheffe de produit",
+                       "riasecMajeur":  "E",
+                       "riasecMineur":  "C",
+                       "transitionEcologique":  false,
+                       "transitionEcologiqueDetaillee":  "EMPLOI_BLANC",
+                       "transitionNumerique":  true,
+                       "codeIsco":  "1221",
+                       "domaineProfessionnel":  {
+                                                    "code":  "M17",
+                                                    "libelle":  "Stratégie commerciale, marketing et supervision des ventes",
+                                                    "grandDomaine":  {
+                                                                         "code":  "M",
+                                                                         "libelle":  "Support à l\u0027entreprise"
+                                                                     }
+                                                },
+                       "emploiCadre":  true,
+                       "emploiReglemente":  false,
+                       "transitionDemographique":  false
+                   },
+        "appellationEsco":  {
+                                "uri":  "http://data.europa.eu/esco/occupation/9f508305-80ce-4111-8722-f2c9b4a44890",
+                                "libelle":  "chef de produit"
+                            },
+        "competencesCles":  [
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300207",
+                                                       "libelle":  "Maîtriser les caractéristiques d\u0027un produit ou d\u0027un matériau",
+                                                       "codeOgr":  "300207"
+                                                   },
+                                    "frequence":  100
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300366",
+                                                       "libelle":  "Recueillir et analyser les besoins client",
+                                                       "codeOgr":  "300366",
+                                                       "riasecMajeur":  "I"
+                                                   },
+                                    "frequence":  100
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300383",
+                                                       "libelle":  "Réaliser une veille de marché, une veille concurrentielle",
+                                                       "codeOgr":  "300383",
+                                                       "riasecMajeur":  "I"
+                                                   },
+                                    "frequence":  100
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300386",
+                                                       "libelle":  "Elaborer un plan marketing, une stratégie de marque et de communication",
+                                                       "codeOgr":  "300386",
+                                                       "riasecMajeur":  "E"
+                                                   },
+                                    "frequence":  100
+                                }
+                            ]
+    },
+    {
+        "obsolete":  false,
+        "code":  "12226",
+        "libelle":  "Chef / Cheffe de produit Internet",
+        "libelleCourt":  "Chef / Cheffe de produit Internet",
+        "emploiCadre":  true,
+        "transitionEcologique":  false,
+        "transitionEcologiqueDetaillee":  "EMPLOI_BLANC",
+        "transitionNumerique":  true,
+        "classification":  "SYNONYME",
+        "metier":  {
+                       "code":  "M1703",
+                       "libelle":  "Chef / Cheffe de produit",
+                       "riasecMajeur":  "E",
+                       "riasecMineur":  "C",
+                       "transitionEcologique":  false,
+                       "transitionEcologiqueDetaillee":  "EMPLOI_BLANC",
+                       "transitionNumerique":  true,
+                       "codeIsco":  "1221",
+                       "domaineProfessionnel":  {
+                                                    "code":  "M17",
+                                                    "libelle":  "Stratégie commerciale, marketing et supervision des ventes",
+                                                    "grandDomaine":  {
+                                                                         "code":  "M",
+                                                                         "libelle":  "Support à l\u0027entreprise"
+                                                                     }
+                                                },
+                       "emploiCadre":  true,
+                       "emploiReglemente":  false,
+                       "transitionDemographique":  false
+                   },
+        "appellationEsco":  {
+                                "uri":  "http://data.europa.eu/esco/occupation/9f508305-80ce-4111-8722-f2c9b4a44890",
+                                "libelle":  "chef de produit"
+                            },
+        "competencesCles":  [
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300207",
+                                                       "libelle":  "Maîtriser les caractéristiques d\u0027un produit ou d\u0027un matériau",
+                                                       "codeOgr":  "300207"
+                                                   },
+                                    "frequence":  100
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300366",
+                                                       "libelle":  "Recueillir et analyser les besoins client",
+                                                       "codeOgr":  "300366",
+                                                       "riasecMajeur":  "I"
+                                                   },
+                                    "frequence":  100
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300383",
+                                                       "libelle":  "Réaliser une veille de marché, une veille concurrentielle",
+                                                       "codeOgr":  "300383",
+                                                       "riasecMajeur":  "I"
+                                                   },
+                                    "frequence":  100
+                                },
+                                {
+                                    "competence":  {
+                                                       "type":  "MACRO-SAVOIR-FAIRE",
+                                                       "code":  "300386",
+                                                       "libelle":  "Elaborer un plan marketing, une stratégie de marque et de communication",
+                                                       "codeOgr":  "300386",
+                                                       "riasecMajeur":  "E"
+                                                   },
+                                    "frequence":  100
+                                }
+                            ]
+    }
+]

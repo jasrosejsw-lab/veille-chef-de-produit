@@ -6,7 +6,7 @@ function Nombre($s) { if ($s -eq "" -or $null -eq $s) { $null } else { [double]:
 
 $fMarche = Dernier "marche_travail_*.csv"
 $fInd = Dernier "indicateurs_*.csv"
-$fApp = Dernier "rome_appellations_*.csv"
+$fApp = Dernier "rome_appellations_2*.csv"
 $fComp = Dernier "rome_competences_*.csv"
 
 $marche = Import-Csv $fMarche.FullName -Delimiter ";"
@@ -97,6 +97,79 @@ $fCpt = Join-Path $racine "data\adzuna_compteurs.csv"
 if (Test-Path $fCpt) {
     $donnees["compteurs"] = @(Import-Csv $fCpt -Delimiter ";" | ForEach-Object {
             [ordered]@{ date = $_.date_releve; requete = $_.requete; nombre = (Nombre $_.nombre_annonces) } })
+}
+
+# Statistiques sur les annonces retenues : nombre, salaires affichés plausibles (valeur annuelle, non estimée), alternance.
+function Mediane($valeurs) {
+    $t = @($valeurs | Sort-Object)
+    if ($t.Count -eq 0) { return $null }
+    return $t[[int][math]::Floor(($t.Count - 1) / 2)]
+}
+function SalairePlausible($o) {
+    if (-not $o.salaire_min -or $o.salaire_estime -eq "1") { return $null }
+    $v = Nombre $o.salaire_min
+    if ($v -ge 10000 -and $v -le 250000) { return $v } else { return $null }
+}
+function StatsAnnonces($lignes) {
+    $lignes = @($lignes)
+    $sal = @($lignes | ForEach-Object { SalairePlausible $_ } | Where-Object { $null -ne $_ })
+    return [ordered]@{
+        n = $lignes.Count
+        part = $(if ($f.Count) { [math]::Round(100 * $lignes.Count / $f.Count, 1) } else { 0 })
+        salaires_n = $sal.Count
+        salaire_mediane = (Mediane $sal)
+        alternance = @($lignes | Where-Object { EstAlternance $_ }).Count
+    }
+}
+
+if ($fAdz) {
+    # Niveau de poste, déduit du titre de l'annonce (premier critère rencontré : assistant, junior, confirmé ou senior, sinon non précisé).
+    function NiveauPoste($titre) {
+        if ($titre -match '(?i)assistant') { return "assistant" }
+        if ($titre -match '(?i)junior') { return "junior" }
+        if ($titre -match '(?i)senior|confirm|exp.riment') { return "confirme" }
+        return "autres"
+    }
+    $donnees["annonces"]["niveaux"] = @("assistant", "junior", "confirme", "autres" | ForEach-Object {
+            $id = $_
+            $groupe = @($f | Where-Object { (NiveauPoste $_.titre) -eq $id })
+            $s = StatsAnnonces $groupe
+            $s["niveau"] = $id
+            $s })
+    $donnees["annonces"]["salaire_mediane_tous"] = (StatsAnnonces $f).salaire_mediane
+}
+
+# Fiches des intitulés du métier (ROME 4.0) : type, compétences clés, et mesures dans les annonces quand l'intitulé figure dans les titres.
+$fDet = Dernier "rome_appellations_detail_*.csv"
+$fMetier = Get-ChildItem (Join-Path $racine "data\raw\rome-metier_M1703_*.json") -ErrorAction SilentlyContinue | Sort-Object Name | Select-Object -Last 1
+if ($fDet) {
+    $motifs = @{ "12218" = "."; "11202" = "(?i)assistant"; "126560" = "(?i)digital"; "38790" = "(?i)\bweb\b"; "126559" = "(?i)mobile"; "38791" = "(?i)multim"; "12226" = "(?i)internet"; "12219" = "(?i)international" }
+    $releveProduct = $null
+    if (Test-Path $fCpt) {
+        $releveProduct = Import-Csv $fCpt -Delimiter ";" | Where-Object { $_.requete -eq "France - product manager" } | Sort-Object date_releve | Select-Object -Last 1
+    }
+    $donnees["intitules"] = @(Import-Csv $fDet.FullName -Delimiter ";" | ForEach-Object {
+            $code = $_.code_appellation
+            $cles = @($_.competences_cles -split ' ; ' | Where-Object { $_ } | ForEach-Object {
+                    if ($_ -match '^(.*) \((\d+) %\)$') { [ordered]@{ libelle = $Matches[1]; frequence = [int]$Matches[2] } } })
+            $ligne = [ordered]@{
+                code = $code; nom = $_.appellation; type = $_.type_appellation; cadre = ($_.emploi_cadre -eq "True"); numerique = ($_.transition_numerique -eq "True")
+                competences_cles = $cles; annonces = $null; compteur = $null
+            }
+            if ($fAdz -and $motifs.ContainsKey($code)) {
+                $ligne["annonces"] = StatsAnnonces @($f | Where-Object { $_.titre -match $motifs[$code] })
+            }
+            if ($code -eq "200147" -and $releveProduct) { $ligne["compteur"] = [ordered]@{ nombre = (Nombre $releveProduct.nombre_annonces); date = $releveProduct.date_releve } }
+            $ligne })
+}
+if ($fMetier) {
+    $m = Get-Content $fMetier.FullName -Raw -Encoding UTF8 | ConvertFrom-Json
+    $morceaux = @($m.definition -split '\\n' | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+    $donnees["metier"] = [ordered]@{
+        code = $m.code; libelle = $m.libelle; definition = $morceaux[0]
+        missions = @($morceaux | Select-Object -Skip 1)
+        acces = @($m.accesEmploi -split '\\n' | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+    }
 }
 
 # Entreprises du 63 (API Recherche d'entreprises) : on met en avant celles dont le siège est dans le département.

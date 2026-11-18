@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Méthode · chef de produit</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b5fff'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="style.css?v=202611182126">
+<link rel="stylesheet" href="style.css?v=202611182140">
 </head>
 <body>
 <main>
@@ -52,6 +52,7 @@
       <li><code>scripts/marche_du_travail.ps1</code> : offres par trimestre → <code>data/marche_travail_AAAA-MM-JJ.csv</code>.</li>
       <li><code>scripts/indicateurs_marche.ps1</code> : tension, embauches, salaires → <code>data/indicateurs_AAAA-MM-JJ.csv</code>.</li>
       <li><code>scripts/rome.ps1</code> : appellations et compétences → <code>data/rome_*.csv</code>.</li>
+      <li><code>scripts/rome_appellations.ps1</code> : fiche de chacun des 16 intitulés (type, compétences clés) → <code>data/rome_appellations_detail_AAAA-MM-JJ.csv</code>, source des pages par intitulé.</li>
       <li><code>scripts/adzuna.ps1</code> : annonces → <code>data/adzuna_offres_AAAA-MM-JJ.csv</code> (sans le texte des annonces, qui est un contenu de tiers).</li>
       <li><code>scripts/adzuna_compteurs.ps1</code> : relevé léger du nombre d'annonces, daté → <code>data/adzuna_compteurs.csv</code>.</li>
       <li><code>scripts/completer_departement.ps1</code> : ajoute le département de chaque annonce, sans nouvelle requête.</li>
@@ -75,7 +76,7 @@
 
   <p>Code et données : <a href="https://github.com/jasrosejsw-lab/veille-chef-de-produit" rel="noopener noreferrer">github.com/jasrosejsw-lab/veille-chef-de-produit</a>.</p>
 </main>
-<script src="donnees.js?v=202611182126"></script>
+<script src="donnees.js?v=202611182140"></script>
 <script>
 // Les dates viennent du fichier de données généré à chaque mise à jour du site.
 window.addEventListener("load", function () {
@@ -88,6 +89,6 @@ window.addEventListener("load", function () {
   met("m-adzuna", "Annonces du " + jourFr(M.annonces) + " ; relevés du nombre d'annonces : " + M.releves.map(jourFr).join(", "));
 });
 </script>
-<script src="commun.js?v=202611182126"></script>
+<script src="commun.js?v=202611182140"></script>
 </body>
 </html>

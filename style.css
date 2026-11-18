@@ -61,7 +61,10 @@ code { font-family: "Cascadia Mono", "SF Mono", Consolas, monospace; font-size: 
 .accueil .texte { max-width: 66ch; margin-top: 0; }
 .accueil .texte h2 { font-size: 1.2rem; margin: 38px 0 6px; letter-spacing: -.02em; }
 .puces { display: flex; flex-wrap: wrap; gap: 8px; padding: 0; list-style: none; margin: 12px 0 0; }
-.puces li { border: 1px solid var(--trait); padding: 4px 12px; font-size: 14px; border-radius: 999px; background: #fff; font-weight: 500; }
+.puces li { border: 1px solid var(--trait); font-size: 14px; border-radius: 999px; background: #fff; font-weight: 500; transition: border-color .12s, background .12s; }
+.puces li a { display: block; padding: 4px 12px; color: var(--texte); text-decoration: none; }
+.puces li:hover { border-color: var(--accent); background: var(--accent-doux); }
+.puces li:hover a { color: var(--accent); }
 .boutons { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 14px; margin: 40px 0 0; }
 .bouton { position: relative; display: block; text-decoration: none; color: var(--texte); padding: 22px 56px 22px 22px; background: #fff; border: 1px solid var(--trait); border-radius: 14px; transition: border-color .15s, transform .15s, box-shadow .15s; }
 .bouton::after { content: "→"; position: absolute; right: 18px; top: 20px; width: 30px; height: 30px; border-radius: 50%; background: var(--bande); color: var(--texte); display: grid; place-items: center; font-size: 1rem; transition: background .15s, color .15s; }

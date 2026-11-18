@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Annonces · chef de produit</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b5fff'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="style.css?v=202611182126">
+<link rel="stylesheet" href="style.css?v=202611182140">
 </head>
 <body>
 <main>
@@ -43,6 +43,11 @@
   <p id="texte-alternance"></p>
   <div class="limite"><strong>Limites.</strong> Le type de contrat n'est renseigné que pour une partie des annonces, et Adzuna ne distingue que « permanent » et « contract ». L'alternance est repérée ici par des mots dans le titre ou dans l'extrait de l'annonce (alternance, apprentissage, contrat de professionnalisation) : c'est une estimation, qui peut en oublier ou en compter à tort. Certaines annonces sont publiées par des écoles ou des centres de formation qui cherchent des entreprises d'accueil, pas par l'employeur.</div>
 
+  <h2>Quel niveau de poste</h2>
+  <p id="texte-niveaux"></p>
+  <table id="t-niveaux"></table>
+  <div class="limite"><strong>Limites.</strong> Le niveau est déduit du titre de l'annonce (« assistant », « junior », « confirmé » ou « senior »). La catégorie « niveau non précisé » regroupe les annonces dont le titre dit seulement « chef de produit ». Les salaires sont les salaires minimum affichés : certaines catégories ont très peu d'annonces avec salaire, ce qui est indiqué dans le tableau. Un salaire « non indiqué » ne veut pas dire qu'il est nul.</div>
+
   <h2>Quels salaires</h2>
   <p id="texte-sal"></p>
   <div class="cartes" id="cartes-sal"></div>
@@ -62,12 +67,12 @@
   <table id="t-outils"></table>
   <div class="limite"><strong>Limite majeure.</strong> L'API ne fournit qu'un extrait d'environ 500 caractères de chaque annonce. Les outils sont presque toujours cités plus bas dans le texte : ces comptages sont donc très sous-estimés et ne permettent <em>pas</em> de conclure qu'un outil n'est pas demandé. Pour compter sérieusement les outils, il faudrait le texte complet des annonces.</div>
 </main>
-<script src="donnees.js?v=202611182126"></script>
-<script src="carte_regions.js?v=202611182126"></script>
-<script src="carte_departements.js?v=202611182126"></script>
-<script src="carte.js?v=202611182126"></script>
-<script src="annonces_liste.js?v=202611182126"></script>
-<script src="commun.js?v=202611182126"></script>
+<script src="donnees.js?v=202611182140"></script>
+<script src="carte_regions.js?v=202611182140"></script>
+<script src="carte_departements.js?v=202611182140"></script>
+<script src="carte.js?v=202611182140"></script>
+<script src="annonces_liste.js?v=202611182140"></script>
+<script src="commun.js?v=202611182140"></script>
 <script>
 (function () {
   var A = window.DONNEES.annonces;
@@ -154,6 +159,19 @@
     document.getElementById("t-evolution").innerHTML = entete + lignes;
     document.getElementById("texte-evolution").textContent = dates.length + " relevé" + (dates.length > 1 ? "s" : "") + " du nombre d'annonces, du " + jourFr(dates[0]) + (dates.length > 1 ? " au " + jourFr(dates[dates.length - 1]) : "") +
       ". Le nombre d'annonces est suivi à intervalles réguliers pour voir si le marché bouge.";
+  }
+  // Niveau de poste : part des annonces et salaire minimum affiché médian par niveau.
+  var NIVEAUX = { assistant: "Assistant chef de produit", junior: "Junior", confirme: "Confirmé ou senior", autres: "Chef de produit, niveau non précisé" };
+  var par = {}; (A.niveaux || []).forEach(function (n) { par[n.niveau] = n; });
+  var salNiv = function (n) { return n.salaires_n >= 5 ? fmt(n.salaire_mediane) + " € (" + n.salaires_n + " annonces)" : (n.salaires_n ? "trop peu d'annonces (" + n.salaires_n + ")" : "aucun salaire affiché"); };
+  if (A.niveaux) {
+    document.getElementById("t-niveaux").innerHTML = "<tr><th>Niveau</th><th>Annonces</th><th>Part</th><th>Salaire minimum affiché médian</th><th>Avec alternance</th></tr>" +
+      ["assistant", "junior", "confirme", "autres"].map(function (k) {
+        var n = par[k]; return "<tr><td>" + NIVEAUX[k] + "</td><td>" + fmt(n.n) + "</td><td>" + String(n.part).replace(".", ",") + " %</td><td>" + salNiv(n) + "</td><td>" + fmt(n.alternance) + "</td></tr>"; }).join("");
+    var a = par.assistant, c = par.autres;
+    document.getElementById("texte-niveaux").textContent =
+      "Les postes d'assistant chef de produit représentent " + Math.round(a.part) + " % des " + fmt(A.retenues) + " annonces, le niveau d'entrée le plus visible. " +
+      (a.salaires_n >= 5 && c.salaires_n >= 5 ? "Leur salaire minimum affiché médian est de " + fmt(a.salaire_mediane) + " € (" + a.salaires_n + " annonces), contre " + fmt(c.salaire_mediane) + " € pour les annonces « chef de produit » sans niveau précisé (" + c.salaires_n + " annonces)." : "");
   }
   var s = A.salaires;
   document.getElementById("texte-sal").textContent =

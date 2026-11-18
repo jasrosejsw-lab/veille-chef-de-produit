@@ -41,6 +41,7 @@ ADZUNA_APP_KEY=...
 | `scripts/marche_du_travail.ps1` | Offres par trimestre → `data/marche_travail_AAAA-MM-JJ.csv` |
 | `scripts/indicateurs_marche.ps1` | Tension, embauches, salaires → `data/indicateurs_AAAA-MM-JJ.csv` |
 | `scripts/rome.ps1` | Appellations et compétences → `data/rome_*.csv` |
+| `scripts/rome_appellations.ps1` | Fiche de chaque intitulé du métier (type, compétences clés) → `data/rome_appellations_detail_AAAA-MM-JJ.csv`, source des pages par intitulé |
 | `scripts/adzuna.ps1` | Annonces → `data/adzuna_offres_AAAA-MM-JJ.csv` (quota de la clé gratuite : une extraction complète en consomme une trentaine) |
 | `scripts/adzuna_compteurs.ps1` | Relevé léger du nombre d'annonces, daté → `data/adzuna_compteurs.csv` (5 requêtes, à répéter à quelques jours d'écart) |
 | `scripts/completer_departement.ps1` | Ajoute le département de chaque annonce, sans nouvelle requête |

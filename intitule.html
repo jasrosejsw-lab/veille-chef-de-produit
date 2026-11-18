@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Intitulé · chef de produit</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b5fff'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css?v=202611182140">
+</head>
+<body>
+<main>
+  <h1>Intitulé du métier</h1>
+  <p class="chapeau" id="chapeau">Un intitulé du métier de chef de produit, comparé au chef de produit.</p>
+
+  <div id="contenu"></div>
+
+  <h2>Les autres intitulés</h2>
+  <ul class="puces" id="autres"></ul>
+  <p class="source">Source : fiches « appellation » et « métier » du ROME 4.0 (API France Travail), extraction du <span class="date" id="date-rome"></span> ; annonces Adzuna du <span class="date" id="date-annonces"></span>. Scripts : <code>scripts/rome.ps1</code>, <code>scripts/rome_appellations.ps1</code>.</p>
+</main>
+<script src="donnees.js?v=202611182140"></script>
+<script src="commun.js?v=202611182140"></script>
+<script>
+(function () {
+  var D = window.DONNEES, liste = D.intitules || [], metier = D.metier || {};
+  var code = new URLSearchParams(location.search).get("code");
+  var principale = liste.filter(function (i) { return i.type === "PRINCIPALE"; })[0] || liste[0];
+  var cible = liste.filter(function (i) { return i.code === code; })[0];
+  var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
+  var oui = function (b) { return b ? "Oui" : "Non"; };
+  document.getElementById("date-rome").textContent = jourFr(D.maj.rome);
+  document.getElementById("date-annonces").textContent = jourFr(D.maj.annonces);
+
+  // Autres intitulés : puces cliquables.
+  var autres = liste.filter(function (i) { return !cible || i.code !== cible.code; }).sort(function (a, b) { return (a.type === "PRINCIPALE" ? 0 : 1) - (b.type === "PRINCIPALE" ? 0 : 1); });
+  document.getElementById("autres").innerHTML = autres.map(function (a) { return '<li><a href="intitule.html?code=' + encodeURIComponent(a.code) + '">' + esc(a.nom) + "</a></li>"; }).join("");
+
+  var contenu = document.getElementById("contenu");
+  if (!cible) {
+    document.getElementById("chapeau").textContent = "Choisissez un intitulé ci-dessous pour voir sa fiche.";
+    document.querySelector("h1").textContent = "Les intitulés du métier";
+    document.title = "Intitulés · chef de produit";
+    return;
+  }
+  var estPrincipale = cible.type === "PRINCIPALE";
+  document.querySelector("h1").textContent = cible.nom;
+  document.title = cible.nom + " · chef de produit";
+  document.getElementById("chapeau").textContent = estPrincipale
+    ? "Intitulé principal du métier, code ROME " + metier.code + ". Les autres intitulés sont comparés à lui."
+    : "Intitulé synonyme de « " + principale.nom + " » dans le ROME (code " + metier.code + "), comparé à l'intitulé principal.";
+
+  var html = "";
+
+  // 1. Ce que dit le référentiel
+  html += "<h2>Ce que dit le référentiel</h2>";
+  html += "<table><tr><th>Critère</th><th>" + esc(cible.nom) + "</th>" + (estPrincipale ? "" : "<th>" + esc(principale.nom) + "</th>") + "</tr>" +
+    "<tr><td>Statut dans le ROME</td><td>" + (estPrincipale ? "Appellation principale" : "Synonyme") + "</td>" + (estPrincipale ? "" : "<td>Appellation principale</td>") + "</tr>" +
+    "<tr><td>Métier rattaché</td><td>" + esc(metier.libelle) + " (" + esc(metier.code) + ")</td>" + (estPrincipale ? "" : "<td>" + esc(metier.libelle) + " (" + esc(metier.code) + ")</td>") + "</tr>" +
+    "<tr><td>Emploi cadre</td><td>" + oui(cible.cadre) + "</td>" + (estPrincipale ? "" : "<td>" + oui(principale.cadre) + "</td>") + "</tr>" +
+    "<tr><td>Concerné par la transition numérique</td><td>" + oui(cible.numerique) + "</td>" + (estPrincipale ? "" : "<td>" + oui(principale.numerique) + "</td>") + "</tr></table>";
+  html += "<h3>Définition</h3>";
+  html += estPrincipale
+    ? "<p>" + esc(metier.definition) + "</p>"
+    : "<p>Le ROME ne propose pas de définition propre à « " + esc(cible.nom) + " » : il le range comme un synonyme du métier chef de produit, dont la définition est la suivante.</p><p><strong>" + esc(principale.nom) + "</strong> : " + esc(metier.definition) + "</p>";
+  if (metier.missions && metier.missions.length) html += "<ul class='liste'>" + metier.missions.map(function (m) { return "<li>" + esc(m) + "</li>"; }).join("") + "</ul>";
+  if (metier.acces && metier.acces.length) html += "<p><strong>Accès à l'emploi :</strong> " + metier.acces.map(esc).join(" ") + "</p>";
+
+  // 2. Compétences clés comparées
+  html += "<h2>Compétences clés</h2>";
+  var cles = {}, ordre = [];
+  var ajouter = function (i, cle) { (i.competences_cles || []).forEach(function (c) { if (!cles[c.libelle]) { cles[c.libelle] = {}; ordre.push(c.libelle); } cles[c.libelle][cle] = c.frequence; }); };
+  ajouter(cible, "a"); if (!estPrincipale) ajouter(principale, "b");
+  var pct = function (v) { return v == null ? "—" : v + " %"; };
+  html += "<table><tr><th>Compétence</th><th>" + esc(cible.nom) + "</th>" + (estPrincipale ? "" : "<th>" + esc(principale.nom) + "</th>") + "</tr>" +
+    ordre.map(function (l) { return "<tr><td>" + esc(l) + "</td><td>" + pct(cles[l].a) + "</td>" + (estPrincipale ? "" : "<td>" + pct(cles[l].b) + "</td>") + "</tr>"; }).join("") + "</table>";
+  html += "<p class='source'>Les pourcentages sont les fréquences indiquées par le ROME 4.0 pour chaque compétence clé de l'intitulé. « — » signifie que la compétence ne figure pas parmi les compétences clés de cet intitulé.</p>";
+
+  // 3. Dans les annonces
+  html += "<h2>Dans les annonces</h2>";
+  var A = cible.annonces, B = principale.annonces;
+  var sal = function (a) { return a.salaires_n >= 5 ? fmt(a.salaire_mediane) + " € (" + a.salaires_n + " annonces)" : (a.salaires_n ? "trop peu d'annonces (" + a.salaires_n + ")" : "aucun salaire affiché"); };
+  if (A && A.n >= 5) {
+    var ligne = function (nom, a) { return "<tr><td>" + nom + "</td><td>" + fmt(a.n) + " (" + String(a.part).replace(".", ",") + " %)</td><td>" + sal(a) + "</td><td>" + fmt(a.alternance) + "</td></tr>"; };
+    html += "<table><tr><th>Annonces dont le titre correspond</th><th>Nombre</th><th>Salaire minimum affiché médian</th><th>Avec alternance</th></tr>" +
+      ligne(esc(cible.nom), A) + (estPrincipale ? "" : ligne("Toutes les annonces « chef de produit »", B)) + "</table>";
+    if (A.n < 30) html += "<div class='limite'><strong>Limite.</strong> Seulement " + A.n + " annonces : les comparaisons de salaire sont fragiles.</div>";
+  } else if (A) {
+    html += "<p>Seulement " + A.n + " annonce" + (A.n > 1 ? "s" : "") + " de notre échantillon portent cet intitulé : c'est trop peu pour comparer.</p>";
+  } else if (cible.compteur) {
+    html += "<p>Cet intitulé ne figure pas dans notre échantillon d'annonces, qui est limité aux titres « chef de produit ». Un relevé du nombre d'annonces donne une idée de sa présence : <strong>" + fmt(cible.compteur.nombre) + " annonces</strong> contiennent l'expression « product manager » au " + jourFr(cible.compteur.date) +
+      ", contre " + fmt(B ? B.n : 0) + " annonces « chef de produit » retenues. Ce nombre inclut d'autres métiers, notamment techniques : il n'est pas comparable.</p>";
+  } else {
+    html += "<p>Cet intitulé ne figure pas dans notre échantillon d'annonces, qui est limité aux titres « chef de produit » : il n'est pas mesuré.</p>";
+  }
+
+  html += "<div class='limite'><strong>Limite.</strong> Les différences de contenu entre intitulés (par exemple entre chef de marque et chef de produit) ne sont pas décrites par le ROME, qui les traite comme des appellations d'un même métier. Cette fiche compare donc ce qui est mesurable : les compétences clés du référentiel et les annonces.</div>";
+  contenu.innerHTML = html;
+})();
+</script>
+</body>
+</html>
